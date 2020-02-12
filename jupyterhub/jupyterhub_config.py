@@ -62,9 +62,9 @@ c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
 # Gives spawned containers access to the API of the hub
 hub_connect_ip = os.environ['HUB_SERVICE_HOST']
 hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
-# c.JupyterHub.hub_connect_ip = hub_connect_ip
-# c.JupyterHub.hub_connect_port = hub_connect_port
-c.JupyterHub.hub_connect_url = 'http://{}:{}'.format(hub_connect_ip, hub_connect_port)
+c.JupyterHub.hub_connect_ip = hub_connect_ip
+c.JupyterHub.hub_connect_port = hub_connect_port
+# c.JupyterHub.hub_connect_url = 'http://{}:{}'.format(hub_connect_ip, hub_connect_port)
 
 c.JupyterHub.hub_ip = '0.0.0.0'
 
