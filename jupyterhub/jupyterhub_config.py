@@ -1,7 +1,6 @@
 import os
 
 from tornado.httpclient import AsyncHTTPClient
-# from z2jh import get_config, set_config_if_not_none
 
 # Configure JupyterHub to use the curl backend for making HTTP requests,
 # rather than the pure-python implementations. The default one starts
@@ -26,16 +25,6 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 c.Application.log_level = 0
 
 #------------------------------------------------------------------------------
-# ConfigurableHTTPProxy configuration
-#------------------------------------------------------------------------------
-
-# Connect to a proxy running in a different pod
-api_ip = os.environ.get('PROXY_API_SERVICE_HOST', '')
-api_port = int(os.environ.get('PROXY_API_SERVICE_PORT', '8081'))
-c.ConfigurableHTTPProxy.api_url = 'http://{}:{}'.format(api_ip, api_port)
-c.ConfigurableHTTPProxy.should_start = False
-
-#------------------------------------------------------------------------------
 # JupyterHub(Application) configuration
 #------------------------------------------------------------------------------
 
@@ -53,16 +42,28 @@ c.JupyterHub.admin_access = True
 ## Class for authenticating users
 c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
 
+#------------------------------------------------------------------------------
+# ConfigurableHTTPProxy configuration
+#------------------------------------------------------------------------------
+
+# Connect to a proxy running in a different pod
+api_ip = os.environ['PROXY_API_SERVICE_HOST']
+api_port = int(os.environ['PROXY_API_SERVICE_PORT'])
+c.ConfigurableHTTPProxy.api_url = 'http://{}:{}'.format(api_ip, api_port)
+c.ConfigurableHTTPProxy.should_start = False
+
 ## Public IP
-public_ip = os.environ.get('PROXY_PUBLIC_SERVICE_HOST', '')
-public_port = int(os.environ.get('PROXY_PUBLIC_SERVICE_PORT', '8081'))
-c.JupyterHub.bind_url = 'http://{}:{}'.format(public_ip, public_port)
+# public_ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
+# public_port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
+c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
+c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
+# c.JupyterHub.bind_url = 'http://{}:{}'.format(public_ip, public_port)
 
 # Gives spawned containers access to the API of the hub
-hub_connect_ip = os.environ.get('HUB_SERVICE_HOST', '')
-hub_connect_port = int(os.environ.get('HUB_SERVICE_PORT', '8081'))
-c.JupyterHub.hub_connect_ip = hub_connect_ip
-c.JupyterHub.hub_connect_port = hub_connect_port
+hub_connect_ip = os.environ['HUB_SERVICE_HOST']
+hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
+# c.JupyterHub.hub_connect_ip = hub_connect_ip
+# c.JupyterHub.hub_connect_port = hub_connect_port
 c.JupyterHub.hub_connect_url = 'http://{}:{}'.format(hub_connect_ip, hub_connect_port)
 
 c.JupyterHub.hub_ip = '0.0.0.0'
@@ -78,7 +79,7 @@ c.JupyterHub.db_url = 'sqlite:///jupyterhub.sqlite'
 c.JupyterHub.last_activity_interval = 60
 
 ## The class to use for configuring the JupyterHub proxy.
-c.JupyterHub.proxy_class = 'jupyterhub.proxy.ConfigurableHTTPProxy'
+# c.JupyterHub.proxy_class = 'jupyterhub.proxy.ConfigurableHTTPProxy'
 
 ## The class to use for spawning single-user servers.
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
@@ -95,7 +96,7 @@ c.JupyterHub.tornado_settings = {
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 
-c.KubeSpawner.image = 'jupyterhub/k8s-singleuser-sample:0.8.2'
+# c.KubeSpawner.image = 'jupyterhub/k8s-singleuser-sample:0.8.2'
 
 ## Storage Settings
 pvc_name_template = 'claim-{username}{servername}'
