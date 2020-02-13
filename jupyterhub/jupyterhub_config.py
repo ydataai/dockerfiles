@@ -96,7 +96,7 @@ c.JupyterHub.tornado_settings = {
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 
-# c.KubeSpawner.image = 'jupyterhub/k8s-singleuser-sample:0.8.2'
+c.KubeSpawner.image = 'ydata/jupyterlab:0.0.3'
 
 ## Storage Settings
 pvc_name_template = 'claim-{username}{servername}'
