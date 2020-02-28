@@ -1,6 +1,0 @@
-## Nuclio
-nuclio-jupyter==0.8.*
-
-## Jupyter
-nbgitpuller==0.8.*
-jupyterhub==0.9.*

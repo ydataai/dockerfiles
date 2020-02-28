@@ -34,4 +34,4 @@ RUN chown ${USER}:${USER} /srv/jupyterhub
 
 EXPOSE 8081
 
-CMD ["jupyterhub", "-f", "/srv/jupyterhub/jupyterhub_config.py"]
+CMD ["jupyterhub", "-f", "/srv/jupyterhub_config.py"]
