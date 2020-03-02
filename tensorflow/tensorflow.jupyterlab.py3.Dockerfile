@@ -1,3 +1,5 @@
-FROM ydata/jupyterlab-1.2.6-py3:1.0.0
+FROM ydata/jupyterlab-1.2.6-kubeflow:1.0.0
 
-RUN pip --no-cache-dir install tensorflow==2.1.*
+ARG TF_PACKAGE='tensorflow==2.1.*'
+
+RUN pip --no-cache-dir install ${TF_PACKAGE}

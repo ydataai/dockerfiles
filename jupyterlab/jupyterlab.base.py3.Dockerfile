@@ -20,20 +20,6 @@ ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
-# Install Nodejs for jupyterlab-manager
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
-RUN apt-get update && apt-get install -yq --no-install-recommends \
-  nodejs \
-  && apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
-
-# Install Tini - used as entrypoint for container
-RUN cd /tmp && \
-    curl -L -O https://github.com/krallin/tini/releases/download/v0.18.0/tini && \
-    echo "12d20136605531b09a2c2dac02ccee85e1b874eb322ef6baf7561cd93f93c855 *tini" | sha256sum -c - && \
-    mv tini /usr/local/bin/tini && \
-    chmod +x /usr/local/bin/tini
-
 # Prepare for user environment
 ENV USER ${USER}
 ENV UID 1000
@@ -71,6 +57,8 @@ RUN conda update --all --quiet --yes && \
     conda install --quiet --yes python && \
     conda install --quiet --yes pip && \
     conda install --quiet --yes -c conda-forge jupyterlab && \
+    conda install --quiet --yes tini && \
+    conda install --quiet --yes nodejs=10.13.* && \
     conda clean --all -f -y
 
 RUN pip --no-cache-dir install kubeflow-fairing==0.7.*
