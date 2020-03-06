@@ -67,4 +67,4 @@ RUN pip --no-cache-dir install kubeflow-fairing==0.7.*
 ENV NB_PREFIX /
 EXPOSE 8888
 ENTRYPOINT [ "tini", "-g", "--" ]
-CMD [ "sh", "-c", "jupyter notebook --notebook-dir=/home/${USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.base_url=${NB_PREFIX}" ]
+CMD [ "sh", "-c", "jupyter lab --notebook-dir=/home/${USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.base_url=${NB_PREFIX}" ]
