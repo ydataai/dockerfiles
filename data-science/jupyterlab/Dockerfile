@@ -61,8 +61,6 @@ RUN conda update --all --quiet --yes && \
     conda install --quiet --yes nodejs=10.13.* && \
     conda clean --all -f -y
 
-RUN pip --no-cache-dir install kubeflow-fairing==0.7.*
-
 # Configure container startup
 ENV NB_PREFIX /
 EXPOSE 8888

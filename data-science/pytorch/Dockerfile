@@ -1,8 +1,6 @@
 ARG TAG=""
-ARG JUPYTERLAB_VERSION="1.2.6"
+ARG PYSPARK_VERSION=""
 
-FROM ydata/jupyterlab-${JUPYTERLAB_VERSION}-kubeflow:${TAG}
+FROM ydata/pyspark-${PYSPARK_VERSION}-jupyterlab-1.2.6-kubeflow:${TAG}
 
-ARG PYTORCH_PACKAGE='pytorch==1.4.0'
-
-RUN conda install ${PYTORCH_PACKAGE} -c pytorch
+RUN conda install pytorch -c pytorch

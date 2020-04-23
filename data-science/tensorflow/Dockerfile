@@ -1,8 +1,8 @@
 ARG TAG=""
-ARG JUPYTERLAB_VERSION="1.2.6"
+ARG PYSPARK_VERSION=""
 
-FROM ydata/jupyterlab-${JUPYTERLAB_VERSION}-kubeflow:${TAG}
+FROM ydata/pyspark-${PYSPARK_VERSION}-jupyterlab-1.2.6-kubeflow:${TAG}
 
-ARG TF_PACKAGE='tensorflow==2.1.*'
+ARG TF_PACKAGE='tensorflow==2.1.0'
 
 RUN pip --no-cache-dir install ${TF_PACKAGE}
