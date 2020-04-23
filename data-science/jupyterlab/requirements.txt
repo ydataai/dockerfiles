@@ -1,5 +1,2 @@
-kubeflow-fairing==0.7.*
-kubeflow-metadata==0.3.*
-kubeflow-kale==0.4.*
-
-kfp-notebook==0.7.*
+kubeflow-kale==0.4.0
+kubeflow-fairing==0.7.2

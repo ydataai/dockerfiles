@@ -61,6 +61,9 @@ RUN conda update --all --quiet --yes && \
 # Install pypi dependencies
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
+# Enable kale extension
+RUN jupyter labextension install kubeflow-kale-launcher
+
 # Configure container startup
 ENV NB_PREFIX /
 EXPOSE 8888

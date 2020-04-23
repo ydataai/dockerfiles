@@ -1,7 +1,9 @@
-ARG TAG=""
+ARG JUPYTERLAB_VERSION
 
-FROM ydata/jupyterlab-1.2.6-kubeflow:${TAG}
+FROM ydata/jupyterlab:${JUPYTERLAB_VERSION}
 
-ARG PYSPARK_PACKAGE="pyspark==2.4.5"
+COPY --chown=ydata:users conda.txt requirements.txt /tmp/
 
-RUN pip --no-cache-dir install ${PYSPARK_PACKAGE}
+RUN conda install --quiet --yes --file /tmp/conda.txt && conda clean --all -f -y
+
+RUN pip --no-cache-dir install -r /tmp/requirements.txt
