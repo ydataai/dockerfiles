@@ -1,0 +1,7 @@
+conda
+python
+pip
+
+conda-forge::jupyterlab=2.1.*
+tini
+nodejs=10.13.*

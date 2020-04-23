@@ -1,6 +1,6 @@
 FROM ubuntu:xenial
 
-ARG USER=ydata
+ENV USER=ydata
 
 USER root
 
@@ -35,10 +35,10 @@ ENV CONDA_DIR /opt/conda
 ENV PATH $CONDA_DIR/bin:$PATH
 
 RUN cd /tmp && \
-    curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    echo "bfe34e1fa28d6d75a7ad05fd02fa5472275673d5f5621b77380898dee1be15d2 *Miniconda3-latest-Linux-x86_64.sh" | sha256sum -c - && \
-    /bin/bash Miniconda3-latest-Linux-x86_64.sh -b -f -p $CONDA_DIR && \
-    rm -f Miniconda3-latest-Linux-x86_64.sh && \
+    curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.2-Linux-x86_64.sh && \
+    echo "87e77f097f6ebb5127c77662dfc3165e  Miniconda3-py37_4.8.2-Linux-x86_64.sh" | md5sum -c - && \
+    /bin/bash Miniconda3-py37_4.8.2-Linux-x86_64.sh -b -f -p $CONDA_DIR && \
+    rm -f Miniconda3-py37_4.8.2-Linux-x86_64.sh && \
     conda config --system --set auto_update_conda false && \
     conda config --system --set show_channel_urls true
     
@@ -51,15 +51,15 @@ SHELL ["/bin/bash", "-c"]
 # Change to new user
 USER ${USER}
 
+COPY --chown=ydata:users conda.txt requirements.txt /tmp/
+
 # Update and install conda packages
 RUN conda update --all --quiet --yes && \
-    conda install --quiet --yes conda && \
-    conda install --quiet --yes python && \
-    conda install --quiet --yes pip && \
-    conda install --quiet --yes -c conda-forge jupyterlab && \
-    conda install --quiet --yes tini && \
-    conda install --quiet --yes nodejs=10.13.* && \
+    conda install --quiet --yes --file /tmp/conda.txt && \
     conda clean --all -f -y
+
+# Install pypi dependencies
+RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Configure container startup
 ENV NB_PREFIX /
