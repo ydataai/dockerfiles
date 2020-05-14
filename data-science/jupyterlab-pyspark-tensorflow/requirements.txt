@@ -1,2 +1,3 @@
+tensorflow==2.*
 bert-tensorflow==1.0.*
 h2o==3.28.*
