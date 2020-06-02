@@ -1,7 +1,9 @@
-ARG H2OFLOW_VERSION
+ARG JUPYTERLAB_VERSION
 ARG PYSPARK_VERSION
 
-FROM ydata/h2oflow-${H2OFLOW_VERSION}_pyspark-${PYSPARK_VERSION}
+
+FROM ydata/jupyterlab-${JUPYTERLAB_VERSION}_pyspark-${PYSPARK_VERSION}
+
 
 COPY --chown=ydata:users requirements.txt /tmp/
 
