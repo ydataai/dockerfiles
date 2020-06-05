@@ -1,2 +1,1 @@
 kubeflow-kale==0.4.0
-kubeflow-fairing==0.7.2

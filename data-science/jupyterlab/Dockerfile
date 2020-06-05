@@ -1,10 +1,7 @@
-FROM ubuntu:xenial
+FROM ubuntu:18.04
 
-ENV USER=ydata
-
-USER root
-
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND noninteractive \
+    DEBCONF_NONINTERACTIVE_SEEN true
 
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     ca-certificates \
@@ -21,6 +18,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
 # Prepare for user environment
+ENV USER=ydata
 ENV USER ${USER}
 ENV UID 1000
 
@@ -68,4 +66,4 @@ RUN jupyter labextension install kubeflow-kale-launcher
 ENV NB_PREFIX /
 EXPOSE 8888
 ENTRYPOINT [ "tini", "-g", "--" ]
-CMD [ "sh", "-c", "jupyter lab --notebook-dir=/home/${USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.base_url=${NB_PREFIX}" ]
+CMD [ "jupyter lab --notebook-dir=/home/${USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.base_url=${NB_PREFIX}" ]
