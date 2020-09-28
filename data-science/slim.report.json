@@ -1,0 +1,281 @@
+{
+  "engine": "darwin|Transformer|1.31.0|latest|latest",
+  "containerized": false,
+  "host": "Catalina (10.15.6)",
+  "type": "build",
+  "state": "done",
+  "target_reference": "ydata/base",
+  "system": {
+    "type": "Linux",
+    "release": "4.19.76-linuxkit",
+    "os": "Debian GNU/Linux 9 (stretch)"
+  },
+  "source_image": {
+    "id": "sha256:616b95d9c182a02687bcdf01ec8c8fd2fbc002d2fbca50093b92e4f0ae9c1428",
+    "name": "ydata/base:0.0.2",
+    "size": 399143262,
+    "size_human": "399 MB",
+    "create_time": "2020-08-14T16:00:08Z",
+    "all_names": [
+      "ydata/base:0.0.2",
+      "ydata/base:latest"
+    ],
+    "docker_version": "19.03.12",
+    "architecture": "amd64",
+    "user": "ydata"
+  },
+  "minified_image_size": 1884262,
+  "minified_image_size_human": "1.9 MB",
+  "minified_image": "ydata/base.slim",
+  "minified_image_has_data": true,
+  "minified_by": 211.83002257647823,
+  "artifact_location": "/tmp/docker-slim-state/.docker-slim-state/images/616b95d9c182a02687bcdf01ec8c8fd2fbc002d2fbca50093b92e4f0ae9c1428/artifacts",
+  "container_report_name": "creport.json",
+  "seccomp_profile_name": "ydata-base-seccomp.json",
+  "apparmor_profile_name": "ydata-base-apparmor-profile",
+  "image_stack": [
+    {
+      "is_top_image": true,
+      "id": "sha256:616b95d9c182a02687bcdf01ec8c8fd2fbc002d2fbca50093b92e4f0ae9c1428",
+      "full_name": "ydata/base:0.0.2",
+      "repo_name": "ydata/base",
+      "version_tag": "0.0.2",
+      "raw_tags": [
+        "ydata/base:0.0.2",
+        "ydata/base:latest"
+      ],
+      "create_time": "2020-08-14T16:00:08Z",
+      "new_size": 399143262,
+      "new_size_human": "399 MB",
+      "instructions": [
+        {
+          "type": "ADD",
+          "time": "2020-08-04T15:45:32Z",
+          "is_nop": true,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 100638180,
+          "size_human": "101 MB",
+          "params": "file:a28d8a949b7577768d87fcbac346797fc5f7bad0539625339edcd09a32d6bf77 in /",
+          "command_snippet": "ADD file:a28d8a949b7577768d87fcbac346797fc5f...",
+          "command_all": "ADD file:a28d8a949b7577768d87fcbac346797fc5f7bad0539625339edcd09a32d6bf77 /",
+          "target": "/",
+          "source_type": "file"
+        },
+        {
+          "type": "CMD",
+          "time": "2020-08-04T15:45:33Z",
+          "is_nop": true,
+          "is_exec_form": true,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "[\"bash\"]",
+          "command_snippet": "CMD [\"bash\"]",
+          "command_all": "CMD [\"bash\"]"
+        },
+        {
+          "type": "ENV",
+          "time": "2020-08-13T09:32:55Z",
+          "is_nop": true,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "DEBIAN_FRONTEND=noninteractive",
+          "command_snippet": "ENV DEBIAN_FRONTEND=noninteractive",
+          "command_all": "ENV DEBIAN_FRONTEND=noninteractive"
+        },
+        {
+          "type": "ENV",
+          "time": "2020-08-13T09:32:55Z",
+          "is_nop": true,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "DEBCONF_NONINTERACTIVE_SEEN=true",
+          "command_snippet": "ENV DEBCONF_NONINTERACTIVE_SEEN=true",
+          "command_all": "ENV DEBCONF_NONINTERACTIVE_SEEN=true"
+        },
+        {
+          "type": "RUN",
+          "time": "2020-08-14T15:59:05Z",
+          "is_nop": false,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "command_snippet": "RUN apt-get -qq update && \\\n\tapt-get -qq -y ...",
+          "command_all": "RUN apt-get -qq update && \\\n\tapt-get -qq -y install         curl && \\\n\tapt-get autoclean && \\\n\trm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt",
+          "system_commands": [
+            "apt-get -qq update",
+            "apt-get -qq -y install         curl",
+            "apt-get autoclean",
+            "rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt"
+          ]
+        },
+        {
+          "type": "ENV",
+          "time": "2020-08-14T15:59:05Z",
+          "is_nop": true,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "CONDA_DIR=/opt/conda",
+          "command_snippet": "ENV CONDA_DIR=/opt/conda",
+          "command_all": "ENV CONDA_DIR=/opt/conda"
+        },
+        {
+          "type": "ENV",
+          "time": "2020-08-14T15:59:05Z",
+          "is_nop": true,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "PATH=/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "command_snippet": "ENV PATH=/opt/conda/bin:/usr/local/sbin:/usr...",
+          "command_all": "ENV PATH=/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+        },
+        {
+          "type": "RUN",
+          "time": "2020-08-14T15:59:34Z",
+          "is_nop": false,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "command_snippet": "RUN curl -sSL https://repo.anaconda.com/mini...",
+          "command_all": "RUN curl -sSL https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.3-Linux-x86_64.sh -o /tmp/miniconda.sh && \\\n\techo \"751786b92c00b1aeae3f017b781018df  /tmp/miniconda.sh\" | md5sum -c - && \\\n\tbash /tmp/miniconda.sh -bfp ${CONDA_DIR} && \\\n\trm -rf /tmp/miniconda.sh && \\\n\tconda install -y python=3 && \\\n\tconda update -y conda && \\\n\tconda update --all -y && \\\n\tconda clean --all -y && \\\n\techo /opt/conda/lib > /etc/ld.so.conf.d/conda.conf && \\\n\tldconfig",
+          "system_commands": [
+            "curl -sSL https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.3-Linux-x86_64.sh -o /tmp/miniconda.sh",
+            "echo \"751786b92c00b1aeae3f017b781018df  /tmp/miniconda.sh\" | md5sum -c -",
+            "bash /tmp/miniconda.sh -bfp ${CONDA_DIR}",
+            "rm -rf /tmp/miniconda.sh",
+            "conda install -y python=3",
+            "conda update -y conda",
+            "conda update --all -y",
+            "conda clean --all -y",
+            "echo /opt/conda/lib > /etc/ld.so.conf.d/conda.conf",
+            "ldconfig"
+          ]
+        },
+        {
+          "type": "ENV",
+          "time": "2020-08-14T15:59:35Z",
+          "is_nop": true,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "USER=ydata",
+          "command_snippet": "ENV USER=ydata",
+          "command_all": "ENV USER=ydata"
+        },
+        {
+          "type": "ENV",
+          "time": "2020-08-14T15:59:35Z",
+          "is_nop": true,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "UID=1000",
+          "command_snippet": "ENV UID=1000",
+          "command_all": "ENV UID=1000"
+        },
+        {
+          "type": "RUN",
+          "time": "2020-08-14T15:59:54Z",
+          "is_nop": false,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "command_snippet": "RUN useradd -m -s /bin/bash -N -u ${UID} ${U...",
+          "command_all": "RUN useradd -m -s /bin/bash -N -u ${UID} ${USER} && \\\n\tchown -R ${USER}:users /opt/conda",
+          "system_commands": [
+            "useradd -m -s /bin/bash -N -u ${UID} ${USER}",
+            "chown -R ${USER}:users /opt/conda"
+          ]
+        },
+        {
+          "type": "USER",
+          "time": "2020-08-14T15:59:55Z",
+          "is_nop": true,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "ydata",
+          "command_snippet": "USER ydata",
+          "command_all": "USER ydata"
+        },
+        {
+          "type": "WORKDIR",
+          "time": "2020-08-14T15:59:56Z",
+          "is_nop": true,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "/home/ydata",
+          "command_snippet": "WORKDIR /home/ydata",
+          "command_all": "WORKDIR /home/ydata",
+          "system_commands": [
+            "mkdir -p /home/ydata"
+          ]
+        },
+        {
+          "type": "COPY",
+          "time": "2020-08-14T15:59:56Z",
+          "is_nop": true,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "--chown=ydata:usersfile:90da26f742785d58736d4fb51d5dbdfe239cc338968eb745e2722f2bc56d80cc in /tmp",
+          "command_snippet": "COPY --chown=ydata:usersfile:90da26f742785d5...",
+          "command_all": "COPY --chown=ydata:usersfile:90da26f742785d58736d4fb51d5dbdfe239cc338968eb745e2722f2bc56d80cc /tmp",
+          "target": "/tmp",
+          "source_type": "--chown=ydata"
+        },
+        {
+          "type": "RUN",
+          "time": "2020-08-14T16:00:03Z",
+          "is_nop": false,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "command_snippet": "RUN conda install --quiet --yes --file /tmp/...",
+          "command_all": "RUN conda install --quiet --yes --file /tmp/conda.txt && \\\n\tconda clean --all -f -y && \\\n\trm -rf /tmp/conda.txt",
+          "system_commands": [
+            "conda install --quiet --yes --file /tmp/conda.txt",
+            "conda clean --all -f -y",
+            "rm -rf /tmp/conda.txt"
+          ]
+        },
+        {
+          "type": "ENTRYPOINT",
+          "time": "2020-08-14T16:00:03Z",
+          "is_nop": true,
+          "is_exec_form": true,
+          "local_image_exits": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "[\"tini\",\"-g\",\"--\"]",
+          "command_snippet": "ENTRYPOINT [\"tini\",\"-g\",\"--\"]",
+          "command_all": "ENTRYPOINT [\"tini\",\"-g\",\"--\"]"
+        },
+        {
+          "type": "FROM",
+          "time": "2020-08-14T16:00:08Z",
+          "is_last_instruction": true,
+          "is_nop": false,
+          "local_image_exits": true,
+          "layer_index": 0,
+          "size": 298505082,
+          "size_human": "298 MB",
+          "params": "scratch",
+          "command_snippet": "FROM scratch",
+          "command_all": "FROM scratch",
+          "comment": "merge sha256:56706a593d38cb50de522c1c0999f12def4baddd5315442dbbcb8414f37fb3d5 to sha256:6d935b41319bb2c76f2d18bb6a631b6f9cbe259d07105308b7053f5771736d2e",
+          "raw_tags": [
+            "ydata/base:0.0.2",
+            "ydata/base:latest"
+          ]
+        }
+      ]
+    }
+  ]
+}

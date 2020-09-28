@@ -1,0 +1,5 @@
+DOCKER = docker
+
+build:
+	$(DOCKER)
+

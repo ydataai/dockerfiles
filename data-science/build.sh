@@ -10,7 +10,7 @@ if [ -f "build.args" ]; then
 fi
 
 
-docker build --rm $build_args -t $2 .
+docker build --rm --squash $build_args -t $2 .
 # docker push $2
 
 cd $OLDPWD
