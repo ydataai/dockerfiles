@@ -1,8 +1,8 @@
-ARG TAG=""
-ARG JUPYTERLAB_VERSION="1.2.6"
+ARG TAG="0.1.0"
+ARG JUPYTERLAB_VERSION="1.2.15"
 
-FROM ydata/jupyterlab-${JUPYTERLAB_VERSION}-kubeflow:${TAG}
+FROM ydata/jupyterlab-${JUPYTERLAB_VERSION}:${TAG}
 
-ARG TF_PACKAGE='tensorflow==2.1.*'
+COPY --chown=ydata:users conda.txt requirements.txt /tmp/
 
-RUN pip --no-cache-dir install ${TF_PACKAGE}
+RUN pip --no-cache-dir install --use-feature=2020-resolver -r /tmp/requirements.txt
