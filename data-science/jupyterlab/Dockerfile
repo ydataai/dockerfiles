@@ -1,4 +1,4 @@
-FROM ydataai/labs-base:0.1.0
+FROM ydata/laboratories-base:0.1.0
 
 COPY --chown=ydata:users conda.txt requirements.txt /tmp/
 
@@ -17,7 +17,4 @@ RUN jupyter labextension install kubeflow-kale-labextension
 ENV NB_PREFIX /
 EXPOSE 8888
 
-ENTRYPOINT ["tini", "--", "bash", "-c", "jupyter lab"]
-#CMD [ "--notebook-dir=/home/${USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.base_url=${NB_PREFIX}" ]
-#ENTRYPOINT [ "/bin/bash", "-c", "jupyter", "lab" ]
-CMD [ "--notebook-dir=/home/${USER}", "--ip=0.0.0.0", "--no-browser", "--allow-root", "--port=8888", "--NotebookApp.token=''", "--NotebookApp.password=''", "--NotebookApp.allow_origin='*'", "--NotebookApp.base_url=${NB_PREFIX}" ]
+CMD [ "/bin/bash", "-c", "jupyter lab --notebook-dir=/home/${USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.base_url=${NB_PREFIX}" ]
