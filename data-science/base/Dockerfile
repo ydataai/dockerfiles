@@ -31,8 +31,9 @@ RUN useradd -m -s /bin/bash -N -u ${UID} ${USER} \
 ## Install and setup miniconda3
 ENV CONDA_DIR /opt/conda
 ENV PATH $CONDA_DIR/bin:$PATH
-ENV MINICONDA_IMAGE Miniconda3-py37_4.9.2-Linux-x86_64.sh
-ENV MINICONDA_IMAGE_HASH 3143b1116f2d466d9325c206b7de88f7
+
+ARG MINICONDA_IMAGE
+ARG MINICONDA_IMAGE_HASH
 
 RUN cd /tmp && \
     curl -L -O https://repo.anaconda.com/miniconda/$MINICONDA_IMAGE && \
