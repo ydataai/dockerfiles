@@ -2,6 +2,6 @@ conda
 python
 pip
 
-conda-forge::jupyterlab=2.1.2
+conda-forge::jupyterlab=1.2.15
 tini
 nodejs=10.13.*
