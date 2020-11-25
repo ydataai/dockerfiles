@@ -7,8 +7,8 @@ USER root
 RUN apt-get -qq update && apt-get -qq -y install default-jre unzip \
     && apt-get autoclean
 
-ENV RELEASE_NAME rel-zermelo/2
-ENV H2O_RELEASE h2o-3.32.0.2
+ARG RELEASE_NAME
+ARG H2O_RELEASE
 
 RUN curl -o /tmp/h2oflow.zip http://h2o-release.s3.amazonaws.com/h2o/$RELEASE_NAME/$H2O_RELEASE.zip \
     && unzip /tmp/h2oflow.zip -d /tmp \
