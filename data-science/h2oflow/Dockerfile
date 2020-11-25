@@ -5,7 +5,8 @@ USER root
 
 # Install basic tools
 RUN apt-get -qq update && apt-get -qq -y install default-jre unzip \
-    && apt-get autoclean
+    && apt-get autoclean \
+    && rm -rf /var/lib/apt/lists/*
 
 ARG RELEASE_NAME
 ARG H2O_RELEASE
