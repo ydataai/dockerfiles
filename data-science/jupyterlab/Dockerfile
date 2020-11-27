@@ -1,4 +1,6 @@
-FROM ydata/laboratories-base:0.1.0
+ARG TAG
+
+FROM ydata/laboratories-base:${TAG}
 
 COPY --chown=ydata:users conda.txt requirements.txt /tmp/
 
