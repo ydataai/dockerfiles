@@ -19,7 +19,7 @@ RUN curl -o /tmp/h2oflow.zip http://h2o-release.s3.amazonaws.com/h2o/$RELEASE_NA
     && rm -rf /tmp/h2oflow.zip \
     && chown -R ydata:users /opt/h2oflow
 
-USER ydata
+USER ${UID}
 
 EXPOSE 8888
 CMD ["bash", "-c", "java -jar /opt/h2oflow/h2o.jar -port 8888"]
