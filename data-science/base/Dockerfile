@@ -50,7 +50,7 @@ RUN chown -R ${USER}:users ${CONDA_DIR}
 SHELL ["/bin/bash", "-c"]
 
 # Change to new user
-USER ${USER}
+USER ${UID}
 
 COPY --chown=ydata:users conda.txt /tmp/
 
