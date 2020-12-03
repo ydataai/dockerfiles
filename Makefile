@@ -1,4 +1,6 @@
-$(eval $_IMAGES := $(shell ls -ld data-science/*/ | sort -r | awk '{sub(/data-science\//, "", $$9); sub(/\//, "", $$9); print $$9}'))
+IMAGES_PATH=data-science
+$(eval $_IMAGES := $(shell ls -ld ${IMAGES_PATH}/*/ | sort -r | head -1 | awk '{sub(/${IMAGES_PATH}\//, "", $$9); sub(/\//, "", $$9); print $$9}'))
+$(eval $_IMAGES += $(shell ls -ld ${IMAGES_PATH}/*/ | sort | head -n $$(( $$(ls -ld ${IMAGES_PATH}/*/ | wc -l | awk '{print $$1}') - 1 )) | awk '{sub(/${IMAGES_PATH}\//, "", $$9); sub(/\//, "", $$9); print $$9}'))
 TAG=latest
 TYPES=cpu
 DOCKER_HUB=docker.io/ydata
