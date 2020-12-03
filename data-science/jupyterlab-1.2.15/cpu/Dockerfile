@@ -10,7 +10,7 @@ RUN conda update --all --quiet --yes && \
     conda clean --all -f -y
 
 # Install pypi dependencies
-RUN pip --no-cache-dir install --use-feature=2020-resolver -r /tmp/requirements.txt
+RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Configure container startup
 ENV NB_PREFIX /
