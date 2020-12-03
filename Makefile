@@ -1,4 +1,4 @@
-$(eval $_IMAGES := $(shell ls -ld data-science/*/ | awk '{sub(/data-science\//, "", $$9); sub(/\//, "", $$9); print $$9}'))
+$(eval $_IMAGES := $(shell ls -ld data-science/*/ | sort -r | awk '{sub(/data-science\//, "", $$9); sub(/\//, "", $$9); print $$9}'))
 TAG=latest
 TYPES=cpu
 DOCKER_HUB=docker.io/ydata
