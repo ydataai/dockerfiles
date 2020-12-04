@@ -22,7 +22,10 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Build and Push all images
-        run: make build-and-push-all TAG=${{ needs.prepare.outputs.version }}
+    - name: Login to DockerHub Registry
+      run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+    - name: Build and Push all images
+      run: make build-and-push-all TAG=test
