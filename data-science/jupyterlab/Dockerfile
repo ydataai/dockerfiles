@@ -14,6 +14,10 @@ RUN conda update --all --quiet --yes && \
 # Install pypi dependencies
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
+# Install extension
+RUN git clone https://github.com/jupytercalpoly/jupyterlab-pkginstaller.git /tmp/jupyterlab-pkginstaller && cd /tmp/jupyterlab-pkginstaller && \
+    jlpm && jupyter labextension link . && jupyter lab build
+
 # Configure container startup
 ENV NB_PREFIX /
 EXPOSE 8888

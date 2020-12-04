@@ -21,6 +21,11 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt
 
+# Install git
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y git
+
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
