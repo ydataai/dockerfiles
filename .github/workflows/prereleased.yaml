@@ -1,0 +1,31 @@
+name: Prereleased
+
+on:
+  release:
+    types: [ prereleased ]
+
+jobs:
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-20.04
+
+    outputs:
+      version: ${{ steps.version.outputs.value }}
+
+    steps:
+    - name: Version
+      id: version
+      run: echo ::set-output name=value::`echo ${{ github.ref }} | sed -n -E 's/refs\/tags\/([0-9]+.[0-9]+.[0-9]+)/\1/p'`
+
+  build:
+    name: Build
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to DockerHub Registry
+      run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+    - name: Build and Push all images
+      run: make build-and-push-all TAG=test

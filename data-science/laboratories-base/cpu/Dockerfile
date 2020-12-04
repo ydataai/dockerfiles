@@ -1,4 +1,12 @@
-FROM ubuntu:20.04
+ARG FROM
+
+FROM $FROM
+
+# Support for string substituion
+SHELL ["/bin/bash", "-c"]
+
+ARG MINICONDA_IMAGE
+ARG MINICONDA_IMAGE_HASH
 
 ENV DEBIAN_FRONTEND noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN true
@@ -6,9 +14,9 @@ ENV DEBIAN_FRONTEND noninteractive \
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     ca-certificates \
     curl \
-    locales \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    locales && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -18,8 +26,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
 # Prepare for user environment
-ENV USER=ydata
-ENV USER ${USER}
+ENV USER ydata
 ENV UID 1000
 
 # Create USER user with UID=1000 and in the 'users' group
@@ -32,9 +39,6 @@ RUN useradd -m -s /bin/bash -N -u ${UID} ${USER} \
 ENV CONDA_DIR /opt/conda
 ENV PATH $CONDA_DIR/bin:$PATH
 
-ARG MINICONDA_IMAGE
-ARG MINICONDA_IMAGE_HASH
-
 RUN cd /tmp && \
     curl -L -O https://repo.anaconda.com/miniconda/$MINICONDA_IMAGE && \
     echo "${MINICONDA_IMAGE_HASH}  ${MINICONDA_IMAGE}" | md5sum -c - && \
@@ -46,13 +50,10 @@ RUN cd /tmp && \
 # Update CONDA_DIR permissions to allow run as regular user
 RUN chown -R ${USER}:users ${CONDA_DIR}
 
-# Force shell to be bash
-SHELL ["/bin/bash", "-c"]
-
 # Change to new user
 USER ${UID}
 
-COPY --chown=ydata:users conda.txt /tmp/
+COPY --chown=${UID}:users conda.txt /tmp/
 
 # Update and install conda packages
 RUN conda update --all --quiet --yes && \
