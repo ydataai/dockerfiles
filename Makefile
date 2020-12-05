@@ -2,8 +2,8 @@ IMAGES_PATH=data-science
 $(eval $_IMAGES := $(shell ls -ld ${IMAGES_PATH}/*/ | sort -r | head -1 | awk '{sub(/${IMAGES_PATH}\//, "", $$9); sub(/\//, "", $$9); print $$9}'))
 $(eval $_IMAGES += $(shell ls -ld ${IMAGES_PATH}/*/ | sort | head -n $$(( $$(ls -ld ${IMAGES_PATH}/*/ | wc -l | awk '{print $$1}') - 1 )) | awk '{sub(/${IMAGES_PATH}\//, "", $$9); sub(/\//, "", $$9); print $$9}'))
 TAG=latest
-TYPES=cpu
-DOCKER_HUB=docker.io/ydata
+TYPES=cpu gpu
+DOCKER_REGISTRY=docker.io/ydata
 
 .PHONY: help list-images build push build-and-push-all
 
@@ -23,7 +23,7 @@ define DOCKER_BUILD
 endef
 
 define DOCKER_PUSH
-	@echo ""; echo "==> Pushing ydata/$1:$3-$2 to DockerHub..."
+	@echo ""; echo "==> Pushing ydata/$1:$3-$2 to Docker image registry..."
 	@docker push ${DOCKER_HUB}/$1:$3-$2
 endef
 
@@ -41,7 +41,7 @@ else
 		$(MAKEFILE_LIST) | grep -v '@awk' | sort
 endif
 
-list-images: ### Lists all the images available to be built and/or pushed to DockerHub
+list-images: ### Lists all the images available to be built and/or pushed to Docker image registry
 	@echo "The images that you can use this tool to build are:"; echo ""
 	@echo $(foreach image, $($_IMAGES), "\t • ${image}"; echo "")
 
@@ -60,11 +60,14 @@ ifeq ($(filter $(TYPE),$(TYPES)),)
 endif
 	$(call DOCKER_BUILD,${IMAGE},${TYPE},${TAG})
 
-push:	### Pushes the image to DockerHub, given its name and its tag. I.e.: `make push IMAGE=h2oflow-3.32.0.2 TAG=0.1.0 (optional)`
+push:	### Pushes the image to Docker image registry, given its name and its tag. I.e.: `make push IMAGE=h2oflow-3.32.0.2 TAG=0.1.0 (optional)`
 ifndef IMAGE
 	$(error Missing IMAGE variable. Usage: make push IMAGE= TAG= (optional))
 endif
 	$(call DOCKER_PUSH,${IMAGE},${TYPE},${TAG})
 
-build-and-push-all:	### Builds and pushes all the currently available images, both CPU and GPU bound, to DockerHub, with the given tag. I.e.: `make build-and-push-all TAG=0.1.0 (optional)`
+build-all:	### Builds all the currently available images, both CPU and GPU bound, to Docker image registry, with the given tag. I.e.: `make build-all TAG=0.1.0 (optional)`
+	$(foreach type, $(TYPES), $(foreach image, $($_IMAGES), $(call DOCKER_BUILD,${image},${type},${TAG})))
+
+build-and-push-all:	### Builds and pushes all the currently available images, both CPU and GPU bound, to Docker image registry, with the given tag. I.e.: `make build-and-push-all TAG=0.1.0 (optional)`
 	$(foreach type, $(TYPES), $(foreach image, $($_IMAGES), $(call DOCKER_BUILD_AND_PUSH,${image},${type},${TAG})))
