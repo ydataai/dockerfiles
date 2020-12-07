@@ -4,4 +4,3 @@ pip
 
 conda-forge::jupyterlab=1.2.15
 tini
-nodejs=10.13.*
