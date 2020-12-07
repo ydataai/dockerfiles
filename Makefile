@@ -24,7 +24,7 @@ endef
 
 define DOCKER_PUSH
 	@echo ""; echo "==> Pushing ydata/$1:$3-$2 to Docker image registry..."
-	@docker push ${DOCKER_HUB}/$1:$3-$2
+	@docker push ${DOCKER_REGISTRY}/$1:$3-$2
 endef
 
 define DOCKER_BUILD_AND_PUSH
