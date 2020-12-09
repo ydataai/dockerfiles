@@ -4,8 +4,6 @@ FROM ydata/laboratories-base:${TAG}
 
 SHELL [ "/bin/bash", "--login", "-c" ]
 
-ENV UID 1000
-
 # Install h2oflow
 USER root
 

@@ -2,8 +2,6 @@ ARG TAG
 
 FROM ydata/laboratories-base:${TAG}
 
-ENV UID 1000
-
 # Install h2oflow
 USER root
 
@@ -19,7 +17,7 @@ RUN curl -o /tmp/h2oflow.zip http://h2o-release.s3.amazonaws.com/h2o/$RELEASE_NA
     && unzip /tmp/h2oflow.zip -d /tmp \
     && mv /tmp/$H2O_RELEASE /opt/h2oflow \
     && rm -rf /tmp/h2oflow.zip \
-    && chown -R ${UID}:users /opt/h2oflow
+    && chown -R ${USER}:users /opt/h2oflow
 
 USER ${UID}
 
