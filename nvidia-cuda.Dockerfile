@@ -1,29 +1,29 @@
-ARG CUDA
+ARG CUDA=10.1
 
 FROM nvidia/cuda:${CUDA}-base-ubuntu18.04
 
-ARG CUDNN
-ARG LIBNVINFER
-ARG LIBCUBLAS
+ARG CUDA
+ARG CUDNN=7=7.6.4.38-1+cuda10.1
+ARG LIBNVINFER=6=6.0.1-1+cuda10.1
 
 # Support for string substituion
 SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    cuda-command-line-tools-${CUDA/./-} \
-    libcublas${LIBCUBLAS} \
-    cuda-nvrtc-${CUDA/./-} \
-    cuda-cufft-${CUDA/./-} \
-    cuda-curand-${CUDA/./-} \
-    cuda-cusolver-${CUDA/./-} \
-    cuda-cusparse-${CUDA/./-} \
-    libcudnn${CUDNN} \
-    libfreetype6-dev \
-    libhdf5-serial-dev \
-    libzmq3-dev \
-    pkg-config \
-    libnvinfer${LIBNVINFER} \
-    libnvinfer-plugin${LIBNVINFER} && \
+        cuda-command-line-tools-${CUDA/./-} \
+        libcublas10=10.2.1.243-1 \
+        cuda-nvrtc-${CUDA/./-} \
+        cuda-cufft-${CUDA/./-} \
+        cuda-curand-${CUDA/./-} \
+        cuda-cusolver-${CUDA/./-} \
+        cuda-cusparse-${CUDA/./-} \
+        libcudnn${CUDNN} \
+        libfreetype6-dev \
+        libhdf5-serial-dev \
+        libzmq3-dev \
+        pkg-config \
+        libnvinfer${LIBNVINFER} \
+        libnvinfer-plugin${LIBNVINFER} \
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt
 
