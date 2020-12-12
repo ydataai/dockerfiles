@@ -28,4 +28,4 @@ jobs:
       run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
     - name: Build and Push all images
-      run: make build-and-push-all TAG=${{ needs.prepare.outputs.version }}
+      run: ./images-builder.sh ${{ needs.prepare.outputs.version }}
