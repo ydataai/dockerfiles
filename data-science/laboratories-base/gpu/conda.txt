@@ -1,4 +1,0 @@
-pip
-
-tini
-conda-forge::nodejs=12.14.1

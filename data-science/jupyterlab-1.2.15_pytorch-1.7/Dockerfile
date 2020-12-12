@@ -3,8 +3,11 @@ ARG JUPYTERLAB_VERSION
 
 FROM ydata/jupyterlab-${JUPYTERLAB_VERSION}:${TAG}
 
-COPY --chown=${USER}:users conda.txt /tmp/
+ARG TYPE
 
-# Update all but JupyterLab and install conda packages
+COPY --chown=${USER}:users conda.txt /tmp/
+COPY --chown=${USER}:users ${TYPE}/conda.txt /tmp/conda-${TYPE}.txt
+
 RUN conda install --quiet --yes --file /tmp/conda.txt && \
+    conda install --quiet --yes --file /tmp/conda-${TYPE}.txt && \
     conda clean --all -f -y

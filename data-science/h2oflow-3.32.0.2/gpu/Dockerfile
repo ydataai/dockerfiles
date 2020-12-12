@@ -9,7 +9,6 @@ USER root
 
 # Install basic tools
 RUN apt-get -qq update && apt-get -qq -y install \
-    libpython3.6-dev \
     default-jre \
     unzip \
     libopenblas-dev \

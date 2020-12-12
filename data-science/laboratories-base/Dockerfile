@@ -5,6 +5,8 @@ FROM $FROM
 # Support for string substituion
 SHELL ["/bin/bash", "-c"]
 
+ARG TYPE
+
 ARG MINICONDA_IMAGE
 ARG MINICONDA_IMAGE_HASH
 
@@ -33,7 +35,7 @@ ENV UID 1000
 # but allow for non-initial launches of the notebook to have
 # $HOME provided by the contents of a PV
 RUN useradd -m -s /bin/bash -N -u ${UID} ${USER} \
-    && chown -R ${UID}:users /usr/local/bin
+    && chown -R ${USER}:users /usr/local/bin
 
 ## Install and setup miniconda3
 ENV CONDA_DIR /opt/conda
@@ -53,7 +55,7 @@ RUN chown -R ${USER}:users ${CONDA_DIR}
 # Change to new user
 USER ${UID}
 
-COPY --chown=${USER}:users conda.txt /tmp/
+COPY --chown=${USER}:users ./conda.txt /tmp/
 
 # Update and install conda packages
 RUN conda update --all --quiet --yes && \
