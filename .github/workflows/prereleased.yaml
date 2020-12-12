@@ -6,7 +6,7 @@ on:
 
 jobs:
   prepare:
-    name: Prepare
+    name: Build and push Docker images
     runs-on: ubuntu-20.04
 
     outputs:
@@ -17,15 +17,10 @@ jobs:
       id: version
       run: echo ::set-output name=value::`echo ${{ github.ref }} | sed -n -E 's/refs\/tags\/([0-9]+.[0-9]+.[0-9]+)/\1/p'`
 
-  build:
-    name: Build
-    runs-on: ubuntu-20.04
-
-    steps:
     - uses: actions/checkout@v2
 
     - name: Login to DockerHub Registry
       run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
     - name: Build and Push all images
-      run: ./images-builder.sh ${{ needs.prepare.outputs.version }}
+      run: make build-and-push-all TAG=${{ steps.version.outputs.value }}
