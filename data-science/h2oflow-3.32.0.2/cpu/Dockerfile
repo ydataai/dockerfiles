@@ -22,4 +22,7 @@ RUN curl -o /tmp/h2oflow.zip http://h2o-release.s3.amazonaws.com/h2o/$RELEASE_NA
 USER ${UID}
 
 EXPOSE 8888
+
+LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
+
 CMD ["bash", "-c", "java -jar /opt/h2oflow/h2o.jar -port 8888"]
