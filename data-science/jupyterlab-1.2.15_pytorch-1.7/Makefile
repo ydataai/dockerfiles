@@ -1,5 +1,5 @@
 TAG=latest
-DOCKER_REGISTRY=docker.io/ydata
+DOCKER_REGISTRY=docker.io
 
 .PHONY: build
 
@@ -19,8 +19,9 @@ define DOCKER_BUILD
 endef
 
 define DOCKER_PUSH
-	@echo ""; echo "==> Pushing ydata/$1-$2:$3 to Docker image registry..."
-	@docker push ${DOCKER_REGISTRY}/$(subst data-science/,,$1):$3-$2
+	$(eval IMAGE_NAME := ydata/$(subst data-science/,,$1):$3-$2)
+	@echo ""; echo "==> Pushing ${IMAGE_NAME} to Docker image registry..."
+	@docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}
 endef
 
 build:

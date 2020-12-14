@@ -1,5 +1,5 @@
 TAG=latest
-DOCKER_REGISTRY=docker.io/ydata
+DOCKER_REGISTRY=docker.io
 CUDA_VERSIONS=10.0 10.1
 
 .PHONY: build
@@ -16,20 +16,25 @@ define DOCKER_BUILD
 	@echo "\t\t$($@_BUILD_ARGS)"; echo ""; echo ""
 
 	@echo ""; echo "==> Commencing build"
-	@docker build --rm $($@_BUILD_ARGS) -t ydata/$(subst data-science/,,$1):$2-$3 .
+	@docker build --rm $($@_BUILD_ARGS) -t ydata/$(subst data-science/,,$1):$3-$2 .
 endef
 
 define DOCKER_PUSH
-	@echo ""; echo "==> Pushing ydata/$1-$2:$3 to Docker image registry..."
-	@docker push ${DOCKER_REGISTRY}/$(subst data-science/,,$1):$3-$2
+	$(eval IMAGE_NAME := ydata/$(subst data-science/,,$1):$3-$2)
+	@echo ""; echo "==> Pushing ${IMAGE_NAME} to Docker image registry..."
+	@docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}
 endef
 
 build:
 ifeq (${TYPE},gpu)
-	$(foreach version, $(CUDA_VERSIONS), $(call DOCKER_BUILD,${IMAGE},gpu-cuda${version},${TAG}))
+	$(foreach version,$(CUDA_VERSIONS),$(call DOCKER_BUILD,${IMAGE},gpu-cuda${version},${TAG}))
 else
 	$(call DOCKER_BUILD,${IMAGE},${TYPE},${TAG})
 endif
 
 push:
+ifeq (${TYPE},gpu)
+	$(foreach version,$(CUDA_VERSIONS),$(call DOCKER_PUSH,${IMAGE},gpu-cuda${version},${TAG}))
+else
 	$(call DOCKER_PUSH,${IMAGE},${TYPE},${TAG})
+endif
