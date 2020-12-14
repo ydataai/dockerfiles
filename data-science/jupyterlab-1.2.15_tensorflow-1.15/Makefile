@@ -15,11 +15,11 @@ define DOCKER_BUILD
 	@echo "\t\t$($@_BUILD_ARGS)"; echo ""; echo ""
 
 	@echo ""; echo "==> Commencing build"
-	@docker build --rm $($@_BUILD_ARGS) -t ydata/$(subst data-science/,,$1):$2-$3 .
+	@docker build --rm $($@_BUILD_ARGS) -t ydata/$(subst data-science/,,$1):$3-$2 .
 endef
 
 define DOCKER_PUSH
-	$(eval IMAGE_NAME := ydata/$(subst data-science/,,$1):$2-$3)
+	$(eval IMAGE_NAME := ydata/$(subst data-science/,,$1):$3-$2)
 	@echo ""; echo "==> Pushing ${IMAGE_NAME} to Docker image registry..."
 	@docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}
 endef
