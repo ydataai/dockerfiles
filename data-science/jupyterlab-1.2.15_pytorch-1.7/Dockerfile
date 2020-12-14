@@ -5,7 +5,6 @@ FROM ydata/jupyterlab-${JUPYTERLAB_VERSION}:${TAG}
 
 ARG TYPE
 
-COPY --chown=${USER}:users conda.txt /tmp/
+COPY --chown=${USER}:users ${TYPE}/requirements.txt /tmp/requirements.txt
 
-RUN conda install --quiet --yes --file /tmp/conda.txt && \
-    conda clean --all -f -y
+RUN pip install pip --no-cache-dir install -r /tmp/requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
