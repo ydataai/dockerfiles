@@ -1,8 +1,8 @@
 name: Prereleased
 
 on:
-  pull_request:
-    branches: [ master ]
+  release:
+    types: [ prereleased ]
 
 jobs:
   prepare:
@@ -26,4 +26,4 @@ jobs:
       uses: docker/setup-buildx-action@v1
 
     - name: Build and Push all images
-      run: ./images-builder.sh test
+      run: ./images-builder.sh ${{ steps.version.outputs.value }}
