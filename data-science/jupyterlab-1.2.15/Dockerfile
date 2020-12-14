@@ -2,7 +2,7 @@ ARG TAG
 
 FROM ydata/laboratories-base:${TAG}
 
-COPY --chown=ydata:users conda.txt requirements.txt /tmp/
+COPY --chown=${USER}:users conda.txt requirements.txt /tmp/
 
 # Update and install conda packages
 RUN conda update --all --quiet --yes && \

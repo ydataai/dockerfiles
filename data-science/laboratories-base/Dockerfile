@@ -5,6 +5,8 @@ FROM $FROM
 # Support for string substituion
 SHELL ["/bin/bash", "-c"]
 
+ARG TYPE
+
 ARG MINICONDA_IMAGE
 ARG MINICONDA_IMAGE_HASH
 
@@ -53,7 +55,7 @@ RUN chown -R ${USER}:users ${CONDA_DIR}
 # Change to new user
 USER ${UID}
 
-COPY --chown=${UID}:users conda.txt /tmp/
+COPY --chown=${USER}:users ./conda.txt /tmp/
 
 # Update and install conda packages
 RUN conda update --all --quiet --yes && \

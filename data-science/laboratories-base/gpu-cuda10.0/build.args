@@ -1,0 +1,1 @@
+FROM=ydata/nvidia-cuda:10.0-ubuntu18.04

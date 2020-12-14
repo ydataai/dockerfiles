@@ -1,10 +1,10 @@
-ARG CUDA=10.1
+ARG CUDA
 
 FROM nvidia/cuda:${CUDA}-base-ubuntu18.04
 
 ARG CUDA
-ARG CUDNN=7=7.6.4.38-1+cuda10.1
-ARG LIBNVINFER=6=6.0.1-1+cuda10.1
+ARG CUDNN
+ARG LIBNVINFER
 
 # Support for string substituion
 SHELL ["/bin/bash", "-c"]
