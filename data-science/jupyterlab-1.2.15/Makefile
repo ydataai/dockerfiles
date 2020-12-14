@@ -1,5 +1,6 @@
 TAG=latest
 DOCKER_REGISTRY=docker.io/ydata
+CUDA_VERSIONS=10.0 10.1
 
 .PHONY: build
 
@@ -15,7 +16,7 @@ define DOCKER_BUILD
 	@echo "\t\t$($@_BUILD_ARGS)"; echo ""; echo ""
 
 	@echo ""; echo "==> Commencing build"
-	@docker build --rm $($@_BUILD_ARGS) -t ydata/$(subst data-science/,,$1):$3-$2 .
+	@docker build --rm $($@_BUILD_ARGS) -t ydata/$(subst data-science/,,$1):$2-$3 .
 endef
 
 define DOCKER_PUSH
@@ -24,7 +25,11 @@ define DOCKER_PUSH
 endef
 
 build:
+ifeq (${TYPE},gpu)
+	$(foreach version, $(CUDA_VERSIONS), $(call DOCKER_BUILD,${IMAGE},gpu-cuda${version},${TAG}))
+else
 	$(call DOCKER_BUILD,${IMAGE},${TYPE},${TAG})
+endif
 
 push:
 	$(call DOCKER_PUSH,${IMAGE},${TYPE},${TAG})

@@ -1,4 +1,4 @@
 pip
 
 tini
-conda-forge::nodejs-10.13.0
+conda-forge::nodejs=12.14.1
