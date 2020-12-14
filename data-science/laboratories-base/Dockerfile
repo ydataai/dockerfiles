@@ -62,5 +62,7 @@ RUN conda update --all --quiet --yes && \
     conda install --quiet --yes --file /tmp/conda.txt && \
     conda clean --all -f -y
 
+LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
+
 # Setup entrypoint using tini
 ENTRYPOINT [ "tini", "-g", "--" ]

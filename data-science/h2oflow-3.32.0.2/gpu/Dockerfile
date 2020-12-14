@@ -40,6 +40,8 @@ RUN conda create -n h2o4gpuenv -c h2oai -c conda-forge -c rapidsai h2o4gpu-cuda1
 
 RUN conda activate h2o4gpuenv
 
+LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
+
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
 CMD ["bash", "-c", "java -jar /opt/h2oflow/h2o.jar -port 8888"]
