@@ -1,8 +1,8 @@
 name: Prereleased
 
 on:
-  pull_request:
-    branches: [ master ]
+  release:
+    types: [ prereleased ]
 
 jobs:
   prepare:
@@ -16,8 +16,6 @@ jobs:
     - name: Version
       id: version
       run: echo ::set-output name=value::`echo ${{ github.ref }} | sed -n -E 's/refs\/tags\/([0-9]+.[0-9]+.[0-9]+)/\1/p'`
-
-    - uses: actions/checkout@v2
 
     - uses: actions/checkout@v2
 
