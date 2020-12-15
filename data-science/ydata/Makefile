@@ -1,6 +1,6 @@
 TAG=latest
 DOCKER_REGISTRY=ghcr.io
-PACKAGE=ydataai/dockerfiles
+OWNER=ydataai
 
 .PHONY: build
 
@@ -22,7 +22,7 @@ endef
 define DOCKER_PUSH
 	$(eval IMAGE_NAME := $(subst data-science/,,$1):$2-gpu)
 	@echo ""; echo "==> Pushing ${IMAGE_NAME} to Docker image registry..."
-	@echo docker push ${DOCKER_REGISTRY}/${PACKAGE}/${IMAGE_NAME}
+	@echo docker push ${DOCKER_REGISTRY}/${OWNER}/${IMAGE_NAME}
 endef
 
 build:
