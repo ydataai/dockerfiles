@@ -16,13 +16,13 @@ define DOCKER_BUILD
 	@echo "\t\t$($@_BUILD_ARGS)"; echo ""; echo ""
 
 	@echo ""; echo "==> Commencing build"
-	@echo docker build --rm $($@_BUILD_ARGS) -t $(subst data-science/,,$1):$2-gpu .
+	@docker build --rm $($@_BUILD_ARGS) -t $(subst data-science/,,$1):$2-gpu .
 endef
 
 define DOCKER_PUSH
 	$(eval IMAGE_NAME := $(subst data-science/,,$1):$2-gpu)
 	@echo ""; echo "==> Pushing ${IMAGE_NAME} to Docker image registry..."
-	@echo docker push ${DOCKER_REGISTRY}/${OWNER}/${IMAGE_NAME}
+	@docker push ${DOCKER_REGISTRY}/${OWNER}/${IMAGE_NAME}
 endef
 
 build:
