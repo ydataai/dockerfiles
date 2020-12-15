@@ -1,7 +1,7 @@
 CUDA_IMAGES=nvidia-cuda
 LABS_IMAGES=data-science/laboratories-base data-science/jupyterlab-1.2.15 \
 data-science/jupyterlab-1.2.15_tensorflow-1.15 data-science/jupyterlab-1.2.15_tensorflow-2.3 \
-data-science/jupyterlab-1.2.15_pytorch-1.7 data-science/h2oflow-3.32.0.2
+data-science/jupyterlab-1.2.15_pytorch-1.7 data-science/h2oflow-3.32.0.2 data-science/ydata
 IMAGES=$(CUDA_IMAGES) $(LABS_IMAGES)
 TAG=latest
 TYPES=cpu gpu
@@ -44,8 +44,10 @@ ifndef VERSION
 	$(error Missing VERSION variable. Usage: make build IMAGE= VERSION=)
 endif
 else
-ifndef TYPE
-	$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
+ifneq ($(IMAGE),data-science/ydata)
+	ifndef TYPE
+		$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
+	endif
 endif
 endif
 ifeq ($(filter $(IMAGE),$(IMAGES)),)
@@ -56,8 +58,10 @@ ifeq ($(filter $(VERSION),$(CUDA_VERSIONS)),)
 	$(error Invalid VERSION selected. Only 10.0 or 10.1 are supported)
 endif
 else
-ifeq ($(filter $(TYPE),$(TYPES)),)
-	$(error Invalid type selected. Only cpu or gpu are supported)
+ifneq ($(IMAGE),data-science/ydata)
+	ifeq ($(filter $(TYPE),$(TYPES)),)
+		$(error Invalid type selected. Only cpu or gpu are supported)
+	endif
 endif
 endif
 
@@ -76,8 +80,10 @@ ifndef VERSION
 	$(error Missing VERSION variable. Usage: make build IMAGE= VERSION=)
 endif
 else
-ifndef TYPE
-	$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
+ifneq ($(IMAGE),data-science/ydata)
+	ifndef TYPE
+		$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
+	endif
 endif
 endif
 ifeq ($(filter $(IMAGE),$(IMAGES)),)
@@ -88,8 +94,10 @@ ifeq ($(filter $(VERSION),$(CUDA_VERSIONS)),)
 	$(error Invalid VERSION selected. Only 10.0 or 10.1 are supported)
 endif
 else
-ifeq ($(filter $(TYPE),$(TYPES)),)
-	$(error Invalid type selected. Only cpu or gpu are supported)
+ifneq ($(IMAGE),data-science/ydata)
+	ifeq ($(filter $(TYPE),$(TYPES)),)
+		$(error Invalid type selected. Only cpu or gpu are supported)
+	endif
 endif
 endif
 
