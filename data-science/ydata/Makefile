@@ -1,5 +1,5 @@
 TAG=latest
-DOCKER_REGISTRY=docker.pkg.github.com
+DOCKER_REGISTRY=ghcr.io
 PACKAGE=ydataai/dockerfiles
 
 .PHONY: build
