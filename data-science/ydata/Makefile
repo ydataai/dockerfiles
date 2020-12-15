@@ -16,7 +16,7 @@ define DOCKER_BUILD
 	@echo "\t\t$($@_BUILD_ARGS)"; echo ""; echo ""
 
 	@echo ""; echo "==> Commencing build"
-	@docker build --rm $($@_BUILD_ARGS) -t $(subst data-science/,,$1):$2-gpu .
+	@docker build --rm $($@_BUILD_ARGS) -t ${DOCKER_REGISTRY}/${OWNER}/$(subst data-science/,,$1):$2-gpu .
 endef
 
 define DOCKER_PUSH
