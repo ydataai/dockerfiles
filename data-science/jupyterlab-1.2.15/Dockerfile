@@ -16,7 +16,7 @@ RUN pip --no-cache-dir install -r /tmp/requirements.txt
 ENV NB_PREFIX /
 EXPOSE 8888
 
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --dev-build=False --minimize=False
 
 LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
 
