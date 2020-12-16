@@ -1,6 +1,0 @@
-conda
-python
-pip
-
-conda-forge::jupyterlab=1.2.15
-tini
