@@ -17,11 +17,6 @@ define DOCKER_PUSH
 	$(MAKE) -C $1 push
 endef
 
-define DOCKER_BUILD_AND_PUSH
-	$(call DOCKER_BUILD,$1,$2,$3)
-	$(call DOCKER_PUSH,$1,$2,$3)
-endef
-
 help:	# The following lines will print the available commands when entering just 'make'
 ifeq ($(UNAME), Linux)
 	@grep -P '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
