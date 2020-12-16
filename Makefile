@@ -45,9 +45,9 @@ ifndef VERSION
 endif
 else
 ifneq ($(IMAGE),data-science/ydata)
-	ifndef TYPE
-		$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
-	endif
+ifndef TYPE
+	$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
+endif
 endif
 endif
 ifeq ($(filter $(IMAGE),$(IMAGES)),)
@@ -59,9 +59,9 @@ ifeq ($(filter $(VERSION),$(CUDA_VERSIONS)),)
 endif
 else
 ifneq ($(IMAGE),data-science/ydata)
-	ifeq ($(filter $(TYPE),$(TYPES)),)
-		$(error Invalid type selected. Only cpu or gpu are supported)
-	endif
+ifeq ($(filter $(TYPE),$(TYPES)),)
+	$(error Invalid type selected. Only cpu or gpu are supported)
+endif
 endif
 endif
 
@@ -81,9 +81,9 @@ ifndef VERSION
 endif
 else
 ifneq ($(IMAGE),data-science/ydata)
-	ifndef TYPE
-		$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
-	endif
+ifndef TYPE
+	$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
+endif
 endif
 endif
 ifeq ($(filter $(IMAGE),$(IMAGES)),)
@@ -95,9 +95,9 @@ ifeq ($(filter $(VERSION),$(CUDA_VERSIONS)),)
 endif
 else
 ifneq ($(IMAGE),data-science/ydata)
-	ifeq ($(filter $(TYPE),$(TYPES)),)
-		$(error Invalid type selected. Only cpu or gpu are supported)
-	endif
+ifeq ($(filter $(TYPE),$(TYPES)),)
+	$(error Invalid type selected. Only cpu or gpu are supported)
+endif
 endif
 endif
 

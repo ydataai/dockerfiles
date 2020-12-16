@@ -7,13 +7,7 @@ for image in "${laboratories_images[@]}"
 do
   for type in "${laboratories_images_types[@]}"
   do
-    if [ -z $type ]
-    then
       make build IMAGE="$image" TYPE="$type" TAG="$1"
       make push IMAGE="$image" TYPE="$type" TAG="$1"
-    else
-      make build IMAGE="$image" TAG="$1"
-      make push IMAGE="$image" TAG="$1"
-    fi
   done
 done
