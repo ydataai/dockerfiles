@@ -32,10 +32,14 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-      with:
-        install: true
+    - name: Build and Push Lab Base images
+      run: ./images-builder.sh base ${{ steps.version.outputs.value }}
 
-    - name: Build and Push all images
-      run: ./images-builder.sh ${{ steps.version.outputs.value }}
+    - name: Build and Push JupyterLab images
+      run: ./images-builder.sh jupyterlab ${{ steps.version.outputs.value }}
+
+    - name: Build and Push H2O images
+      run: ./images-builder.sh h2o ${{ steps.version.outputs.value }}
+
+    - name: Build and Push YData image
+      run: ./images-builder.sh ydata ${{ steps.version.outputs.value }}

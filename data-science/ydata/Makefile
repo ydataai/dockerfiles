@@ -2,7 +2,7 @@ TAG=latest
 DOCKER_REGISTRY=ghcr.io
 OWNER=ydataai
 
-.PHONY: build
+.PHONY: build push
 
 define DOCKER_BUILD
 	$(eval ARGS_FILE := ./build.args)

@@ -1,6 +1,6 @@
 DOCKER_REGISTRY=docker.io
 
-.PHONY: build
+.PHONY: build push
 
 define DOCKER_BUILD
 	$(eval ARGS_FILE := ./$1/build.args)
