@@ -1,7 +1,7 @@
 CUDA_IMAGES=nvidia-cuda
-LABS_IMAGES=data-science/laboratories-base data-science/jupyterlab-1.2.15 \
-data-science/jupyterlab-1.2.15_tensorflow-1.15 data-science/jupyterlab-1.2.15_tensorflow-2.3 \
-data-science/jupyterlab-1.2.15_pytorch-1.7 data-science/h2oflow-3.32.0.2 data-science/ydata
+LABS_IMAGES=data-science/laboratories-base data-science/jupyterlab \
+data-science/jupyterlab_tensorflow-1.15 data-science/jupyterlab_tensorflow-2.3 \
+data-science/jupyterlab_pytorch-1.7 data-science/h2oflow data-science/ydata
 IMAGES=$(CUDA_IMAGES) $(LABS_IMAGES)
 TAG=latest
 TYPES=cpu gpu
@@ -15,11 +15,6 @@ endef
 
 define DOCKER_PUSH
 	$(MAKE) -C $1 push
-endef
-
-define DOCKER_BUILD_AND_PUSH
-	$(call DOCKER_BUILD,$1,$2,$3)
-	$(call DOCKER_PUSH,$1,$2,$3)
 endef
 
 help:	# The following lines will print the available commands when entering just 'make'

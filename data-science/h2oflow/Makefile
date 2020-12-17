@@ -1,6 +1,5 @@
 TAG=latest
 DOCKER_REGISTRY=docker.io
-CUDA_VERSIONS=10.0 10.1
 
 .PHONY: build push
 
@@ -10,13 +9,13 @@ define DOCKER_BUILD
 	@echo ""; echo "==> Building $(subst data-science/,,$1) image, $2-bound with tag $3"; echo ""
 
 	@echo ""; echo "==> Reading args from $(ARGS_FILE)"
-	$(eval $@_BUILD_ARGS := $(shell cat $(ARGS_FILE) | awk '{print "--build-arg",$$1}' && cat ./build.args | awk '{print "--build-arg",$$1}'))
+	$(eval $@_BUILD_ARGS := $(shell echo "--build-arg TYPE=$2" && cat $(ARGS_FILE) | awk '{print "--build-arg",$$1}' && cat ./build.args | awk '{print "--build-arg",$$1}'))
 
 	@echo ""; echo "\t==> Using the following variables:"; echo ""
 	@echo "\t\t$($@_BUILD_ARGS)"; echo ""; echo ""
 
 	@echo ""; echo "==> Commencing build"
-	@docker build --rm $($@_BUILD_ARGS) -t ydata/$(subst data-science/,,$1):$3-$2 .
+	@docker build --rm $($@_BUILD_ARGS) -t ydata/$(subst data-science/,,$1):$3-$2 $2
 endef
 
 define DOCKER_PUSH
@@ -26,15 +25,7 @@ define DOCKER_PUSH
 endef
 
 build:
-ifeq (${TYPE},gpu)
-	$(foreach version,$(CUDA_VERSIONS),$(call DOCKER_BUILD,${IMAGE},gpu-cuda${version},${TAG}))
-else
 	$(call DOCKER_BUILD,${IMAGE},${TYPE},${TAG})
-endif
 
 push:
-ifeq (${TYPE},gpu)
-	$(foreach version,$(CUDA_VERSIONS),$(call DOCKER_PUSH,${IMAGE},gpu-cuda${version},${TAG}))
-else
 	$(call DOCKER_PUSH,${IMAGE},${TYPE},${TAG})
-endif
