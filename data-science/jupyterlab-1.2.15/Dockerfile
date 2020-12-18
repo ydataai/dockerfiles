@@ -2,6 +2,8 @@ ARG TAG
 
 FROM ydata/laboratories-base:${TAG}
 
+LABEL JupyterLabVersion=1.2.15
+
 COPY --chown=${USER}:users conda.txt requirements.txt /tmp/
 
 # Update and install conda packages

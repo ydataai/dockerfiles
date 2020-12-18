@@ -2,6 +2,8 @@ ARG TAG
 
 FROM ydata/laboratories-base:${TAG}
 
+LABEL H2OFlowVersion=3.32.0.2
+
 SHELL [ "/bin/bash", "--login", "-c" ]
 
 # Install h2oflow

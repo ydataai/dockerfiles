@@ -3,6 +3,8 @@ ARG JUPYTERLAB_VERSION
 
 FROM ydata/jupyterlab-${JUPYTERLAB_VERSION}:${TAG}
 
+LABEL JupyterLabVersion=1.2.15
+
 ARG TYPE
 
 COPY --chown=${USER}:users ${TYPE}/requirements.txt /tmp/requirements.txt

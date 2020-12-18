@@ -3,6 +3,8 @@ ARG JUPYTERLAB_VERSION
 
 FROM ydata/jupyterlab-${JUPYTERLAB_VERSION}:${TAG}
 
+LABEL JupyterLabVersion=1.2.15
+
 COPY --chown=${USER}:users requirements.txt /tmp/
 
 LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
