@@ -2,3 +2,4 @@ pip
 
 tini
 conda-forge::nodejs=12.14.1
+conda-forge::kfp=1.2.0
