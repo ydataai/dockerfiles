@@ -1,7 +1,0 @@
-conda
-python
-pip
-
-conda-forge::jupyterlab=2.2.9
-conda-forge::xeus-python=0.8.6
-tini

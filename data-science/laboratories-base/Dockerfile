@@ -16,7 +16,6 @@ ENV DEBIAN_FRONTEND noninteractive \
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     ca-certificates \
     curl \
-    git \
     locales && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt
