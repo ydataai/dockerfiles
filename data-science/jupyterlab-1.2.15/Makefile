@@ -5,6 +5,8 @@ CUDA_VERSIONS=10.0 10.1
 .PHONY: build push
 
 define DOCKER_BUILD
+	$(eval ARGS_FILE := ./build.args)
+
 	@echo ""; echo "==> Building $(subst data-science/,,$1) image, $2-bound with tag $3"; echo ""
 
 	$(eval $@_BUILD_ARGS := $(shell echo "--build-arg TYPE=$2 --build-arg TAG=$3-$2"))
