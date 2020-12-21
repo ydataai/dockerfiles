@@ -3,10 +3,10 @@ ARG JUPYTERLAB_VERSION
 
 FROM ydata/jupyterlab-${JUPYTERLAB_VERSION}:${TAG}
 
-COPY --chown=ydata:users requirements.txt /tmp/
+LABEL JupyterLabVersion=1.2.15
 
-RUN pip --no-cache-dir install -r /tmp/requirements.txt
+COPY --chown=${USER}:users requirements.txt /tmp/
 
 LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
 
-RUN pip uninstall pip -y
+RUN pip --no-cache-dir install -r /tmp/requirements.txt
