@@ -9,7 +9,7 @@ define DOCKER_BUILD
 	@echo ""; echo "==> Building $(subst data-science/,,$1) image, $2-bound with tag $3"; echo ""
 
 	@echo ""; echo "==> Reading args from $(ARGS_FILE)"
-	$(eval $@_BUILD_ARGS := $(shell echo "--build-arg TYPE=$2 --build-arg TAG=$3-$2" && cat $(ARGS_FILE) | awk '{print "--build-arg",$$1}'))
+	$(eval $@_BUILD_ARGS := $(shell echo "--build-arg TYPE=$(subst -cuda10.0,,$2) --build-arg TAG=$3-$2" && cat $(ARGS_FILE) | awk '{print "--build-arg",$$1}'))
 
 	@echo ""; echo "\t==> Using the following variables:"; echo ""
 	@echo "\t\t$($@_BUILD_ARGS)"; echo ""; echo ""
