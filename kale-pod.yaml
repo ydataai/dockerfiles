@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kale-test-pod
+  annotations:
+    sidecar.istio.io/inject: 'false'
+spec:
+  containers:
+  - name: jupyter-lab-container
+    image: ydata/jupyterlab-1.2.15:kale-cpu
+    ports:
+      - containerPort: 8888
+        hostPort: 8888
+    imagePullPolicy: Always

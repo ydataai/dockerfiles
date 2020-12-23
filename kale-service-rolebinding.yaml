@@ -1,0 +1,12 @@
+kind: ServiceRoleBinding
+apiVersion: rbac.istio.io/v1alpha1
+metadata:
+  name: bind-ml-pipeline-kale-test
+  namespace: rafael
+spec:
+  roleRef:
+    kind: ServiceRole
+    name: ml-pipeline-services
+  subjects:
+    - properties:
+        source.principal: cluster.local/ns/rafael/sa/default-editor
