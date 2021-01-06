@@ -1,6 +1,7 @@
 ARG TAG
+ARG LANGUAGE
 
-FROM ydata/laboratories-base:${TAG}
+FROM ydata/laboratories-base-${LANGUAGE}:${TAG}
 
 LABEL JupyterLabVersion=1.2.15
 

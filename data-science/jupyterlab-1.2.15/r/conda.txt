@@ -1,0 +1,9 @@
+conda
+python
+pip
+
+conda-forge::libiconv=1.16
+conda-forge::r-irkernel=0.8.15
+conda-forge::jupyterlab=1.2.15
+conda-forge::kfp=1.2.0
+tini
