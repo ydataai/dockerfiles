@@ -1,6 +1,5 @@
 conda
 python
-pip
 
 conda-forge::libiconv=1.16
 conda-forge::r-irkernel=0.8.15
