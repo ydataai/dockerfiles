@@ -12,13 +12,7 @@ RUN conda update --all --quiet --yes && \
     conda install --quiet --yes --file /tmp/conda.txt && \
     conda clean --all -f -y
 
-# Install R Packages and kernel for Jupyter notebook
-USER root
-RUN Rscript -e "install.packages(c('repr', 'IRdisplay', 'IRkernel'), type = 'source', repos = 'http://cran.us.r-project.org')"
-RUN Rscript -e "IRkernel::installspec(user = FALSE)"
-
 # Configure container startup
-USER ydata
 ENV NB_PREFIX /
 EXPOSE 8888
 
