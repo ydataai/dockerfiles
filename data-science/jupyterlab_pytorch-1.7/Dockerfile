@@ -1,7 +1,6 @@
 ARG TAG
-ARG JUPYTERLAB_VERSION
 
-FROM ydata/jupyterlab-${JUPYTERLAB_VERSION}:${TAG}
+FROM ydata/jupyterlab:${TAG}
 
 LABEL JupyterLabVersion=1.2.15
 

@@ -5,12 +5,9 @@ OWNER=ydataai
 .PHONY: build push
 
 define DOCKER_BUILD
-	$(eval ARGS_FILE := ./build.args)
-
 	@echo ""; echo "==> Building $(subst data-science/,,$1) image, with tag $2"; echo ""
 
-	@echo ""; echo "==> Reading args from $(ARGS_FILE)"
-	$(eval $@_BUILD_ARGS := $(shell echo "--build-arg TAG=$2-gpu-cuda10.1" && cat $(ARGS_FILE) | awk '{print "--build-arg",$$1}'))
+	$(eval $@_BUILD_ARGS := $(shell echo "--build-arg TAG=$2-gpu-cuda10.1" ))
 
 	@echo ""; echo "\t==> Using the following variables:"; echo ""
 	@echo "\t\t$($@_BUILD_ARGS)"; echo ""; echo ""
