@@ -1,11 +1,13 @@
 ARG TAG
 ARG JUPYTERLAB_VERSION
 
-FROM ydata/jupyterlab-${JUPYTERLAB_VERSION}:${TAG}
+FROM ydata/jupyterlab:${TAG}
 
 LABEL JupyterLabVersion=1.2.15
 
-COPY --chown=${USER}:users requirements.txt /tmp/
+ARG TYPE
+
+COPY --chown=${USER}:users ${TYPE}/requirements.txt /tmp/
 
 LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
 
