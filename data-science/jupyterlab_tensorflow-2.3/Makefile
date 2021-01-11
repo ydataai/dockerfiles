@@ -4,12 +4,9 @@ DOCKER_REGISTRY=docker.io
 .PHONY: build push
 
 define DOCKER_BUILD
-	$(eval ARGS_FILE := ./build.args)
-
 	@echo ""; echo "==> Building $(subst data-science/,,$1) image, $2-bound with tag $3"; echo ""
 
-	@echo ""; echo "==> Reading args from $(ARGS_FILE)"
-	$(eval $@_BUILD_ARGS := $(shell echo "--build-arg TYPE=$(subst -cuda10.1,,$2)" && cat $(ARGS_FILE) | awk '{print "--build-arg",$$1}'))
+	$(eval $@_BUILD_ARGS := $(shell echo "--build-arg TYPE=$(subst -cuda10.1,,$2) --build-arg TAG=$3-$2"))
 
 	@echo ""; echo "\t==> Using the following variables:"; echo ""
 	@echo "\t\t$($@_BUILD_ARGS)"; echo ""; echo ""

@@ -1,8 +1,8 @@
 CUDA_IMAGES=nvidia-cuda
 LABS_IMAGES=data-science/laboratories-base data-science/jupyterlab_rtorch-1.7 \
-data-science/jupyterlab-1.2.15/r data-science/jupyterlab-1.2.15/python \
-data-science/jupyterlab-1.2.15_tensorflow-1.15 data-science/jupyterlab-1.2.15_tensorflow-2.3 \
-data-science/jupyterlab-1.2.15_pytorch-1.7 data-science/h2oflow-3.32.0.2 data-science/ydata
+data-science/jupyterlab/r data-science/jupyterlab/python \
+data-science/jupyterlab_tensorflow-1.15 data-science/jupyterlab_tensorflow-2.3 \
+data-science/jupyterlab_pytorch-1.7 data-science/h2oflow data-science/ydata
 IMAGES=$(CUDA_IMAGES) $(LABS_IMAGES)
 TAG=latest
 TYPES=cpu gpu

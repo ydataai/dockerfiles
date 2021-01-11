@@ -6,8 +6,6 @@ LANGUAGES=r python
 .PHONY: build push
 
 define DOCKER_BUILD
-	$(eval ARGS_FILE := ./build.args)
-
 	@echo ""; echo "==> Building $(subst data-science/,,$1) image, $2-bound with tag $3"; echo ""
 
 	$(eval $@_BUILD_ARGS := $(shell echo "--build-arg TYPE=$2 --build-arg TAG=$3-$2 --build-arg LANGUAGE=$4"))
