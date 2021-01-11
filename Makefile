@@ -1,5 +1,6 @@
 CUDA_IMAGES=nvidia-cuda
-LABS_IMAGES=data-science/laboratories-base data-science/jupyterlab-1.2.15 \
+LABS_IMAGES=data-science/laboratories-base data-science/jupyterlab_rtorch-1.7 \
+data-science/jupyterlab-1.2.15/r data-science/jupyterlab-1.2.15/python \
 data-science/jupyterlab-1.2.15_tensorflow-1.15 data-science/jupyterlab-1.2.15_tensorflow-2.3 \
 data-science/jupyterlab-1.2.15_pytorch-1.7 data-science/h2oflow-3.32.0.2 data-science/ydata
 IMAGES=$(CUDA_IMAGES) $(LABS_IMAGES)
