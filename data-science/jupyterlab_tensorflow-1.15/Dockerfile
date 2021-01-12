@@ -3,7 +3,7 @@ ARG JUPYTERLAB_VERSION
 
 FROM ydata/jupyterlab:${TAG}
 
-LABEL JupyterLabVersion=1.2.15
+LABEL JupyterLabVersion=2.2.9
 
 ARG TYPE
 

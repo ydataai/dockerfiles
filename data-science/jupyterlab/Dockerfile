@@ -2,7 +2,7 @@ ARG TAG
 
 FROM ydata/laboratories-base:${TAG}
 
-LABEL JupyterLabVersion=1.2.15
+LABEL JupyterLabVersion=2.2.9
 
 COPY --chown=${USER}:users conda.txt requirements.txt /tmp/
 
