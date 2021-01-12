@@ -1,9 +1,8 @@
 ARG TAG
-ARG LANGUAGE
 
-FROM ydata/laboratories-base-${LANGUAGE}:${TAG}
+FROM ydata/laboratories-base_r:${TAG}
 
-LABEL JupyterLabVersion=1.2.15
+LABEL JupyterLabVersion=2.2.9
 
 COPY --chown=${USER}:users conda.txt /tmp/
 
@@ -16,8 +15,8 @@ RUN conda update --all --quiet --yes && \
 ENV NB_PREFIX /
 EXPOSE 8888
 
-RUN jupyter labextension install @techrah/text-shortcuts --dev-build=False --minimize=False
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager @techrah/text-shortcuts --dev-build=False --minimize=False
 
 LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
 
-CMD [ "/bin/bash", "-c", "jupyter lab --notebook-dir=/home/${USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*'  --NotebookApp.base_url=${NB_PREFIX} --KernelSpecManager.whitelist 'ir'" ]
+CMD [ "/bin/bash", "-c", "jupyter lab --notebook-dir=/home/${USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.terminals_enabled=False --NotebookApp.password='' --NotebookApp.allow_origin='*'  --NotebookApp.base_url=${NB_PREFIX} --KernelSpecManager.whitelist 'ir'" ]
