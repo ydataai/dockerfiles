@@ -1,0 +1,3 @@
+conda
+
+conda-forge::r-reticulate

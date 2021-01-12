@@ -4,6 +4,7 @@ DOCKER_REGISTRY=docker.io
 .PHONY: build push
 
 define DOCKER_BUILD
+	$()
 	@echo ""; echo "==> Building $(subst data-science/,,$1) image, $2-bound with tag $3"; echo ""
 
 	$(eval $@_BUILD_ARGS := $(shell echo "--build-arg TYPE=$(subst -cuda10.0,,$2) --build-arg TAG=$3-$2"))

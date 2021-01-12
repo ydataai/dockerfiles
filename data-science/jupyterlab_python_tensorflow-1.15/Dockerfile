@@ -1,5 +1,4 @@
 ARG TAG
-ARG JUPYTERLAB_VERSION
 
 FROM ydata/jupyterlab:${TAG}
 

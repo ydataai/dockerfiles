@@ -10,7 +10,7 @@ case $1 in
     ;;
 
   jupyterlab)
-      for image in data-science/jupyterlab data-science/jupyterlab_tensorflow-1.15 data-science/jupyterlab_tensorflow-2.3 data-science/jupyterlab_pytorch-1.7
+      for image in data-science/jupyterlab data-science/jupyterlab_python_tensorflow-1.15 data-science/jupyterlab_python_tensorflow-2.3 data-science/jupyterlab_r_tensorflow-1.15 data-science/jupyterlab_r_tensorflow-2.3 data-science/jupyterlab_r_torch-1.7
       do
         for type in "${laboratories_images_types[@]}"
         do

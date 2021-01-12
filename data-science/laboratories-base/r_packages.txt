@@ -3,3 +3,4 @@ curl
 git
 locales
 r-base
+libgit2-dev
