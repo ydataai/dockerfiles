@@ -3,7 +3,7 @@ ARG JUPYTERLAB_VERSION
 
 FROM ydata/jupyterlab:${TAG}
 
-LABEL JupyterLabVersion=2.2.9
+LABEL ai.ydata.laboratory.jupyterlab.version=2.2.9
 
 COPY --chown=${USER}:users requirements.txt /tmp/
 

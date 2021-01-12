@@ -2,7 +2,7 @@ ARG TAG
 
 FROM ydata/jupyterlab:${TAG}
 
-LABEL JupyterLabVersion=2.2.9
+LABEL ai.ydata.laboratory.jupyterlab.version=2.2.9
 
 ARG TYPE
 
