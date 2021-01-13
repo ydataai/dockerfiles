@@ -6,5 +6,3 @@ conda-forge::jupyterlab=2.2.9
 conda-forge::jupyterlab_widgets=1.0.0
 conda-forge::r-irkernel=0.8.15
 conda-forge::kfp=1.2.0
-
-nodejs=10.13
