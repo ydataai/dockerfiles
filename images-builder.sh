@@ -20,6 +20,28 @@ case $1 in
       done
     ;;
 
+  rstudio)
+      for image in data-science/rstudio
+      do
+        for type in "${laboratories_images_types[@]}"
+        do
+            make build IMAGE="$image" TYPE="$type" TAG="$2"
+            make push IMAGE="$image" TYPE="$type" TAG="$2"
+        done
+      done
+    ;;
+
+  rstudio_bundles)
+      for image in data-science/rstudio_tensorflow data-science/rstudio_torch-1.7
+      do
+        for type in "${laboratories_images_types[@]}"
+        do
+            make build IMAGE="$image" TYPE="$type" TAG="$2"
+            make push IMAGE="$image" TYPE="$type" TAG="$2"
+        done
+      done
+    ;;
+
   h2o)
       for type in "${laboratories_images_types[@]}"
       do

@@ -4,13 +4,6 @@ FROM ydata/laboratories-base-r:${TAG}
 
 USER root
 
-COPY --chown=${USER}:users conda.txt /tmp/
-
-# Update and install conda packages
-RUN conda update --all --quiet --yes && \
-    conda install --quiet --yes --file /tmp/conda.txt && \
-    conda clean --all -f -y
-
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     apt-transport-https \
     apt-utils \
@@ -40,7 +33,6 @@ RUN Rscript -e "install.packages(c('Rcpp', 'base64enc', 'digest', 'evaluate', 'g
 
 USER ydata
 EXPOSE 8787
-
 
 ENTRYPOINT ["/usr/lib/rstudio-server/bin/rserver"]
 CMD ["--server-daemonize=0", "--server-app-armor-enabled=0", "--auth-none=1"]
