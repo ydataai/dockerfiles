@@ -1,2 +1,1 @@
-tensorflow-gpu==1.15.*
-keras==2.4.3
+ tensorflow-gpu==1.15.*

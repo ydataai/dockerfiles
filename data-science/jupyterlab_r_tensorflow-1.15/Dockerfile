@@ -5,7 +5,6 @@ FROM ydata/jupyterlab_r:${TAG}
 LABEL JupyterLabVersion=2.2.9
 
 ARG TYPE
-
 COPY --chown=${USER}:users ${TYPE}/requirements.txt conda.txt /tmp/
 
 # Update and install conda packages
