@@ -2,9 +2,11 @@ ARG TAG
 
 FROM ydata/jupyterlab_python:${TAG}
 
-LABEL JupyterLabVersion=1.2.15
+LABEL ai.ydata.laboratory.jupyterlab.version=2.2.9
 
-COPY --chown=${USER}:users requirements.txt /tmp/
+ARG TYPE
+
+COPY --chown=${USER}:users ${TYPE}/requirements.txt /tmp/
 
 LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
 
