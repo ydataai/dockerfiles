@@ -1,11 +1,17 @@
 ARG TAG
 
-FROM ydata/laboratories-base_r:${TAG}
+FROM ydata/laboratories-base-r:${TAG}
 
 USER root
 
-RUN apt-get -y update && apt-get -y dist-upgrade \
-    && apt-get -y install --no-install-recommends --no-install-suggests \
+COPY --chown=${USER}:users conda.txt /tmp/
+
+# Update and install conda packages
+RUN conda update --all --quiet --yes && \
+    conda install --quiet --yes --file /tmp/conda.txt && \
+    conda clean --all -f -y
+
+RUN apt-get update && apt-get install -yq --no-install-recommends \
     apt-transport-https \
     apt-utils \
     ca-certificates \
@@ -17,8 +23,8 @@ RUN apt-get -y update && apt-get -y dist-upgrade \
     lsb-release \
     psmisc \
     r-base \
-    sudo \
     make \
+    sudo \
     build-essential \
     && apt-get -y autoremove \
     && apt-get clean \
@@ -32,7 +38,9 @@ RUN ln -s /dev/stdout /var/log/syslog \
 
 RUN Rscript -e "install.packages(c('Rcpp', 'base64enc', 'digest', 'evaluate', 'glue', 'highr', 'htmltools', 'jsonlite', 'knitr', 'magrittr', 'markdown', 'mime', 'rmarkdown', 'rprojroot', 'stringi', 'stringr', 'tinytex', 'xfun', 'yaml'))"
 
+USER ydata
 EXPOSE 8787
+
 
 ENTRYPOINT ["/usr/lib/rstudio-server/bin/rserver"]
 CMD ["--server-daemonize=0", "--server-app-armor-enabled=0", "--auth-none=1"]
