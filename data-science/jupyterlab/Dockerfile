@@ -18,7 +18,6 @@ RUN pip --no-cache-dir install -r /tmp/requirements.txt
 RUN jupyter serverextension enable --py jupyterlab_git
 
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager@2 \
-    @jupyterlab/git@0.23 \
     @jupyterlab/debugger@0.3 --dev-build=False --minimize=False
 
 # Integrate NBDIME with git
