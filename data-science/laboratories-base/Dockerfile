@@ -9,15 +9,14 @@ ARG TYPE
 
 ARG MINICONDA_IMAGE
 ARG MINICONDA_IMAGE_HASH
+ARG PACKAGES_FILE
 
 ENV DEBIAN_FRONTEND noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN true
 
-RUN apt-get update && apt-get install -yq --no-install-recommends \
-    ca-certificates \
-    curl \
-    git \
-    locales && \
+COPY ./$PACKAGES_FILE /tmp/
+RUN apt-get update
+RUN xargs -a /tmp/$PACKAGES_FILE apt-get install -yq --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt
 

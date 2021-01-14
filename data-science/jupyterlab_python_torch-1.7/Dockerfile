@@ -1,6 +1,6 @@
 ARG TAG
 
-FROM ydata/jupyterlab:${TAG}
+FROM ydata/jupyterlab_python:${TAG}
 
 LABEL ai.ydata.laboratory.jupyterlab.version=2.2.9
 
