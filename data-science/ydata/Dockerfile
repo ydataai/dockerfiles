@@ -1,6 +1,6 @@
 ARG TAG
 
-FROM ydata/jupyterlab:${TAG}
+FROM ydata/jupyterlab_python:${TAG}
 
 COPY --chown=ydata:users requirements.txt /tmp/
 

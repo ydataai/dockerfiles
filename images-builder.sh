@@ -17,35 +17,31 @@ case $1 in
     done
   ;;
 
-<<<<<<< HEAD
   rstudio)
-      for image in data-science/rstudio
+    for image in data-science/rstudio
+    do
+      for type in "${laboratories_images_types[@]}"
       do
-        for type in "${laboratories_images_types[@]}"
-        do
-            make build IMAGE="$image" TYPE="$type" TAG="$2"
-            make push IMAGE="$image" TYPE="$type" TAG="$2"
-        done
+          make build IMAGE="$image" TYPE="$type" TAG="$2"
+          make push IMAGE="$image" TYPE="$type" TAG="$2"
       done
-    ;;
+    done
+  ;;
 
   rstudio_bundles)
-      for image in data-science/rstudio_tensorflow data-science/rstudio_torch-1.7
+    for image in data-science/rstudio_tensorflow data-science/rstudio_torch-1.7
+    do
+      for type in "${laboratories_images_types[@]}"
       do
-        for type in "${laboratories_images_types[@]}"
-        do
-            make build IMAGE="$image" TYPE="$type" TAG="$2"
-            make push IMAGE="$image" TYPE="$type" TAG="$2"
-        done
+          make build IMAGE="$image" TYPE="$type" TAG="$2"
+          make push IMAGE="$image" TYPE="$type" TAG="$2"
       done
-    ;;
+    done
+  ;;
 
-  h2o)
-=======
   jupyterlab_bundles)
     for image in data-science/jupyterlab_python_tensorflow-1.15 data-science/jupyterlab_python_tensorflow-2.3 data-science/jupyterlab_r_tensorflow-1.15 data-science/jupyterlab_r_tensorflow-2.3 data-science/jupyterlab_python_torch-1.7 data-science/jupyterlab_r_torch-1.7
     do
->>>>>>> master
       for type in "${laboratories_images_types[@]}"
       do
         make build IMAGE="$image" TYPE="$type" TAG="$2"
