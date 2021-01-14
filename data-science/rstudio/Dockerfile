@@ -27,8 +27,9 @@ RUN ln -s /dev/stdout /var/log/syslog \
     && apt-get -y install /tmp/rstudio.deb \
     && rm -rf /tmp/rstudio.deb
 
-RUN apt-get remove --auto-remove -yq apt-transport-https apt-utils && \
-    && apt-get clean
+RUN export SUDO_FORCE_REMOVE=yes &&  \
+    apt-get remove --auto-remove -yq sudo apt-transport-https apt-utils && \
+    apt-get clean
 
 RUN Rscript -e "install.packages(c('Rcpp', 'base64enc', 'digest', 'evaluate', 'glue', 'highr', 'htmltools', 'jsonlite', 'knitr', 'magrittr', 'markdown', 'mime', 'rmarkdown', 'rprojroot', 'stringi', 'stringr', 'tinytex', 'xfun', 'yaml'))"
 
