@@ -68,7 +68,7 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build and Push JupyterLab images
+    - name: Build and Push JupyterLab Bundles images
       run: ./images-builder.sh jupyterlab_bundles ${{ needs.prepare.outputs.version }}
 
   build-h2o-images:
