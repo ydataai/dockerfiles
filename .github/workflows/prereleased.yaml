@@ -57,7 +57,7 @@ jobs:
     name: Build and push JupyterLab and bundles Docker images
     runs-on: ubuntu-20.04
 
-    needs: [prepare, build-base-images]
+    needs: [prepare, build-base-images, build-jupyterlab-images]
 
     steps:
     - uses: actions/checkout@v2
