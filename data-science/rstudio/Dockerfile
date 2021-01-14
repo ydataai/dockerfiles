@@ -1,6 +1,6 @@
 ARG TAG
 
-FROM ydata/laboratories-base-r:${TAG}
+FROM ydata/laboratories-base_r:${TAG}
 
 USER root
 
@@ -15,7 +15,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     libssl-dev \
     lsb-release \
     psmisc \
-    r-base \
     make \
     sudo \
     build-essential \
