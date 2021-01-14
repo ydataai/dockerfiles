@@ -1,6 +1,6 @@
 python
+nodejs=10.13.0
 
-conda-forge::nodejs=13.13.0
 conda-forge::libiconv=1.16
 conda-forge::jupyterlab=2.2.9
 conda-forge::jupyterlab_widgets=1.0.0
