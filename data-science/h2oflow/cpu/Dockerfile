@@ -1,6 +1,6 @@
 ARG TAG
 
-FROM ydata/laboratories-base:${TAG}
+FROM ydata/laboratories-base_python:${TAG}
 
 LABEL H2OFlowVersion=3.32.0.2
 

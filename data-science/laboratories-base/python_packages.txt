@@ -1,0 +1,4 @@
+ca-certificates
+curl
+git
+locales

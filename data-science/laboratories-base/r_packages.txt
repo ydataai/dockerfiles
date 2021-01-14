@@ -1,0 +1,7 @@
+ca-certificates
+curl
+git
+locales
+libblas-dev
+r-base
+libgit2-dev
