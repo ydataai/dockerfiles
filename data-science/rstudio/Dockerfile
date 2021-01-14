@@ -8,7 +8,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     apt-transport-https \
     apt-utils \
     ca-certificates \
-    curl \
     libapparmor1 \
     libclang-dev \
     libedit2 \
@@ -28,9 +27,12 @@ RUN ln -s /dev/stdout /var/log/syslog \
     && apt-get -y install /tmp/rstudio.deb \
     && rm -rf /tmp/rstudio.deb
 
+RUN apt-get remove --auto-remove -yq apt-transport-https apt-utils && \
+    && apt-get clean
+
 RUN Rscript -e "install.packages(c('Rcpp', 'base64enc', 'digest', 'evaluate', 'glue', 'highr', 'htmltools', 'jsonlite', 'knitr', 'magrittr', 'markdown', 'mime', 'rmarkdown', 'rprojroot', 'stringi', 'stringr', 'tinytex', 'xfun', 'yaml'))"
 
-USER ydata
+USER ${UID}
 EXPOSE 8787
 
 ENTRYPOINT ["/usr/lib/rstudio-server/bin/rserver"]

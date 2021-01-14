@@ -10,6 +10,6 @@ ARG VERSION
 RUN Rscript -e "install.packages(c('keras', 'r-reticulate', 'tensorflow'))"
 RUN Rscript -e "tensorflow::install_tensorflow(method = 'conda', envname = 'r-reticulate', version='${VERSION}-${TYPE}')"
 
-USER ydata
+USER ${UID}
 
 LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
