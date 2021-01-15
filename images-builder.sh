@@ -39,8 +39,19 @@ case $1 in
     done
   ;;
 
-  jupyterlab_bundles)
-    for image in data-science/jupyterlab_python_tensorflow-1.15 data-science/jupyterlab_python_tensorflow-2.3 data-science/jupyterlab_r_tensorflow-1.15 data-science/jupyterlab_r_tensorflow-2.3 data-science/jupyterlab_python_torch-1.7 data-science/jupyterlab_r_torch-1.7
+  jupyterlab_python_bundles)
+    for image in data-science/jupyterlab_python_tensorflow-1.15 data-science/jupyterlab_python_tensorflow-2.3 data-science/jupyterlab_python_torch-1.7
+    do
+      for type in "${laboratories_images_types[@]}"
+      do
+        make build IMAGE="$image" TYPE="$type" TAG="$2"
+        make push IMAGE="$image" TYPE="$type" TAG="$2"
+      done
+    done
+  ;;
+
+  jupyterlab_r_bundles)
+    for image in data-science/jupyterlab_r_tensorflow-1.15 data-science/jupyterlab_r_tensorflow-2.3 data-science/jupyterlab_r_torch-1.7
     do
       for type in "${laboratories_images_types[@]}"
       do
