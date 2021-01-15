@@ -20,7 +20,7 @@ endef
 define DOCKER_PUSH
 	$(eval IMAGE_NAME := ydata/$(subst data-science/,,$1):$3-$2)
 	@echo ""; echo "==> Pushing ${IMAGE_NAME} to Docker image registry..."
-	@echo docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}
+	@docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}
 endef
 
 build:
