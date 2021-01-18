@@ -1,5 +1,6 @@
 CUDA_IMAGES=nvidia-cuda
-LABS_IMAGES=data-science/jupyterlab data-science/laboratories-base data-science/jupyterlab_r_torch-1.7 \
+LABS_IMAGES=data-science/jupyterlab_r data-science/jupyterlab_python \
+data-science/laboratories-base data-science/jupyterlab_r_torch-1.7 \
 data-science/jupyterlab_r_tensorflow-1.15 data-science/jupyterlab_r_tensorflow-2.3 \
 data-science/rstudio data-science/rstudio_tensorflow data-science/rstudio_torch-1.7 \
 data-science/jupyterlab_python_tensorflow-1.15 data-science/jupyterlab_python_tensorflow-2.3 \
