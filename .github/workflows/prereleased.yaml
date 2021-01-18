@@ -33,7 +33,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Build and Push Lab Base images
-      run: ./images-builder.sh base ${{ needs.prepare.outputs.version }}
+      run: ./images-builder.sh base_python ${{ needs.prepare.outputs.version }}
 
   build-base-r-images:
     name: Build and push Laboratories Base Docker images
@@ -51,7 +51,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Build and Push Lab Base images
-      run: ./images-builder.sh base ${{ needs.prepare.outputs.version }}
+      run: ./images-builder.sh base_r ${{ needs.prepare.outputs.version }}
 
   build-jupyterlab-python-images:
     name: Build and push JupyterLab Python Docker images
