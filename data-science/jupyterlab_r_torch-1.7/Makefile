@@ -1,6 +1,5 @@
 TAG=latest
 DOCKER_REGISTRY=docker.io
-VERSION_TYPES=cpu 10.1
 
 .PHONY: build push
 

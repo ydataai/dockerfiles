@@ -1,11 +1,19 @@
 laboratories_images_types=(cpu gpu)
 
 case $1 in
-  base)
+  base_python)
     for type in "${laboratories_images_types[@]}"
     do
-      make build IMAGE="data-science/laboratories-base" TYPE="$type" TAG="$2"
-      make push IMAGE="data-science/laboratories-base" TYPE="$type" TAG="$2"
+      make build IMAGE="data-science/laboratories-base" LANGUAGE="python" TYPE="$type" TAG="$2"
+      make push IMAGE="data-science/laboratories-base" LANGUAGE="python" TYPE="$type" TAG="$2"
+    done
+  ;;
+
+  base_r)
+    for type in "${laboratories_images_types[@]}"
+    do
+      make build IMAGE="data-science/laboratories-base" LANGUAGE="r" TYPE="$type" TAG="$2"
+      make push IMAGE="data-science/laboratories-base" LANGUAGE="r" TYPE="$type" TAG="$2"
     done
   ;;
 

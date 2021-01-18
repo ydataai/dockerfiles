@@ -4,12 +4,11 @@ CUDA_VERSIONS=10.0 10.1
 
 .PHONY: build push
 
-
 define DOCKER_BUILD
 	$()
 	@echo ""; echo "==> Building $(subst data-science/,,$1) image, $2-bound with tag $3"; echo ""
 
-	$(eval $@_BUILD_ARGS := $(shell echo "--build-arg TYPE=$2 --build-arg TAG=$3-$2"))
+	$(eval $@_BUILD_ARGS := $(shell echo "--build-arg TAG=$3-$2"))
 
 	@echo ""; echo "\t==> Using the following variables:"; echo ""
 	@echo "\t\t$($@_BUILD_ARGS)"; echo ""; echo ""
@@ -20,7 +19,7 @@ define DOCKER_BUILD
 endef
 
 define DOCKER_PUSH
-	$(eval IMAGE_NAME := ydata/$(subst data-science/,,$1)_${language}:$3-$2)
+	$(eval IMAGE_NAME := ydata/$(subst data-science/,,$1):$3-$2)
 	@echo ""; echo "==> Pushing ${IMAGE_NAME} to Docker image registry..."
 	@docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}
 endef

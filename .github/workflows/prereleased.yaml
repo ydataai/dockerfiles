@@ -17,8 +17,8 @@ jobs:
       id: version
       run: echo ::set-output name=value::`echo ${{ github.ref }} | sed -n -E 's/refs\/tags\/([0-9]+.[0-9]+.[0-9]+)/\1/p'`
 
-  build-base-images:
-    name: Build and push Laboratories Base Docker images
+  build-base-python-images:
+    name: Build and push Laboratories Base Python Docker images
     runs-on: ubuntu-20.04
 
     needs: prepare
@@ -32,14 +32,32 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build and Push Lab Base images
-      run: ./images-builder.sh base ${{ needs.prepare.outputs.version }}
+    - name: Build and Push Lab Base Python images
+      run: ./images-builder.sh base_python ${{ needs.prepare.outputs.version }}
+
+  build-base-r-images:
+    name: Build and push Laboratories Base R Docker images
+    runs-on: ubuntu-20.04
+
+    needs: prepare
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push Lab Base R images
+      run: ./images-builder.sh base_r ${{ needs.prepare.outputs.version }}
 
   build-jupyterlab-python-images:
     name: Build and push JupyterLab Python Docker images
     runs-on: ubuntu-20.04
 
-    needs: [prepare, build-base-images]
+    needs: [prepare, build-base-python-images]
 
     steps:
     - uses: actions/checkout@v2
@@ -57,7 +75,7 @@ jobs:
     name: Build and push JupyterLab R Docker images
     runs-on: ubuntu-20.04
 
-    needs: [prepare, build-base-images]
+    needs: [prepare, build-base-r-images]
 
     steps:
     - uses: actions/checkout@v2
@@ -75,7 +93,7 @@ jobs:
     name: Build and push JupyterLab Python Tensorflow Docker images
     runs-on: ubuntu-20.04
 
-    needs: [prepare, build-base-images, build-jupyterlab-python-images]
+    needs: [prepare, build-base-python-images, build-jupyterlab-python-images]
 
     steps:
     - uses: actions/checkout@v2
@@ -93,7 +111,7 @@ jobs:
     name: Build and push JupyterLab R Tensorflow Docker images
     runs-on: ubuntu-20.04
 
-    needs: [prepare, build-base-images, build-jupyterlab-r-images]
+    needs: [prepare, build-base-r-images, build-jupyterlab-r-images]
 
     steps:
     - uses: actions/checkout@v2
@@ -111,7 +129,7 @@ jobs:
     name: Build and push JupyterLab Python Torch Docker images
     runs-on: ubuntu-20.04
 
-    needs: [prepare, build-base-images, build-jupyterlab-python-images]
+    needs: [prepare, build-base-python-images, build-jupyterlab-python-images]
 
     steps:
     - uses: actions/checkout@v2
@@ -129,7 +147,7 @@ jobs:
     name: Build and push JupyterLab R Torch Docker images
     runs-on: ubuntu-20.04
 
-    needs: [prepare, build-base-images, build-jupyterlab-r-images]
+    needs: [prepare, build-base-r-images, build-jupyterlab-r-images]
 
     steps:
     - uses: actions/checkout@v2
@@ -147,7 +165,7 @@ jobs:
     name: Build and push H2O Docker images
     runs-on: ubuntu-20.04
 
-    needs: [prepare, build-base-images, build-jupyterlab-python-images]
+    needs: [prepare, build-base-python-images, build-jupyterlab-python-images]
 
     steps:
     - uses: actions/checkout@v2
@@ -165,7 +183,7 @@ jobs:
     name: Build and push RStudio Docker images
     runs-on: ubuntu-20.04
 
-    needs: [prepare, build-base-images]
+    needs: [prepare, build-base-r-images]
 
     steps:
     - uses: actions/checkout@v2
@@ -219,7 +237,7 @@ jobs:
     name: Build and push YData Docker images
     runs-on: ubuntu-20.04
 
-    needs: [prepare, build-base-images, build-jupyterlab-python-images]
+    needs: [prepare, build-base-python-images, build-jupyterlab-python-images]
 
     steps:
     - uses: actions/checkout@v2
