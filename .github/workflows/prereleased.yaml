@@ -18,7 +18,7 @@ jobs:
       run: echo ::set-output name=value::`echo ${{ github.ref }} | sed -n -E 's/refs\/tags\/([0-9]+.[0-9]+.[0-9]+)/\1/p'`
 
   build-base-python-images:
-    name: Build and push Laboratories Base Docker images
+    name: Build and push Laboratories Base Python Docker images
     runs-on: ubuntu-20.04
 
     needs: prepare
@@ -32,11 +32,11 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build and Push Lab Base images
+    - name: Build and Push Lab Base Python images
       run: ./images-builder.sh base_python ${{ needs.prepare.outputs.version }}
 
   build-base-r-images:
-    name: Build and push Laboratories Base Docker images
+    name: Build and push Laboratories Base R Docker images
     runs-on: ubuntu-20.04
 
     needs: prepare
@@ -50,7 +50,7 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build and Push Lab Base images
+    - name: Build and Push Lab Base R images
       run: ./images-builder.sh base_r ${{ needs.prepare.outputs.version }}
 
   build-jupyterlab-python-images:

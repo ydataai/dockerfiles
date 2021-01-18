@@ -4,7 +4,6 @@ CUDA_VERSIONS=10.0 10.1
 
 .PHONY: build push
 
-
 define DOCKER_BUILD
 	$()
 	@echo ""; echo "==> Building $(subst data-science/,,$1) image, $2-bound with tag $3"; echo ""
