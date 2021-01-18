@@ -1,7 +1,6 @@
 TAG=latest
 DOCKER_REGISTRY=docker.io
 CUDA_VERSIONS=10.0 10.1
-LANGUAGES=r python
 
 .PHONY: build push
 
@@ -28,16 +27,16 @@ endef
 
 build:
 ifeq (${TYPE},gpu)
-	$(foreach language,${LANGUAGES},$(foreach version,$(CUDA_VERSIONS),$(call DOCKER_BUILD,${IMAGE},gpu-cuda${version},${TAG},${language}_packages.txt)))
+	$(foreach version,$(CUDA_VERSIONS),$(call DOCKER_BUILD,${IMAGE},gpu-cuda${version},${TAG},${LANGUAGE}_packages.txt))
 else
-	$(foreach language,${LANGUAGES},$(call DOCKER_BUILD,${IMAGE},${TYPE},${TAG},${language}_packages.txt))
+	$(call DOCKER_BUILD,${IMAGE},${TYPE},${TAG},${LANGUAGE}_packages.txt)
 endif
 
 push:
 ifeq (${TYPE},gpu)
-	$(foreach language,${LANGUAGES},$(foreach version,$(CUDA_VERSIONS),$(call DOCKER_PUSH,${IMAGE},gpu-cuda${version},${TAG},${language})))
+	$(foreach version,$(CUDA_VERSIONS),$(call DOCKER_PUSH,${IMAGE},gpu-cuda${version},${TAG},${LANGUAGE}))
 else
-	$(foreach language,${LANGUAGES},$(call DOCKER_PUSH,${IMAGE},${TYPE},${TAG},${language}))
+	$(call DOCKER_PUSH,${IMAGE},${TYPE},${TAG},${LANGUAGE})
 endif
 
 
