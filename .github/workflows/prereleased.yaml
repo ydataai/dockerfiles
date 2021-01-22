@@ -165,7 +165,7 @@ jobs:
     name: Build and push H2O Docker images
     runs-on: ubuntu-20.04
 
-    needs: [prepare, build-base-python-images, build-jupyterlab-python-images]
+    needs: [prepare, build-base-python-images]
 
     steps:
     - uses: actions/checkout@v2
