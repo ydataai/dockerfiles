@@ -449,11 +449,11 @@ jobs:
     - name: Build and Push RStudio Torch images
       run: ./images-builder.sh rstudio_torch gpu ${{ needs.prepare.outputs.version }}
 
-  build-ydata-image:
-    name: Build and push YData Docker images
+  build-ydata-image-cpu:
+    name: Build and push YData Docker images CPU
     runs-on: ubuntu-20.04
 
-    needs: [prepare, build-base-python-images, build-jupyterlab-python-images]
+    needs: [prepare, build-base-python-images-cpu, build-jupyterlab-python-images-cpu]
 
     steps:
     - uses: actions/checkout@v2
@@ -469,4 +469,26 @@ jobs:
         password: ${{ secrets.GHCR_TOKEN }}
 
     - name: Build and Push YData image
-      run: ./images-builder.sh ydata ${{ needs.prepare.outputs.version }}
+      run: ./images-builder.sh ydata cpu ${{ needs.prepare.outputs.version }}
+
+  build-ydata-image-gpu:
+    name: Build and push YData Docker images GPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-gpu, build-jupyterlab-python-images-gpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Add authentication to requirements file
+      run: sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements.txt
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GHCR_TOKEN }}
+
+    - name: Build and Push YData image
+      run: ./images-builder.sh ydata gpu ${{ needs.prepare.outputs.version }}
