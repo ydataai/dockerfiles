@@ -1,5 +1,5 @@
 # YData
-https://github.com/ydataai/ydata/releases/download/0.11.0/ydata-0.11.0.tar.gz
+git+https://github.com/ydataai/ydata.git@0.14.2
 
 # Pandas Profiling
-https://github.com/ydataai/pandas-profiling/releases/download/2.10.1/pandas-profiling-2.10.1.tar.gz
+https://github-production-release-asset-2e65be.s3.amazonaws.com/267437286/33592200-5fb9-11eb-97b2-edd4c18e3daa?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20210126%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210126T130138Z&X-Amz-Expires=300&X-Amz-Signature=3be52fefba5ad90ba0e78f5661272dd38fe1c4be5b8b6475683067ac0fe49d6f&X-Amz-SignedHeaders=host&actor_id=1502403&key_id=0&repo_id=267437286&response-content-disposition=attachment%3B%20filename%3Dpandas-profiling-2.10.1.tar.gz&response-content-type=application%2Foctet-stream
