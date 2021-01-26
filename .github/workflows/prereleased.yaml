@@ -242,6 +242,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Configure git authentication for private repos
+      run: git config --global url."https://${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v1
       with:
