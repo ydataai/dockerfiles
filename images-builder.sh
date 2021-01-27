@@ -67,7 +67,7 @@ case $1 in
   ;;
 
   ydata)
-    make build IMAGE="data-science/ydata" TAG="$2"
-    make push IMAGE="data-science/ydata" TAG="$2"
+    make build IMAGE="data-science/ydata" TYPE="$2" TAG="$3"
+    make push IMAGE="data-science/ydata" TYPE="$2" TAG="$3"
   ;;
 esac
