@@ -21,7 +21,7 @@ RUN python -m pip uninstall pip -y
 
 USER root
 
-RUN apt-get --purge autoremove build-essential unixodbc-dev && \
+RUN apt-get --purge autoremove --yes build-essential unixodbc-dev && \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt
 
 USER ${UID}
