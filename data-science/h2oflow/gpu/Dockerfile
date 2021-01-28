@@ -31,4 +31,6 @@ USER ${UID}
 
 EXPOSE 8888
 
+LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
+
 CMD ["bash", "-c", "java -jar /opt/h2oflow/h2o.jar -port 8888"]
