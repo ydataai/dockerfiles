@@ -5,3 +5,4 @@ seaborn==0.10.*
 scipy==1.*
 Keras==2.4.*
 xgboost==1.2.*
+jedi==0.17.2
