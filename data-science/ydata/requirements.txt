@@ -1,5 +1,5 @@
 # YData
-git+https://github.com/ydataai/ydata.git@0.15.0
+git+https://github.com/ydataai/ydata.git@0.15.2
 
 # Pandas Profiling
-git+https://github.com/ydataai/pandas-profiling.git@2.10.1
+git+https://github.com/ydataai/pandas-profiling.git@2.11.0
