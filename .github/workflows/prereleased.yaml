@@ -521,7 +521,7 @@ jobs:
         repository: ydataai/manifests
         token: ${{ secrets.ACCESS_TOKEN }}
 
-    - name: Update kustomization image tag
+    - name: Update params.env with laboratories image tag
       run: |
         cd ydata/${COMPONENT}
         sed -i -r 's/\=(.*)/=${{steps.replace.outputs.replaced}}/g' params.env
