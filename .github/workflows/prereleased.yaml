@@ -524,7 +524,7 @@ jobs:
     - name: Update params.env with laboratories image tag
       run: |
         cd ydata/${COMPONENT}
-        sed -i -r 's/\=(.*)/=${{steps.replace.outputs.replaced}}/g' params.env
+        sed -i -r 's/\laboratoriesImageTag=(.*)/laboratoriesImageTag=${{steps.replace.outputs.replaced}}/g' params.env
 
     - name: Commit and push image update into manifests repo
       env:
