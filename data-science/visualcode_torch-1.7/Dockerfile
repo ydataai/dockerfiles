@@ -2,8 +2,6 @@ ARG TAG
 
 FROM ydata/visualcode:${TAG}
 
-LABEL ai.ydata.laboratory.visualcode.version=3.9.0
-
 ARG TYPE
 
 COPY --chown=${USER}:users ${TYPE}/requirements.txt /tmp/requirements.txt
