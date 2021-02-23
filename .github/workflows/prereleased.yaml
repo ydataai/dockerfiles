@@ -362,6 +362,114 @@ jobs:
     - name: Build and Push RStudio images
       run: ./images-builder.sh rstudio cpu ${{ needs.prepare.outputs.version }}
 
+  build-visualcode-images-cpu:
+    name: Build and push Visual Code Docker images CPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-cpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push Visual Code images
+      run: ./images-builder.sh visualcode cpu ${{ needs.prepare.outputs.version }}
+  
+  build-visualcode-images-gpu:
+    name: Build and push Visual Code Docker images GPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-gpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses:  docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push Visual Code images
+      run: ./images-builder.sh visualcode gpu ${{ needs.prepare.outputs.version }}
+
+  build-visualcode-tensorflow-images-cpu:
+    name: Build and push Visual Code Tensorflow Docker images CPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-cpu, build-visualcode-images-cpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push JupyterLab Python Tensorflow Bundles images
+      run: ./images-builder.sh visualcode_tensorflow cpu ${{ needs.prepare.outputs.version }}
+
+  build-visualcode-tensorflow-images-gpu:
+    name: Build and push Visual Code Tensorflow Docker images GPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-gpu, build-visualcode-images-gpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push Visual Code Tensorflow Bundles images
+      run: ./images-builder.sh visualcode_tensorflow gpu ${{ needs.prepare.outputs.version }}
+
+  build-visualcode-torch-images-cpu:
+    name: Build and push Visual Code Torch Docker images CPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-cpu, build-visualcode-images-cpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push Visual Code Torch Bundles images
+      run: ./images-builder.sh visualcode_torch cpu ${{ needs.prepare.outputs.version }}
+
+  build-visualcode-torch-images-gpu:
+    name: Build and push Visual Code Torch Docker images GPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-gpu, build-visualcode-images-gpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push Visual Code Torch Bundles images
+      run: ./images-builder.sh visualcode_torch gpu ${{ needs.prepare.outputs.version }}
+
   build-rstudio-images-gpu:
     name: Build and push RStudio Docker images GPU
     runs-on: ubuntu-20.04
@@ -496,6 +604,50 @@ jobs:
     - name: Build and Push YData image
       run: ./images-builder.sh ydata gpu ${{ needs.prepare.outputs.version }}
 
+  build-visualcode-ydata-image-cpu:
+    name: Build and push VisualCode YData Docker images CPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-cpu, build-visualcode-images-cpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Add authentication to requirements file
+      run: sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements.txt
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GHCR_TOKEN }}
+
+    - name: Build and Push VisualCode YData image
+      run: ./images-builder.sh visualcode_ydata cpu ${{ needs.prepare.outputs.version }}
+
+  build-visualcode-ydata-image-gpu:
+    name: Build and push VisualCode YData Docker images GPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-gpu, build-jupyterlab-python-images-gpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Add authentication to requirements file
+      run: sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements.txt
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GHCR_TOKEN }}
+
+    - name: Build and Push VisualCode YData image
+      run: ./images-builder.sh visualcode_ydata gpu ${{ needs.prepare.outputs.version }}
+
 
   update-manifests:
     name: Update Manifests
@@ -512,7 +664,7 @@ jobs:
       with:
         pattern: VERSION
         flags: g
-        string: 'rstudio-cpu:VERSION,rstudio-gpu:VERSION,jupyterlab_r-cpu:VERSION,jupyterlab_python-cpu:VERSION,jupyterlab_r-gpu:VERSION,jupyterlab_python-gpu:VERSION,ydata-cpu:VERSION,ydata-gpu:VERSION,h2oflow-cpu:VERSION,h2oflow-gpu:VERSION,tensorflow-1.15-cpu:VERSION,tensorflow-1.15-gpu:VERSION,tensorflow-2.3-cpu:VERSION,tensorflow-2.3-gpu:VERSION,torch-1.7-cpu:VERSION,torch-1.7-gpu:VERSION'
+        string: 'rstudio-cpu:VERSION,rstudio-gpu:VERSION,jupyterlab_r-cpu:VERSION,jupyterlab_python-cpu:VERSION,jupyterlab_r-gpu:VERSION,jupyterlab_python-gpu:VERSION,ydata-cpu:VERSION,ydata-gpu:VERSION,h2oflow-cpu:VERSION,h2oflow-gpu:VERSION,tensorflow-1.15-cpu:VERSION,tensorflow-1.15-gpu:VERSION,tensorflow-2.3-cpu:VERSION,tensorflow-2.3-gpu:VERSION,torch-1.7-cpu:VERSION,torch-1.7-gpu:VERSION,visualcode-cpu:VERSION,visualcode-gpu:VERSION'
         replace-with: ${{ env.VERSION }}
 
     - name: Checkout Manifests repo
