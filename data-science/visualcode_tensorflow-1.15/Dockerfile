@@ -1,0 +1,13 @@
+ARG TAG
+
+FROM ydata/visualcode:${TAG}
+
+LABEL ai.ydata.laboratory.visualcode.version=3.9.0
+
+ARG TYPE
+
+COPY --chown=${USER}:users ${TYPE}/requirements.txt /tmp/
+
+LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
+
+RUN pip --no-cache-dir install -r /tmp/requirements.txt

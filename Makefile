@@ -4,7 +4,9 @@ data-science/laboratories-base data-science/jupyterlab_r_torch-1.7 \
 data-science/jupyterlab_r_tensorflow-1.15 data-science/jupyterlab_r_tensorflow-2.3 \
 data-science/rstudio data-science/rstudio_tensorflow data-science/rstudio_torch-1.7 \
 data-science/jupyterlab_python_tensorflow-1.15 data-science/jupyterlab_python_tensorflow-2.3 \
-data-science/jupyterlab_python_torch-1.7 data-science/h2oflow data-science/ydata
+data-science/jupyterlab_python_torch-1.7 data-science/h2oflow data-science/ydata \
+data-science/visualcode data-science/visualcode_tensorflow-1.15 data-science/visualcode_torch-1.7 \
+data-science/visualcode_tensorflow-2.3 data-science/visualcode_ydata
 IMAGES=$(CUDA_IMAGES) $(LABS_IMAGES)
 TAG=latest
 TYPES=cpu gpu
