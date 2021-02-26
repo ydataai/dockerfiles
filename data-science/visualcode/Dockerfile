@@ -13,6 +13,7 @@ USER ${UID}
 EXPOSE 8888
 
 RUN code-server --install-extension ms-python.python --install-extension littlefoxteam.vscode-python-test-adapter
+RUN mkdir /home/${USER}/workspace
 
-CMD ["bash", "-c", "code-server --auth none --bind-addr 0.0.0.0:8888 --disable-telemetry true --home /"]
+CMD ["bash", "-c", "code-server --auth none --bind-addr 0.0.0.0:8888 --disable-telemetry true --home / -- user-data-dir /home/${USER}/workspace"]
 
