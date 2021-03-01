@@ -61,13 +61,16 @@ case $1 in
     done
   ;;
 
-  jupyterlab_r_tensorflow)
-    for image in data-science/jupyterlab_r_tensorflow-1.15 data-science/jupyterlab_r_tensorflow-2.3
-    do
-      make build IMAGE="$image" TYPE="$2" TAG="$3"
-      make push IMAGE="$image" TYPE="$2" TAG="$3"
-    done
+  jupyterlab_r_tensorflow-1.15)
+    make build IMAGE="data-science/jupyterlab_r_tensorflow-1.15" TYPE="$2" TAG="$3"
+    make push IMAGE="data-science/jupyterlab_r_tensorflow-1.15" TYPE="$2" TAG="$3"
   ;;
+
+  jupyterlab_r_tensorflow-2.3)
+    make build IMAGE="data-science/jupyterlab_r_tensorflow-2.3" TYPE="$2" TAG="$3"
+    make push IMAGE="data-science/jupyterlab_r_tensorflow-2.3" TYPE="$2" TAG="$3"
+  ;;
+
 
   jupyterlab_python_torch)
     make build IMAGE="data-science/jupyterlab_python_torch-1.7" TYPE="$2" TAG="$3"
