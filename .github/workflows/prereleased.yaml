@@ -164,8 +164,8 @@ jobs:
     - name: Build and Push JupyterLab R images
       run: ./images-builder.sh jupyterlab_r gpu ${{ needs.prepare.outputs.version }}
 
-  build-jupyterlab-python-tensorflow-images-cpu:
-    name: Build and push JupyterLab Python Tensorflow Docker images CPU
+  build-jupyterlab-python-tensorflow-115-images-cpu:
+    name: Build and push JupyterLab Python Tensorflow 1.15 Docker images CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, build-base-python-images-cpu, build-jupyterlab-python-images-cpu]
@@ -179,11 +179,11 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build and Push JupyterLab Python Tensorflow Bundles images
-      run: ./images-builder.sh jupyterlab_python_tensorflow cpu ${{ needs.prepare.outputs.version }}
+    - name: Build and Push JupyterLab Python Tensorflow 1.15 Bundles images
+      run: ./images-builder.sh jupyterlab_python_tensorflow-1.15 cpu ${{ needs.prepare.outputs.version }}
 
-  build-jupyterlab-python-tensorflow-images-gpu:
-    name: Build and push JupyterLab Python Tensorflow Docker images GPU
+  build-jupyterlab-python-tensorflow-115-images-gpu:
+    name: Build and push JupyterLab Python Tensorflow 1.15 Docker images GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, build-base-python-images-gpu, build-jupyterlab-python-images-gpu]
@@ -197,10 +197,82 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build and Push JupyterLab Python Tensorflow Bundles images
-      run: ./images-builder.sh jupyterlab_python_tensorflow gpu ${{ needs.prepare.outputs.version }}
+    - name: Build and Push JupyterLab Python Tensorflow 1.15 Bundles images
+      run: ./images-builder.sh jupyterlab_python_tensorflow-1.15 gpu ${{ needs.prepare.outputs.version }}
 
-  build-jupyterlab-r-tensorflow-images-cpu:
+  build-jupyterlab-python-tensorflow-23-images-cpu:
+    name: Build and push JupyterLab Python Tensorflow 2.3 Docker images CPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-cpu, build-jupyterlab-python-images-cpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push JupyterLab Python Tensorflow 2.3 Bundles images
+      run: ./images-builder.sh jupyterlab_python_tensorflow-2.3 cpu ${{ needs.prepare.outputs.version }}
+
+  build-jupyterlab-python-tensorflow-23-images-gpu:
+    name: Build and push JupyterLab Python Tensorflow 2.3 Docker images GPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-gpu, build-jupyterlab-python-images-gpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push JupyterLab Python Tensorflow 2.23 Bundles images
+      run: ./images-builder.sh jupyterlab_python_tensorflow-2.3 gpu ${{ needs.prepare.outputs.version }}
+
+  build-jupyterlab-r-tensorflow-115-images-cpu:
+    name: Build and push JupyterLab R Tensorflow 1.15 Docker images CPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-r-images-cpu, build-jupyterlab-r-images-cpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push JupyterLab R Tensorflow images
+      run: ./images-builder.sh jupyterlab_r_tensorflow-1.5 cpu ${{ needs.prepare.outputs.version }}
+
+  build-jupyterlab-r-tensorflow-115-images-gpu:
+    name: Build and push JupyterLab R Tensorflow 1.15 Docker images GPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-r-images-gpu, build-jupyterlab-r-images-gpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push JupyterLab R Tensorflow images
+      run: ./images-builder.sh jupyterlab_r_tensorflow-1.15 gpu ${{ needs.prepare.outputs.version }}
+  
+  build-jupyterlab-r-tensorflow-23-images-cpu:
     name: Build and push JupyterLab R Tensorflow Docker images CPU
     runs-on: ubuntu-20.04
 
@@ -216,9 +288,9 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Build and Push JupyterLab R Tensorflow images
-      run: ./images-builder.sh jupyterlab_r_tensorflow cpu ${{ needs.prepare.outputs.version }}
+      run: ./images-builder.sh jupyterlab_r_tensorflow-2.3 cpu ${{ needs.prepare.outputs.version }}
 
-  build-jupyterlab-r-tensorflow-images-gpu:
+  build-jupyterlab-r-tensorflow-23-images-gpu:
     name: Build and push JupyterLab R Tensorflow Docker images GPU
     runs-on: ubuntu-20.04
 
@@ -234,7 +306,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Build and Push JupyterLab R Tensorflow images
-      run: ./images-builder.sh jupyterlab_r_tensorflow gpu ${{ needs.prepare.outputs.version }}
+      run: ./images-builder.sh jupyterlab_r_tensorflow-2.3 gpu ${{ needs.prepare.outputs.version }}
 
   build-jupyterlab-python-torch-images-cpu:
     name: Build and push JupyterLab Python Torch Docker images CPU
@@ -398,8 +470,8 @@ jobs:
     - name: Build and Push Visual Code images
       run: ./images-builder.sh visualcode gpu ${{ needs.prepare.outputs.version }}
 
-  build-visualcode-tensorflow-images-cpu:
-    name: Build and push Visual Code Tensorflow Docker images CPU
+  build-visualcode-tensorflow-115-images-cpu:
+    name: Build and push Visual Code Tensorflow 1.15 Docker images CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, build-base-python-images-cpu, build-visualcode-images-cpu]
@@ -413,11 +485,11 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build and Push JupyterLab Python Tensorflow Bundles images
-      run: ./images-builder.sh visualcode_tensorflow cpu ${{ needs.prepare.outputs.version }}
+    - name: Build and Push JupyterLab Python Tensorflow 1.15 Bundles images
+      run: ./images-builder.sh visualcode_tensorflow-1.15 cpu ${{ needs.prepare.outputs.version }}
 
-  build-visualcode-tensorflow-images-gpu:
-    name: Build and push Visual Code Tensorflow Docker images GPU
+  build-visualcode-tensorflow-115-images-gpu:
+    name: Build and push Visual Code Tensorflow 1.15 Docker images GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, build-base-python-images-gpu, build-visualcode-images-gpu]
@@ -431,8 +503,44 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build and Push Visual Code Tensorflow Bundles images
-      run: ./images-builder.sh visualcode_tensorflow gpu ${{ needs.prepare.outputs.version }}
+    - name: Build and Push Visual Code Tensorflow 1.15 Bundles images
+      run: ./images-builder.sh visualcode_tensorflow-1.15 gpu ${{ needs.prepare.outputs.version }}
+    
+  build-visualcode-tensorflow-23-images-cpu:
+    name: Build and push Visual Code Tensorflow 2.3 Docker images CPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-cpu, build-visualcode-images-cpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push JupyterLab Python Tensorflow 2.3 Bundles images
+      run: ./images-builder.sh visualcode_tensorflow-2.3 cpu ${{ needs.prepare.outputs.version }}
+
+  build-visualcode-tensorflow-23-images-gpu:
+    name: Build and push Visual Code Tensorflow 2.3 Docker images GPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, build-base-python-images-gpu, build-visualcode-images-gpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and Push Visual Code Tensorflow 2.3 Bundles images
+      run: ./images-builder.sh visualcode_tensorflow-2.3 gpu ${{ needs.prepare.outputs.version }}
 
   build-visualcode-torch-images-cpu:
     name: Build and push Visual Code Torch Docker images CPU

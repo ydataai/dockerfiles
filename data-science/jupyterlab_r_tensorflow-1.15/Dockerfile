@@ -10,7 +10,7 @@ COPY --chown=${USER}:users ${TYPE}/requirements.txt conda.txt /tmp/
 # Update and install conda packages
 RUN conda update --all --quiet --yes && \
     conda install --quiet --yes --file /tmp/conda.txt && \
-    conda clean --all -f -y
+    conda clean --all -f -y 
 
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
