@@ -180,7 +180,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Build and Push JupyterLab Python Tensorflow 1.15 Bundles images
-      run: ./images-builder.sh jupyterlab_python_tensorflow-115 cpu ${{ needs.prepare.outputs.version }}
+      run: ./images-builder.sh jupyterlab_python_tensorflow-1.15 cpu ${{ needs.prepare.outputs.version }}
 
   build-jupyterlab-python-tensorflow-115-images-gpu:
     name: Build and push JupyterLab Python Tensorflow 1.15 Docker images GPU
