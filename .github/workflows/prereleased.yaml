@@ -539,7 +539,7 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build and Push Visual Code Tensorflow 2.23 Bundles images
+    - name: Build and Push Visual Code Tensorflow 2.3 Bundles images
       run: ./images-builder.sh visualcode_tensorflow-2.3 gpu ${{ needs.prepare.outputs.version }}
 
   build-visualcode-torch-images-cpu:
