@@ -6,7 +6,7 @@ LABEL ai.ydata.laboratory.visualcode.version=3.9.0
 
 USER root
 
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=3.9.0 
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=3.9.0
 
 USER ${UID}
 
@@ -15,5 +15,6 @@ EXPOSE 8888
 RUN code-server --install-extension ms-python.python --install-extension littlefoxteam.vscode-python-test-adapter
 RUN mkdir /home/${USER}/workspace
 
-CMD ["bash", "-c", "code-server --auth none --bind-addr 0.0.0.0:8888 --disable-telemetry true --home / -- user-data-dir /home/${USER}/workspace"]
+ENV URL_BASE_PATH /
 
+CMD ["bash", "-c", "code-server --auth none --bind-addr 0.0.0.0:8888 --disable-telemetry true --home ${URL_BASE_PATH} -- user-data-dir /home/${USER}/workspace"]

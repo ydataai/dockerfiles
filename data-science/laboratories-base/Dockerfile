@@ -66,5 +66,8 @@ RUN conda update --all --quiet --yes && \
 
 LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
 
+# Make bash as the default shell
+ENV SHELL /bin/bash
+
 # Setup entrypoint using tini
 ENTRYPOINT [ "tini", "-g", "--" ]

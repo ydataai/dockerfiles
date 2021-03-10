@@ -24,6 +24,6 @@ RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager@2 \
 RUN nbdime config-git --enable --global
 
 # Configure container startup
-ENV NB_PREFIX /
+ENV URL_BASE_PATH /
 EXPOSE 8888
-CMD [ "/bin/bash", "-c", "jupyter lab --notebook-dir=/home/${USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.terminals_enabled=False --NotebookApp.base_url=${NB_PREFIX}" ]
+CMD [ "/bin/bash", "-c", "jupyter lab --notebook-dir=/home/${USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.terminals_enabled=False --NotebookApp.base_url=${URL_BASE_PATH}" ]
