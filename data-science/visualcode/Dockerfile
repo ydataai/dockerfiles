@@ -17,4 +17,4 @@ RUN mkdir /home/${USER}/workspace
 
 ENV URL_BASE_PATH /
 
-CMD ["bash", "-c", "code-server --auth none --bind-addr 0.0.0.0:8888 --disable-telemetry true --home ${URL_BASE_PATH} -- user-data-dir /home/${USER}/workspace"]
+CMD ["bash", "-c", "code-server --auth none --bind-addr 0.0.0.0:8888 --disable-telemetry true --home ${URL_BASE_PATH} --user-data-dir /home/${USER}/workspace"]
