@@ -4,6 +4,6 @@ git+https://github.com/ydataai/ydata.git@0.15.6
 # Pandas Profiling
 git+https://github.com/ydataai/pandas-profiling.git@2.11.0
 
-git+https://github.com/ydataai/platform-python-sdk.git@0.1.0.dev23
+git+https://github.com/ydataai/platform-python-sdk.git@0.1.0.dev25
 
-git+https://github.com/ydataai/platform-python-models.git@0.1.0.dev4
+git+https://github.com/ydataai/platform-python-models.git@0.1.0.dev6
