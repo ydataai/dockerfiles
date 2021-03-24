@@ -2,18 +2,21 @@ ARG TAG
 
 FROM ydata/laboratories-base_python:${TAG}
 
-LABEL ai.ydata.laboratory.visualcode.version=3.9.0
+LABEL ai.ydata.laboratory.visualcode.version=3.9.1
 
 USER root
 
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=3.9.0
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=3.9.1
 
 USER ${UID}
 
 EXPOSE 8888
 
-RUN code-server --install-extension ms-python.python --install-extension littlefoxteam.vscode-python-test-adapter
+RUN code-server --install-extension ms-python.python
 RUN mkdir /home/${USER}/workspace
+
+RUN conda install pylint --quiet --yes && \
+    conda clean --all -f -y
 
 ENV URL_BASE_PATH /
 
