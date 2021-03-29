@@ -7,10 +7,13 @@ data-science/jupyterlab_python_tensorflow-1.15 data-science/jupyterlab_python_te
 data-science/jupyterlab_python_torch-1.7 data-science/h2oflow data-science/ydata \
 data-science/visualcode data-science/visualcode_tensorflow-1.15 data-science/visualcode_torch-1.7 \
 data-science/visualcode_tensorflow-2.3 data-science/visualcode_ydata
-IMAGES=$(CUDA_IMAGES) $(LABS_IMAGES)
+DASK_IMAGES=dask/worker
+
+IMAGES=$(CUDA_IMAGES) $(LABS_IMAGES) $(DASK_IMAGES)
 TAG=latest
 TYPES=cpu gpu
 CUDA_VERSIONS=10.0 10.1
+DASK_VERSIONS=2020.12.0
 
 .PHONY: help list-images build push build-and-push-all
 
@@ -39,70 +42,80 @@ build:	### Builds the image given, its name, its type and, optionally, its tag. 
 ifndef IMAGE
 	$(error Missing IMAGE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
 endif
+
+ifeq ($(filter $(IMAGE),$(IMAGES)),)
+	$(error Invalid image selected. Call `make list-images` to check the images you can build)
+endif
+
 ifeq ($(IMAGE),nvidia-cuda)
 ifndef VERSION
 	$(error Missing VERSION variable. Usage: make build IMAGE= VERSION=)
 endif
-else
-ifneq ($(IMAGE),data-science/ydata)
-ifndef TYPE
-	$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
-endif
-endif
-endif
-ifeq ($(filter $(IMAGE),$(IMAGES)),)
-	$(error Invalid image selected. Call `make list-images` to check the images you can build)
-endif
-ifeq ($(IMAGE),nvidia-cuda)
+
 ifeq ($(filter $(VERSION),$(CUDA_VERSIONS)),)
 	$(error Invalid VERSION selected. Only 10.0 or 10.1 are supported)
 endif
+
+	$(call DOCKER_BUILD,${IMAGE},${VERSION})
+else ifeq ($(IMAGE),dask/worker)
+ifndef VERSION
+	$(error Missing VERSION variable. Usage: make build IMAGE= VERSION=)
+endif
+
+ifeq ($(filter $(VERSION),$(DASK_VERSIONS)),)
+	$(error Invalid VERSION selected. Only 2020.12.0 is supported)
+endif
+
+	$(call DOCKER_BUILD,${IMAGE},${VERSION})
 else
-ifneq ($(IMAGE),data-science/ydata)
+ifndef TYPE
+	$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
+endif
+
 ifeq ($(filter $(TYPE),$(TYPES)),)
 	$(error Invalid type selected. Only cpu or gpu are supported)
 endif
-endif
-endif
 
-ifeq ($(IMAGE),nvidia-cuda)
-	$(call DOCKER_BUILD,${IMAGE},${VERSION})
-else
 	$(call DOCKER_BUILD,${IMAGE},${TYPE},${TAG})
 endif
 
 push:	### Pushes the image to Docker image registry, given its name and its tag. I.e.: `make push IMAGE=h2oflow-3.32.0.2 TAG=0.1.0 (optional)`
 ifndef IMAGE
-	$(error Missing IMAGE variable. Usage: make push IMAGE= TAG= (optional))
+	$(error Missing IMAGE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
 endif
+
+ifeq ($(filter $(IMAGE),$(IMAGES)),)
+	$(error Invalid image selected. Call `make list-images` to check the images you can build)
+endif
+
 ifeq ($(IMAGE),nvidia-cuda)
 ifndef VERSION
 	$(error Missing VERSION variable. Usage: make build IMAGE= VERSION=)
 endif
-else
-ifneq ($(IMAGE),data-science/ydata)
-ifndef TYPE
-	$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
-endif
-endif
-endif
-ifeq ($(filter $(IMAGE),$(IMAGES)),)
-	$(error Invalid image selected. Call `make list-images` to check the images you can build)
-endif
-ifeq ($(IMAGE),nvidia-cuda)
+
 ifeq ($(filter $(VERSION),$(CUDA_VERSIONS)),)
 	$(error Invalid VERSION selected. Only 10.0 or 10.1 are supported)
 endif
+
+	$(call DOCKER_PUSH,${IMAGE},${VERSION})
+else ifeq ($(IMAGE),dask/worker)
+ifndef VERSION
+	$(error Missing VERSION variable. Usage: make build IMAGE= VERSION=)
+endif
+
+ifeq ($(filter $(VERSION),$(DASK_VERSIONS)),)
+	$(error Invalid VERSION selected. Only 2020.12.0 is supported)
+endif
+
+	$(call DOCKER_PUSH,${IMAGE},${VERSION})
 else
-ifneq ($(IMAGE),data-science/ydata)
+ifndef TYPE
+	$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
+endif
+
 ifeq ($(filter $(TYPE),$(TYPES)),)
 	$(error Invalid type selected. Only cpu or gpu are supported)
 endif
-endif
-endif
 
-ifeq ($(IMAGE),nvidia-cuda)
-	$(call DOCKER_PUSH,${IMAGE},${VERSION})
-else
 	$(call DOCKER_PUSH,${IMAGE},${TYPE},${TAG})
 endif
