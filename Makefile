@@ -66,7 +66,7 @@ ifeq ($(filter $(VERSION),$(DASK_VERSIONS)),)
 	$(error Invalid VERSION selected. Only 2020.12.0 is supported)
 endif
 
-	$(call DOCKER_BUILD,${IMAGE},${VERSION})
+	$(call DOCKER_BUILD,${IMAGE},${VERSION},${TAG})
 else
 ifndef TYPE
 	$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
