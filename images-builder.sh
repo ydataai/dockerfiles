@@ -102,8 +102,8 @@ case $1 in
   ;;
 
   dask-worker)
-    make build IMAGE="dask/worker" VERSION="2020.12.0" TAG="$2"
-    make push IMAGE="dask/worker" VERSION="2020.12.0" TAG="$2"
+    make build IMAGE="dask/worker" VERSION="2020.12.0" TAG="$3"
+    make push IMAGE="dask/worker" VERSION="2020.12.0" TAG="$3"
   ;;
 
 esac
