@@ -1,9 +1,13 @@
-# YData
-git+https://github.com/ydataai/ydata.git@0.15.7
+--extra-index-url https://pypi.ydata.ai
+
+platform-python-sdk==0.1.2
+
+ydata-connectors==1.0.0rc2
+ydata-report==1.0.0rc2
+ydata-synthesizers==1.0.0rc2
+ydata-utils==1.0.0rc2
+
+platform-python-models==0.1.0
 
 # Pandas Profiling
 git+https://github.com/ydataai/pandas-profiling.git@2.11.0
-
-git+https://github.com/ydataai/platform-python-sdk.git@0.1.0.dev25
-
-git+https://github.com/ydataai/platform-python-models.git@0.1.0.dev6
