@@ -1,8 +1,12 @@
 python
 nodejs=10.13.0
 
+conda-forge::jupyterlab=3.0.14
+conda-forge::kfp=1.3.0
 conda-forge::libiconv=1.16
-conda-forge::jupyterlab=2.2.9
-conda-forge::jupyterlab_widgets=1.0.0
 conda-forge::r-irkernel=0.8.15
-conda-forge::kfp=1.2.0
+
+conda-forge::elyra
+conda-forge::jupyterlab-git=0.30.0
+conda-forge::jupyterlab_widgets=1.0.0
+conda-forge::ipywidgets=7.6.3
