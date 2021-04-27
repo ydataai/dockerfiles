@@ -679,8 +679,8 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i -r 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements.txt
-        sed -i -r 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/ydata/requirements.txt
+        sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/ydata/requirements.txt
 
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v1
@@ -703,8 +703,8 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i -r 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements.txt
-        sed -i -r 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/ydata/requirements.txt
+        sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/ydata/requirements.txt
 
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v1
@@ -727,8 +727,8 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i -r 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/visualcode_ydata/requirements.txt
-        sed -i -r 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
 
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v1
@@ -751,8 +751,8 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i -r 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/visualcode_ydata/requirements.txt
-        sed -i -r 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
 
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v1
@@ -769,7 +769,8 @@ jobs:
     name: Update Manifests
     runs-on: ubuntu-20.04
 
-    needs: [build-visualcode-ydata-image-gpu,
+    needs: [prepare,
+            build-visualcode-ydata-image-gpu,
             build-ydata-image-gpu,
             build-rstudio-torch-images-gpu,
             build-rstudio-tensorflow-images-gpu,

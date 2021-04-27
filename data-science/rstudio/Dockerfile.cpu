@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     psmisc \
     make \
     sudo \
+    libpng-dev \
     build-essential \
     && apt-get -y autoremove \
     && apt-get clean \
