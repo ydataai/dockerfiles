@@ -60,9 +60,9 @@ USER ${UID}
 COPY --chown=${USER}:users ./conda.txt /tmp/
 
 # Update and install conda packages
-RUN conda update --all --quiet --yes && \
-    conda install --quiet --yes --file /tmp/conda.txt && \
-    conda clean --all -f -y
+RUN conda update --all --quiet -y && \
+    conda install --quiet -y --file /tmp/conda.txt && \
+    conda clean --all -y
 
 LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
 

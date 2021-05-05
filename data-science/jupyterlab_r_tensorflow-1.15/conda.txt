@@ -1,5 +1,3 @@
-conda
-
 conda-forge::r-reticulate
 conda-forge::r-tensorflow
 conda-forge::r-matrix

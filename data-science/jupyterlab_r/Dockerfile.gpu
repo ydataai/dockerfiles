@@ -4,7 +4,6 @@ FROM ydata/laboratories-base_r:${TAG}
 
 LABEL JupyterLabVersion=2.2.9
 
-COPY --chown=${USER}:users conda.txt /tmp/
 
 USER root
 
@@ -22,9 +21,13 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD5
 USER ${UID}
 
 # Update and install conda packages
-RUN conda update --all --quiet --yes && \
-    conda install --quiet --yes --file /tmp/conda.txt && \
+COPY --chown=${USER}:users conda.txt /tmp/
+RUN conda install --quiet --y --file /tmp/conda.txt && \
     conda clean --all -f -y
+
+# Install pypi dependencies
+COPY --chown=${USER}:users requirements.txt /tmp/
+RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Configure container startup
 ENV URL_BASE_PATH /

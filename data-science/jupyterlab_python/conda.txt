@@ -1,7 +1,1 @@
-python
-
-conda-forge::jupyterlab=2.2.9
-conda-forge::jupyterlab-git=0.23.3
-conda-forge::jupyterlab_widgets=1.0.0
-conda-forge::ipywidgets=7.6.3
-conda-forge::kfp=1.2.0
+conda-forge::nodejs=12.19.0
