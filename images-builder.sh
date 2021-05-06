@@ -51,8 +51,8 @@ case $1 in
   ;;
 
   rstudio_torch)
-    make build IMAGE="data-science/rstudio_torch-1.7" TYPE="$2" TAG="$3"
-    make push IMAGE="data-science/rstudio_torch-1.7" TYPE="$2" TAG="$3"
+    make build IMAGE="data-science/rstudio_torch" TYPE="$2" TAG="$3"
+    make push IMAGE="data-science/rstudio_torch" TYPE="$2" TAG="$3"
   ;;
 
   jupyterlab_python_tensorflow-1.15)
@@ -82,8 +82,8 @@ case $1 in
   ;;
 
   jupyterlab_r_torch)
-    make build IMAGE="data-science/jupyterlab_r_torch-1.7" TYPE="$2" TAG="$3"
-    make push IMAGE="data-science/jupyterlab_r_torch-1.7" TYPE="$2" TAG="$3"
+    make build IMAGE="data-science/jupyterlab_r_torch" TYPE="$2" TAG="$3"
+    make push IMAGE="data-science/jupyterlab_r_torch" TYPE="$2" TAG="$3"
   ;;
 
   h2o)
