@@ -2,7 +2,7 @@ ARG TAG
 
 FROM ydata/laboratories-base_python:${TAG}
 
-LABEL H2OFlowVersion=3.32.0.2
+LABEL ai.ydata.laboratory.h2oflow.version=3.32.0.2
 
 SHELL [ "/bin/bash", "--login", "-c" ]
 
@@ -30,7 +30,5 @@ RUN curl -o /tmp/h2oflow.zip http://h2o-release.s3.amazonaws.com/h2o/$RELEASE_NA
 USER ${UID}
 
 EXPOSE 8888
-
-LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
 
 CMD ["bash", "-c", "java -jar /opt/h2oflow/h2o.jar -port 8888"]
