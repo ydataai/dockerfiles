@@ -13,9 +13,10 @@ USER ${UID}
 
 ARG TYPE
 
-COPY --chown=${USER}:users ${TYPE}/requirements.txt /tmp/requirements.txt
+COPY --chown=${USER}:users requirements.txt /tmp/requirements-shared.txt
+COPY --chown=${USER}:users ${TYPE}/requirements.txt /tmp/
 
-RUN pip install pip --no-cache-dir install -r /tmp/requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
+RUN pip install pip --no-cache-dir install -r /tmp/requirements.txt -r /tmp/requirements-shared.txt -f https://download.pytorch.org/whl/torch_stable.html
 
 USER root
 

@@ -13,9 +13,10 @@ USER ${UID}
 
 ARG TYPE
 
+COPY --chown=${USER}:users requirements.txt /tmp/requirements-shared.txt
 COPY --chown=${USER}:users ${TYPE}/requirements.txt /tmp/
 
-RUN pip --no-cache-dir install -r /tmp/requirements.txt
+RUN pip --no-cache-dir install -r /tmp/requirements.txt -r /tmp/requirements-shared.txt
 
 USER root
 

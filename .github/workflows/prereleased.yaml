@@ -139,7 +139,7 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/jupyterlab_python_tensorflow-1.15/requirements.txt
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -161,7 +161,7 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/jupyterlab_python_tensorflow-1.15/requirements.txt
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -183,7 +183,7 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/jupyterlab_python_tensorflow-2.3/requirements.txt
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -205,7 +205,7 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/jupyterlab_python_tensorflow-2.3/requirements.txt
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -227,7 +227,7 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/jupyterlab_python_torch-1.7/requirements.txt
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -249,7 +249,7 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/jupyterlab_python_torch-1.7/requirements.txt
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -643,7 +643,7 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_tensorflow-1.15/requirements.txt
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -665,7 +665,7 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        3sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_tensorflow-1.15/requirements.txt
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -687,7 +687,7 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_tensorflow-2./requirements.txt
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -709,7 +709,7 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_tensorflow-2.3/requirements.txt
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -731,7 +731,7 @@ jobs:
 
     - name: Add authentication to requirements file
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_torch-1.7/requirements.txt
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
