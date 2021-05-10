@@ -1,1 +1,10 @@
+--extra-index-url https://pypi.ydata.ai
+
+platform-python-sdk==0.1.2
+
+ydata-utils==1.0.0rc2
+ydata-connectors==1.0.0rc2
+
+platform-python-models==0.1.0
+
 tensorflow-cpu==2.3.*
