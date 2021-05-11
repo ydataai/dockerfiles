@@ -1,0 +1,5 @@
+distributed:
+  version: 2
+  logging:
+    distributed: warning
+    distributed.schedular: warning
