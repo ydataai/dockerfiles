@@ -2,10 +2,10 @@
 
 platform-python-sdk==0.1.2
 
-ydata-connectors==1.0.0rc2
-ydata-report==1.0.0rc2
-ydata-synthesizers==1.0.0rc2
-ydata-utils==1.0.0rc2
+ydata-connectors==1.0.0rc3
+ydata-report==1.0.0rc3
+ydata-synthesizers==1.0.0rc3
+ydata-utils==1.0.0rc3
 
 platform-python-models==0.1.0
 
