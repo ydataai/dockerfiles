@@ -34,7 +34,54 @@ RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --dev-build
 # Integrate NBDIME with git
 RUN nbdime config-git --enable --global
 
+# Configure elyra runtime-images
+RUN elyra-metadata install runtime-images --schema_name=runtime-image \
+--name="ydata_tensorflow_115-cpu" \
+--display_name="YData Tensorflow 1.15 CPU" \
+--image_name="docker.io/ydata/jupyterlab_python_tensorflow-1.15:0.17.0-cpu"
+
+RUN elyra-metadata install runtime-images --schema_name=runtime-image \
+--name="ydata_tensorflow_23-cpu" \
+--display_name="YData Tensorflow 2.3 CPU" \
+--image_name="docker.io/ydata/jupyterlab_python_tensorflow-2.3:0.17.0-cpu"
+
+RUN elyra-metadata install runtime-images --schema_name=runtime-image \
+--name="ydata_torch_17-cpu" \
+--display_name="YData Torch 1.7 CPU" \
+--image_name="docker.io/ydata/jupyterlab_python_torch-1.7:0.17.0-cpu"
+
+RUN elyra-metadata install runtime-images --schema_name=runtime-image \
+--name="ydata-cpu" \
+--display_name="YData CPU" \
+--image_name="ghcr.io/ydataai/ydata:0.17.0-cpu"
+
+RUN elyra-metadata install runtime-images --schema_name=runtime-image \
+--name="ydata_tensorflow_115-gpu" \
+--display_name="YData Tensorflow 1.15 GPU" \
+--image_name="docker.io/ydata/jupyterlab_python_tensorflow-1.15:0.17.0-gpu"
+
+RUN elyra-metadata install runtime-images --schema_name=runtime-image \
+--name="ydata_tensorflow_23-gpu" \
+--display_name="YData Tensorflow 2.3 GPU" \
+--image_name="docker.io/ydata/jupyterlab_python_tensorflow-2.3:0.17.0-gpu"
+
+RUN elyra-metadata install runtime-images --schema_name=runtime-image \
+--name="ydata_torch_17-gpu" \
+--display_name="YData Torch 1.7 GPU" \
+--image_name="docker.io/ydata/jupyterlab_python_torch-1.7:0.17.0-gpu"
+
+RUN elyra-metadata install runtime-images --schema_name=runtime-image \
+--name="ydata-gpu" \
+--display_name="YData GPU" \
+--image_name="ghcr.io/ydataai/ydata:0.17.0-gpu"
+
+USER root
+COPY entrypoint.sh /etc/entrypoint.sh
+RUN chmod +x /etc/entrypoint.sh
+USER ${UID}
+
 # Configure container startup
 ENV URL_BASE_PATH /
 EXPOSE 8888
+ENTRYPOINT [ "/etc/entrypoint.sh" ]
 CMD [ "/bin/bash", "-c", "jupyter lab --notebook-dir=/home/${USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.terminals_enabled=False --NotebookApp.base_url=${URL_BASE_PATH}" ]
