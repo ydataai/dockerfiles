@@ -1,0 +1,7 @@
+{
+  "display_name": "YData Tensorflow 1.15 GPU",
+  "metadata": {
+    "image_name": "docker.io/ydata/jupyterlab_python_tensorflow-1.15:0.18.3-gpu"
+  },
+  "schema_name": "runtime-image"
+}

@@ -1,0 +1,7 @@
+{
+  "display_name": "YData GPU",
+  "metadata": {
+    "image_name": "ghcr.io/ydataai/ydata:0.18.3-gpu"
+  },
+  "schema_name": "runtime-image"
+}

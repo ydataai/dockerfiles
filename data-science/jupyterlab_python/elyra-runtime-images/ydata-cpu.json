@@ -1,0 +1,7 @@
+{
+  "display_name": "YData CPU",
+  "metadata": {
+    "image_name": "ghcr.io/ydataai/ydata:0.18.3-cpu"
+  },
+  "schema_name": "runtime-image"
+}
