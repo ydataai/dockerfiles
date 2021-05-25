@@ -13,4 +13,4 @@ elyra-metadata install runtimes \
 --cos_bucket="elyra-$NAMESPACE" \
 --schema_name=kfp
 
-exec tini -g -- $@
+exec tini -g -- "$@"
