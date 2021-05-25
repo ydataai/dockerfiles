@@ -23,5 +23,3 @@ RUN apt-get --purge autoremove --yes build-essential unixodbc-dev && \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt
 
 USER ${UID}
-
-COPY --chown=ydata:users dask_config.yaml /etc/dask/distributed.yaml

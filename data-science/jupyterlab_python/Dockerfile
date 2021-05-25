@@ -27,6 +27,11 @@ USER root
 RUN apt-get --purge autoremove --yes build-essential unixodbc-dev && \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt
 
+COPY entrypoint.sh /etc/entrypoint.sh
+RUN chmod +x /etc/entrypoint.sh
+
+COPY --chown=ydata:users dask_config.yaml /etc/dask/distributed.yaml
+
 USER ${UID}
 
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --dev-build=False --minimize=False
@@ -74,11 +79,6 @@ RUN elyra-metadata install runtime-images --schema_name=runtime-image \
 --name="ydata-gpu" \
 --display_name="YData GPU" \
 --image_name="ghcr.io/ydataai/ydata:0.17.0-gpu"
-
-USER root
-COPY entrypoint.sh /etc/entrypoint.sh
-RUN chmod +x /etc/entrypoint.sh
-USER ${UID}
 
 # Configure container startup
 ENV URL_BASE_PATH /
