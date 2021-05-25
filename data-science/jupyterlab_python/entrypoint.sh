@@ -1,6 +1,7 @@
 #! /bin/sh
 
 elyra-metadata install runtimes \
+--replace \
 --name="ydata_pipelines" \
 --display_name="YData Pipelines" \
 --api_endpoint=http://ml-pipeline.kubeflow.svc.cluster.local:8888 \
