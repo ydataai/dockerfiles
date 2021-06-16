@@ -2,6 +2,3 @@
 
 ydata-report==1.0.0rc3
 ydata-synthesizers==1.0.0rc3
-
-# Pandas Profiling
-git+https://github.com/ydataai/pandas-profiling.git@2.11.0
