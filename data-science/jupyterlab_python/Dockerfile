@@ -1,6 +1,6 @@
 ARG TAG
 
-FROM ydata/laboratories-base_python:${TAG}
+FROM ydata/laboratories-base_python:0.18.4-cpu
 
 LABEL ai.ydata.laboratory.jupyterlab.version=3.0.14
 
@@ -19,8 +19,10 @@ RUN apt-get update && \
 USER ${UID}
 
 # Install pypi dependencies
-COPY --chown=${USER}:users requirements.txt /tmp/
+COPY --chown=${USER}:users requirements.txt requirements-ydata.txt /tmp/
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
+
+RUN pip --no-cache-dir install -r /tmp/requirements-ydata.txt
 
 USER root
 
