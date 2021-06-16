@@ -1,6 +1,6 @@
 ARG TAG
 
-FROM ydata/laboratories-base_python:0.18.4-cpu
+FROM ydata/laboratories-base_python:${TAG}
 
 LABEL ai.ydata.laboratory.jupyterlab.version=3.0.14
 
