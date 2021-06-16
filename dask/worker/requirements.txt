@@ -1,34 +1,13 @@
+--extra-index-url https://pypi.ydata.ai
+
+platform-python-sdk==0.1.3
+
+ydata-connectors==1.0.0rc3
+ydata-report==1.0.0rc3
+ydata-synthesizers==1.0.0rc3
+ydata-utils==1.0.0rc3
+
+platform-python-models==0.1.0
+
 # Common
 rhea==0.5.5
-
-# Azure
-azure-common==1.1.25
-azure-storage-blob==12.4.0
-azure-storage-file-datalake==12.0.2
-adlfs==0.7.3
-
-# AWS S3
-boto3==1.14.63
-s3fs==0.4.2
-
-# Google
-gcsfs==0.8.0
-fs_gcsfs==1.4.0
-google-api-core==1.26.2
-google-cloud-bigquery-storage==2.2.1
-google-cloud-storage==1.30.0
-pandas_gbq==0.14.0
-
-# SQL
-mysql-connector-python==8.0.20
-
-openpyxl==3.0.7
-pyarrow==2.0.0
-
-sqlparse==0.3.1
-SQLAlchemy==1.3.18
-pymssql==2.1.5
-pyodbc==4.0.30
-uuid==1.30
-packaging==20.8
-xarray==0.17.0

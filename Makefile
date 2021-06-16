@@ -13,7 +13,7 @@ IMAGES=$(CUDA_IMAGES) $(LABS_IMAGES) $(DASK_IMAGES)
 TAG=latest
 TYPES=cpu gpu
 CUDA_VERSIONS=10.0 10.1
-DASK_VERSIONS=2020.12.0
+DASK_VERSIONS=2020.12.0 2021.06.0
 
 .PHONY: help list-images build push build-and-push-all
 

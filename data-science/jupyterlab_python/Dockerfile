@@ -19,8 +19,10 @@ RUN apt-get update && \
 USER ${UID}
 
 # Install pypi dependencies
-COPY --chown=${USER}:users requirements.txt /tmp/
+COPY --chown=${USER}:users requirements.txt requirements-ydata.txt /tmp/
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
+
+RUN pip --no-cache-dir install -r /tmp/requirements-ydata.txt
 
 USER root
 
