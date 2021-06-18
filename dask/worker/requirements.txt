@@ -1,10 +1,8 @@
 --extra-index-url https://pypi.ydata.ai
 
-platform-python-sdk==0.1.3
+platform-python-sdk==0.1.5
 
 ydata-connectors==1.0.0rc3
-ydata-report==1.0.0rc3
-ydata-synthesizers==1.0.0rc3
 ydata-utils==1.0.0rc3
 
 platform-python-models==0.1.0
