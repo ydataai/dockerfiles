@@ -54,7 +54,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab Python images CUDA 10.0
-      run: make all IMAGE=data-science/jupyterlab_python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
     - name: Lab Base Python images CUDA 10.1
       run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
