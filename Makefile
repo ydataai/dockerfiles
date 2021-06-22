@@ -12,7 +12,7 @@ DASK_IMAGES=dask/worker
 IMAGES=$(CUDA_IMAGES) $(LABS_IMAGES) $(DASK_IMAGES)
 TAG=latest
 TYPES=cpu gpu
-CUDA_VERSIONS=10.0 10.1
+CUDA_VERSIONS=10.0 10.1 11.0
 DASK_VERSIONS=2020.12.0 2021.06.0
 
 .PHONY: help list-images build push build-and-push-all
@@ -38,6 +38,8 @@ list-images: ### Lists all the images available to be built and/or pushed to Doc
 	@echo "The images that you can use this tool to build are:"; echo ""
 	@echo $(foreach image, $(IMAGES), "\t • ${image}"; echo "")
 
+all: build push
+
 build:	### Builds the image given, its name, its type and, optionally, its tag. I.e.: `make build IMAGE=h2oflow-3.32.0.2 TYPE=gpu TAG=0.1.0 (optional)`
 ifndef IMAGE
 	$(error Missing IMAGE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
@@ -53,7 +55,7 @@ ifndef VERSION
 endif
 
 ifeq ($(filter $(VERSION),$(CUDA_VERSIONS)),)
-	$(error Invalid VERSION selected. Only 10.0 or 10.1 are supported)
+	$(error Invalid VERSION $(VERSION) selected. Only $(DASK_VERSIONS) are supported)
 endif
 
 	$(call DOCKER_BUILD,${IMAGE},${VERSION})
@@ -94,7 +96,7 @@ ifndef VERSION
 endif
 
 ifeq ($(filter $(VERSION),$(CUDA_VERSIONS)),)
-	$(error Invalid VERSION selected. Only 10.0 or 10.1 are supported)
+	$(error Invalid VERSION $(VERSION) selected. Only $(DASK_VERSIONS) are supported)
 endif
 
 	$(call DOCKER_PUSH,${IMAGE},${VERSION})

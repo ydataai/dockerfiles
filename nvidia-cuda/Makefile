@@ -14,7 +14,7 @@ define DOCKER_BUILD
 	@echo "\t\t$($@_BUILD_ARGS)"; echo ""; echo ""
 
 	@echo ""; echo "==> Commencing build"
-	@docker build --rm $($@_BUILD_ARGS) -t ydata/nvidia-cuda:$1-ubuntu18.04 .
+	@docker build --rm $($@_BUILD_ARGS) -t ydata/nvidia-cuda:$1-ubuntu18.04 -f ./$1/Dockerfile .
 endef
 
 define DOCKER_PUSH

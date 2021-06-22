@@ -36,10 +36,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Lab Base Python images
-      run: ./images-builder.sh base_python cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   base-python-images-gpu:
-    name: Laboratories Base Python  GPU
+    name: Laboratories Base Python GPU
     runs-on: ubuntu-20.04
 
     needs: prepare
@@ -53,11 +53,17 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Lab Base Python images
-      run: ./images-builder.sh base_python gpu ${{ needs.prepare.outputs.version }}
+    - name: JupyterLab Python images CUDA 10.0
+      run: make all IMAGE=data-science/jupyterlab_python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
+
+    - name: Lab Base Python images CUDA 10.1
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
+
+    - name: Lab Base Python images CUDA 11
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
   base-r-images-cpu:
-    name: Laboratories Base R  CPU
+    name: Laboratories Base R CPU
     runs-on: ubuntu-20.04
 
     needs: prepare
@@ -72,10 +78,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Lab Base R images
-      run: ./images-builder.sh base_r cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   base-r-images-gpu:
-    name: Laboratories Base R  GPU
+    name: Laboratories Base R GPU
     runs-on: ubuntu-20.04
 
     needs: prepare
@@ -89,11 +95,17 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Lab Base R images
-      run: ./images-builder.sh base_r gpu ${{ needs.prepare.outputs.version }}
+    - name: Lab Base R images CUDA 10.0
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
+
+    - name: Lab Base R images CUDA 10.1
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
+
+    - name: Lab Base R images CUDA 11.0
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
   jupyterlab-python-images-cpu:
-    name: JupyterLab Python  CPU
+    name: JupyterLab Python CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, base-python-images-cpu]
@@ -112,7 +124,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab Python images
-      run: ./images-builder.sh jupyterlab_python cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_python TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-python-images-gpu:
     name: JupyterLab Python  GPU
@@ -133,8 +145,14 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab Python images
-      run: ./images-builder.sh jupyterlab_python gpu ${{ needs.prepare.outputs.version }}
+    - name: JupyterLab Python images CUDA 10.0
+      run: make all IMAGE=data-science/jupyterlab_python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
+
+    - name: JupyterLab Python images CUDA 10.1
+      run: make all IMAGE=data-science/jupyterlab_python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
+
+    - name: JupyterLab Python images CUDA 11.0
+      run: make all IMAGE=data-science/jupyterlab_python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
   jupyterlab-python-tensorflow-115-images-cpu:
     name: JupyterLab Python Tensorflow 1.15  CPU
@@ -152,10 +170,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab Python Tensorflow 1.15 Bundles images
-      run: ./images-builder.sh jupyterlab_python_tensorflow-1.15 cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_python_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-python-tensorflow-115-images-gpu:
-    name: JupyterLab Python Tensorflow 1.15  GPU
+    name: JupyterLab Python Tensorflow 1.15 GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-python-images-gpu]
@@ -170,10 +188,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab Python Tensorflow 1.15 Bundles images
-      run: ./images-builder.sh jupyterlab_python_tensorflow-1.15 gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_python_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   jupyterlab-python-tensorflow-23-images-cpu:
-    name: JupyterLab Python Tensorflow 2.3  CPU
+    name: JupyterLab Python Tensorflow 2.3 CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-python-images-cpu]
@@ -188,7 +206,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab Python Tensorflow 2.3 Bundles images
-      run: ./images-builder.sh jupyterlab_python_tensorflow-2.3 cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_python_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-python-tensorflow-23-images-gpu:
     name: JupyterLab Python Tensorflow 2.3  GPU
@@ -205,8 +223,8 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab Python Tensorflow 2.23 Bundles images
-      run: ./images-builder.sh jupyterlab_python_tensorflow-2.3 gpu ${{ needs.prepare.outputs.version }}
+    - name: JupyterLab Python Tensorflow 2.3 Bundles images
+      run: make all IMAGE=data-science/jupyterlab_python_tensorflow-2.3 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   jupyterlab-python-torch-images-cpu:
     name: JupyterLab Python Torch  CPU
@@ -224,7 +242,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab Python Torch images
-      run: ./images-builder.sh jupyterlab_python_torch cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_python_torch-1.7 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-python-torch-images-gpu:
     name: JupyterLab Python Torch  GPU
@@ -242,10 +260,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab Python Torch images
-      run: ./images-builder.sh jupyterlab_python_torch gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_python_torch-1.7 TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   jupyterlab-python-ydata-image-cpu:
-    name: YData  CPU
+    name: YData CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-python-images-cpu]
@@ -266,10 +284,10 @@ jobs:
         password: ${{ secrets.GHCR_TOKEN }}
 
     - name: YData image
-      run: ./images-builder.sh ydata cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/ydata TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-python-ydata-image-gpu:
-    name: YData  GPU
+    name: YData GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-python-images-gpu]
@@ -290,7 +308,7 @@ jobs:
         password: ${{ secrets.GHCR_TOKEN }}
 
     - name: YData image
-      run: ./images-builder.sh ydata gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/ydata TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
   jupyterlab-r-images-cpu:
     name: JupyterLab R  CPU
@@ -308,7 +326,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab R images
-      run: ./images-builder.sh jupyterlab_r cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_r TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-r-images-gpu:
     name: JupyterLab R  GPU
@@ -325,8 +343,11 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab R images
-      run: ./images-builder.sh jupyterlab_r gpu ${{ needs.prepare.outputs.version }}
+    - name: JupyterLab R images CUDA 10.0
+      run: make all IMAGE=data-science/jupyterlab_r TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
+
+    - name: JupyterLab R images CUDA 10.1
+      run: make all IMAGE=data-science/jupyterlab_r TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   jupyterlab-r-tensorflow-115-images-cpu:
     name: JupyterLab R Tensorflow 1.15  CPU
@@ -344,7 +365,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab R Tensorflow images
-      run: ./images-builder.sh jupyterlab_r_tensorflow-1.5 cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-r-tensorflow-115-images-gpu:
     name: JupyterLab R Tensorflow 1.15  GPU
@@ -362,7 +383,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab R Tensorflow images
-      run: ./images-builder.sh jupyterlab_r_tensorflow-1.15 gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   jupyterlab-r-tensorflow-23-images-cpu:
     name: JupyterLab R Tensorflow  CPU
@@ -380,7 +401,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab R Tensorflow images
-      run: ./images-builder.sh jupyterlab_r_tensorflow-2.3 cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-r-tensorflow-23-images-gpu:
     name: JupyterLab R Tensorflow  GPU
@@ -398,7 +419,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab R Tensorflow images
-      run: ./images-builder.sh jupyterlab_r_tensorflow-2.3 gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   jupyterlab-r-torch-images-cpu:
     name: JupyterLab R Torch  CPU
@@ -416,7 +437,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab R Torch images
-      run: ./images-builder.sh jupyterlab_r_torch cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_r_torch TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-r-torch-images-gpu:
     name: JupyterLab R Torch  GPU
@@ -434,10 +455,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab R Torch images
-      run: ./images-builder.sh jupyterlab_r_torch gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/jupyterlab_r_torch TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   h2o-images-cpu:
-    name: H2O  CPU
+    name: H2O CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, base-python-images-cpu]
@@ -452,10 +473,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: H2O images
-      run: ./images-builder.sh h2o cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/h2oflow TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   h2o-images-gpu:
-    name: H2O  GPU
+    name: H2O GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, base-python-images-gpu]
@@ -470,7 +491,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: H2O images
-      run: ./images-builder.sh h2o gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/h2oflow TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   rstudio-images-cpu:
     name: RStudio  CPU
@@ -488,7 +509,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: RStudio images
-      run: ./images-builder.sh rstudio cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/rstudio TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   rstudio-images-gpu:
     name: RStudio  GPU
@@ -506,7 +527,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: RStudio images
-      run: ./images-builder.sh rstudio gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/rstudio TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   rstudio-tensorflow-images-cpu:
     name: RStudio Tensorflow  CPU
@@ -524,7 +545,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: RStudio Tensorflow images
-      run: ./images-builder.sh rstudio_tensorflow cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/rstudio_tensorflow TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   rstudio-tensorflow-images-gpu:
     name: RStudio Tensorflow  GPU
@@ -542,7 +563,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: RStudio Tensorflow images
-      run: ./images-builder.sh rstudio_tensorflow gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/rstudio_tensorflow TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   rstudio-torch-images-cpu:
     name: RStudio Torch  CPU
@@ -560,7 +581,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: RStudio Torch images
-      run: ./images-builder.sh rstudio_torch cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/rstudio_torch TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   rstudio-torch-images-gpu:
     name: RStudio Torch  GPU
@@ -578,7 +599,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: RStudio Torch images
-      run: ./images-builder.sh rstudio_torch gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/rstudio_torch TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   visualcode-images-cpu:
     name: Visual Code  CPU
@@ -600,7 +621,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Visual Code images
-      run: ./images-builder.sh visualcode cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/visualcode TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   visualcode-images-gpu:
     name: Visual Code  GPU
@@ -621,8 +642,14 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Visual Code images
-      run: ./images-builder.sh visualcode gpu ${{ needs.prepare.outputs.version }}
+    - name: Visual Code images CUDA 10.0
+      run: make all IMAGE=data-science/visualcode TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
+
+    - name: Visual Code images CUDA 10.1
+      run: make all IMAGE=data-science/visualcode TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
+
+    - name: Visual Code images CUDA 11.0
+      run: make all IMAGE=data-science/visualcode TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
   visualcode-tensorflow-115-images-cpu:
     name: Visual Code Tensorflow 1.15  CPU
@@ -639,8 +666,8 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab Python Tensorflow 1.15 Bundles images
-      run: ./images-builder.sh visualcode_tensorflow-1.15 cpu ${{ needs.prepare.outputs.version }}
+    - name: Visual Code Tensorflow 1.15 Bundles images
+      run: make all IMAGE=data-science/visualcode_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   visualcode-tensorflow-115-images-gpu:
     name: Visual Code Tensorflow 1.15  GPU
@@ -658,7 +685,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Visual Code Tensorflow 1.15 Bundles images
-      run: ./images-builder.sh visualcode_tensorflow-1.15 gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/visualcode_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   visualcode-tensorflow-23-images-cpu:
     name: Visual Code Tensorflow 2.3  CPU
@@ -675,8 +702,8 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab Python Tensorflow 2.3 Bundles images
-      run: ./images-builder.sh visualcode_tensorflow-2.3 cpu ${{ needs.prepare.outputs.version }}
+    - name: Visual Code Tensorflow 2.3 Bundles images
+      run: make all IMAGE=data-science/visualcode_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   visualcode-tensorflow-23-images-gpu:
     name: Visual Code Tensorflow 2.3  GPU
@@ -694,10 +721,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Visual Code Tensorflow 2.3 Bundles images
-      run: ./images-builder.sh visualcode_tensorflow-2.3 gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/visualcode_tensorflow-2.3 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   visualcode-torch-images-cpu:
-    name: Visual Code Torch  CPU
+    name: Visual Code Torch CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, visualcode-images-cpu]
@@ -712,10 +739,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Visual Code Torch Bundles images
-      run: ./images-builder.sh visualcode_torch cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/visualcode_torch-1.7 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   visualcode-torch-images-gpu:
-    name: Visual Code Torch  GPU
+    name: Visual Code Torch GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, visualcode-images-gpu]
@@ -730,7 +757,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Visual Code Torch Bundles images
-      run: ./images-builder.sh visualcode_torch gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/visualcode_torch-1.7 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   visualcode-ydata-image-cpu:
     name: VisualCode YData  CPU
@@ -754,7 +781,7 @@ jobs:
         password: ${{ secrets.GHCR_TOKEN }}
 
     - name: VisualCode YData image
-      run: ./images-builder.sh visualcode_ydata cpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/visualcode_ydata TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   visualcode-ydata-image-gpu:
     name: VisualCode YData  GPU
@@ -778,7 +805,7 @@ jobs:
         password: ${{ secrets.GHCR_TOKEN }}
 
     - name: VisualCode YData image
-      run: ./images-builder.sh visualcode_ydata gpu ${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/visualcode_ydata TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
 
   update-manifests:

@@ -1,6 +1,5 @@
 TAG=latest
 DOCKER_REGISTRY=docker.io
-CUDA_VERSIONS=10.0 10.1
 
 .PHONY: build push
 
@@ -26,14 +25,20 @@ endef
 
 build:
 ifeq (${TYPE},gpu)
-	$(foreach version,$(CUDA_VERSIONS),$(call DOCKER_BUILD,${IMAGE},gpu-cuda${version},${TAG},${language}))
+	ifndef CUDA
+		$(error Missing CUDA variable. Usage: make build IMAGE= TYPE=gpu CUDA=(10.0, 10.1, 11.0) TAG= (optional))
+	endif
+	$(call DOCKER_BUILD,${IMAGE},gpu-cuda${CUDA},${TAG},${language})
 else
 	$(call DOCKER_BUILD,${IMAGE},${TYPE},${TAG},${language})
 endif
 
 push:
 ifeq (${TYPE},gpu)
-	$(foreach version,$(CUDA_VERSIONS),$(call DOCKER_PUSH,${IMAGE},gpu-cuda${version},${TAG},${language}))
+	ifndef CUDA
+		$(error Missing CUDA variable. Usage: make build IMAGE= TYPE=gpu CUDA=(10.0, 10.1, 11.0) TAG= (optional))
+	endif
+	$(call DOCKER_PUSH,${IMAGE},gpu-cuda${CUDA},${TAG},${language})
 else
 	$(call DOCKER_PUSH,${IMAGE},${TYPE},${TAG},${language})
 endif

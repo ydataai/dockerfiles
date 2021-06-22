@@ -1,7 +1,7 @@
 {
   "display_name": "YData Tensorflow 1.15 CPU",
   "metadata": {
-    "image_name": "docker.io/ydata/jupyterlab_python_tensorflow-1.15:0.18.3-cpu"
+    "image_name": "docker.io/ydata/jupyterlab_python_tensorflow-1.15:0.20.0-cpu"
   },
   "schema_name": "runtime-image"
 }
