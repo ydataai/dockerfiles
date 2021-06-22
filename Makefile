@@ -38,6 +38,8 @@ list-images: ### Lists all the images available to be built and/or pushed to Doc
 	@echo "The images that you can use this tool to build are:"; echo ""
 	@echo $(foreach image, $(IMAGES), "\t • ${image}"; echo "")
 
+all: build push
+
 build:	### Builds the image given, its name, its type and, optionally, its tag. I.e.: `make build IMAGE=h2oflow-3.32.0.2 TYPE=gpu TAG=0.1.0 (optional)`
 ifndef IMAGE
 	$(error Missing IMAGE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
