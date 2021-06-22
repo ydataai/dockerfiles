@@ -21,7 +21,7 @@ jobs:
       run: echo ::set-output name=value::`echo ${{ github.ref }} | sed -n -E 's/refs\/tags\/([0-9]+.[0-9]+.[0-9]+)/\1/p'`
 
   base-python-images-cpu:
-    name: Laboratories Base Python  CPU
+    name: Laboratories Base Python CPU
     runs-on: ubuntu-20.04
 
     needs: prepare
@@ -54,13 +54,13 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab Python images CUDA 10.0
-      run: make all IMAGE=data-science/jupyterlab_python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
     - name: Lab Base Python images CUDA 10.1
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
     - name: Lab Base Python images CUDA 11
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
   base-r-images-cpu:
     name: Laboratories Base R CPU
@@ -96,13 +96,13 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Lab Base R images CUDA 10.0
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
     - name: Lab Base R images CUDA 10.1
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
     - name: Lab Base R images CUDA 11.0
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
+      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
   jupyterlab-python-images-cpu:
     name: JupyterLab Python CPU
@@ -127,7 +127,7 @@ jobs:
       run: make all IMAGE=data-science/jupyterlab_python TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-python-images-gpu:
-    name: JupyterLab Python  GPU
+    name: JupyterLab Python GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, base-python-images-gpu]
@@ -155,7 +155,7 @@ jobs:
       run: make all IMAGE=data-science/jupyterlab_python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
   jupyterlab-python-tensorflow-115-images-cpu:
-    name: JupyterLab Python Tensorflow 1.15  CPU
+    name: JupyterLab Python Tensorflow 1.15 CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-python-images-cpu]
@@ -209,7 +209,7 @@ jobs:
       run: make all IMAGE=data-science/jupyterlab_python_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-python-tensorflow-23-images-gpu:
-    name: JupyterLab Python Tensorflow 2.3  GPU
+    name: JupyterLab Python Tensorflow 2.3 GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-python-images-gpu]
@@ -227,7 +227,7 @@ jobs:
       run: make all IMAGE=data-science/jupyterlab_python_tensorflow-2.3 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   jupyterlab-python-torch-images-cpu:
-    name: JupyterLab Python Torch  CPU
+    name: JupyterLab Python Torch CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-python-images-cpu]
@@ -245,7 +245,7 @@ jobs:
       run: make all IMAGE=data-science/jupyterlab_python_torch-1.7 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-python-torch-images-gpu:
-    name: JupyterLab Python Torch  GPU
+    name: JupyterLab Python Torch GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-python-images-gpu]
@@ -260,7 +260,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab Python Torch images
-      run: make all IMAGE=data-science/jupyterlab_python_torch-1.7 TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
+      run: make all IMAGE=data-science/jupyterlab_python_torch-1.7 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   jupyterlab-python-ydata-image-cpu:
     name: YData CPU
@@ -311,7 +311,7 @@ jobs:
       run: make all IMAGE=data-science/ydata TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
   jupyterlab-r-images-cpu:
-    name: JupyterLab R  CPU
+    name: JupyterLab R CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, base-r-images-cpu]
@@ -329,7 +329,7 @@ jobs:
       run: make all IMAGE=data-science/jupyterlab_r TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-r-images-gpu:
-    name: JupyterLab R  GPU
+    name: JupyterLab R GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, base-r-images-gpu]
@@ -350,7 +350,7 @@ jobs:
       run: make all IMAGE=data-science/jupyterlab_r TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   jupyterlab-r-tensorflow-115-images-cpu:
-    name: JupyterLab R Tensorflow 1.15  CPU
+    name: JupyterLab R Tensorflow 1.15 CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-r-images-cpu]
@@ -368,7 +368,7 @@ jobs:
       run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-r-tensorflow-115-images-gpu:
-    name: JupyterLab R Tensorflow 1.15  GPU
+    name: JupyterLab R Tensorflow 1.15 GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-r-images-gpu]
@@ -386,7 +386,7 @@ jobs:
       run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   jupyterlab-r-tensorflow-23-images-cpu:
-    name: JupyterLab R Tensorflow  CPU
+    name: JupyterLab R Tensorflow CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-r-images-cpu]
@@ -404,7 +404,7 @@ jobs:
       run: make all IMAGE=data-science/jupyterlab_r_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-r-tensorflow-23-images-gpu:
-    name: JupyterLab R Tensorflow  GPU
+    name: JupyterLab R Tensorflow GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-r-images-gpu]
@@ -422,7 +422,7 @@ jobs:
       run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   jupyterlab-r-torch-images-cpu:
-    name: JupyterLab R Torch  CPU
+    name: JupyterLab R Torch CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-r-images-cpu]
@@ -440,7 +440,7 @@ jobs:
       run: make all IMAGE=data-science/jupyterlab_r_torch TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-r-torch-images-gpu:
-    name: JupyterLab R Torch  GPU
+    name: JupyterLab R Torch GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, jupyterlab-r-images-gpu]
@@ -455,7 +455,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab R Torch images
-      run: make all IMAGE=data-science/jupyterlab_r_torch TYPE=cpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
+      run: make all IMAGE=data-science/jupyterlab_r_torch TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   h2o-images-cpu:
     name: H2O CPU
@@ -494,7 +494,7 @@ jobs:
       run: make all IMAGE=data-science/h2oflow TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   rstudio-images-cpu:
-    name: RStudio  CPU
+    name: RStudio CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, base-r-images-cpu]
@@ -512,7 +512,7 @@ jobs:
       run: make all IMAGE=data-science/rstudio TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   rstudio-images-gpu:
-    name: RStudio  GPU
+    name: RStudio GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, base-r-images-gpu]
@@ -530,7 +530,7 @@ jobs:
       run: make all IMAGE=data-science/rstudio TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   rstudio-tensorflow-images-cpu:
-    name: RStudio Tensorflow  CPU
+    name: RStudio Tensorflow CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, rstudio-images-cpu]
@@ -548,7 +548,7 @@ jobs:
       run: make all IMAGE=data-science/rstudio_tensorflow TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   rstudio-tensorflow-images-gpu:
-    name: RStudio Tensorflow  GPU
+    name: RStudio Tensorflow GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, rstudio-images-gpu]
@@ -566,7 +566,7 @@ jobs:
       run: make all IMAGE=data-science/rstudio_tensorflow TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   rstudio-torch-images-cpu:
-    name: RStudio Torch  CPU
+    name: RStudio Torch CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, rstudio-images-cpu]
@@ -584,7 +584,7 @@ jobs:
       run: make all IMAGE=data-science/rstudio_torch TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   rstudio-torch-images-gpu:
-    name: RStudio Torch  GPU
+    name: RStudio Torch GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, rstudio-images-gpu]
@@ -602,7 +602,7 @@ jobs:
       run: make all IMAGE=data-science/rstudio_torch TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   visualcode-images-cpu:
-    name: Visual Code  CPU
+    name: Visual Code CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, base-python-images-cpu]
@@ -624,7 +624,7 @@ jobs:
       run: make all IMAGE=data-science/visualcode TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   visualcode-images-gpu:
-    name: Visual Code  GPU
+    name: Visual Code GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, base-python-images-gpu]
@@ -652,7 +652,7 @@ jobs:
       run: make all IMAGE=data-science/visualcode TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
   visualcode-tensorflow-115-images-cpu:
-    name: Visual Code Tensorflow 1.15  CPU
+    name: Visual Code Tensorflow 1.15 CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, visualcode-images-cpu]
@@ -670,7 +670,7 @@ jobs:
       run: make all IMAGE=data-science/visualcode_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   visualcode-tensorflow-115-images-gpu:
-    name: Visual Code Tensorflow 1.15  GPU
+    name: Visual Code Tensorflow 1.15 GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, visualcode-images-gpu]
@@ -688,7 +688,7 @@ jobs:
       run: make all IMAGE=data-science/visualcode_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
   visualcode-tensorflow-23-images-cpu:
-    name: Visual Code Tensorflow 2.3  CPU
+    name: Visual Code Tensorflow 2.3 CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, visualcode-images-cpu]
@@ -706,7 +706,7 @@ jobs:
       run: make all IMAGE=data-science/visualcode_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   visualcode-tensorflow-23-images-gpu:
-    name: Visual Code Tensorflow 2.3  GPU
+    name: Visual Code Tensorflow 2.3 GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, visualcode-images-gpu]
@@ -760,7 +760,7 @@ jobs:
       run: make all IMAGE=data-science/visualcode_torch-1.7 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   visualcode-ydata-image-cpu:
-    name: VisualCode YData  CPU
+    name: VisualCode YData CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, visualcode-images-cpu]
@@ -784,7 +784,7 @@ jobs:
       run: make all IMAGE=data-science/visualcode_ydata TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   visualcode-ydata-image-gpu:
-    name: VisualCode YData  GPU
+    name: VisualCode YData GPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, visualcode-images-gpu]

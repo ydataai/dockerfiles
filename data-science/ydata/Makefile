@@ -24,7 +24,7 @@ endef
 
 build:
 ifeq ($(TYPE),gpu)
-	$(call DOCKER_BUILD,${IMAGE},gpu-cuda10.1,${TAG})
+	$(call DOCKER_BUILD,${IMAGE},gpu-cuda11.0,${TAG})
 else
 	$(call DOCKER_BUILD,${IMAGE},cpu,${TAG})
 endif
