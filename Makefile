@@ -78,7 +78,7 @@ ifeq ($(filter $(TYPE),$(TYPES)),)
 	$(error Invalid type selected. Only cpu or gpu are supported)
 endif
 
-	$(call DOCKER_BUILD,${IMAGE},${TYPE},${TAG})
+	$(call DOCKER_BUILD,${IMAGE},${TYPE},${TAG},${CUDA})
 endif
 
 push:	### Pushes the image to Docker image registry, given its name and its tag. I.e.: `make push IMAGE=h2oflow-3.32.0.2 TAG=0.1.0 (optional)`
@@ -119,5 +119,5 @@ ifeq ($(filter $(TYPE),$(TYPES)),)
 	$(error Invalid type selected. Only cpu or gpu are supported)
 endif
 
-	$(call DOCKER_PUSH,${IMAGE},${TYPE},${TAG})
+	$(call DOCKER_PUSH,${IMAGE},${TYPE},${TAG},${CUDA})
 endif
