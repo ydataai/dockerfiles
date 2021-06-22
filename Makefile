@@ -55,7 +55,7 @@ ifndef VERSION
 endif
 
 ifeq ($(filter $(VERSION),$(CUDA_VERSIONS)),)
-	$(error Invalid VERSION selected. Only 10.0 or 10.1 are supported)
+	$(error Invalid VERSION $(VERSION) selected. Only $(DASK_VERSIONS) are supported)
 endif
 
 	$(call DOCKER_BUILD,${IMAGE},${VERSION})
@@ -96,7 +96,7 @@ ifndef VERSION
 endif
 
 ifeq ($(filter $(VERSION),$(CUDA_VERSIONS)),)
-	$(error Invalid VERSION selected. Only 10.0 or 10.1 are supported)
+	$(error Invalid VERSION $(VERSION) selected. Only $(DASK_VERSIONS) are supported)
 endif
 
 	$(call DOCKER_PUSH,${IMAGE},${VERSION})
