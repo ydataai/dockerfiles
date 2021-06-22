@@ -1,7 +1,7 @@
 {
   "display_name": "YData Torch 1.7 CPU",
   "metadata": {
-    "image_name": "docker.io/ydata/jupyterlab_python_torch-1.7:0.18.3-cpu"
+    "image_name": "docker.io/ydata/jupyterlab_python_torch-1.7:0.19.5-cpu"
   },
   "schema_name": "runtime-image"
 }
