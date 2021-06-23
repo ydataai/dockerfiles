@@ -26,7 +26,7 @@ endef
 
 build:
 ifeq ($(TYPE),gpu)
-	$(foreach VERSION,${TENSORFLOW_VERSIONS},$(call DOCKER_BUILD,${IMAGE},${TYPE}-cuda10.1,${TAG},${VERSION}))
+	$(foreach VERSION,${TENSORFLOW_VERSIONS},$(call DOCKER_BUILD,${IMAGE},${TYPE}-cuda10.0,${TAG},${VERSION}))
 else
 	$(foreach VERSION,${TENSORFLOW_VERSIONS},$(call DOCKER_BUILD,${IMAGE},${TYPE},${TAG},${VERSION}))
 endif
