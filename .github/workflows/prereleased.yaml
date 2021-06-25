@@ -493,132 +493,6 @@ jobs:
     - name: H2O images
       run: make all IMAGE=data-science/h2oflow TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
-  rstudio-images-cpu:
-    name: RStudio CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, base-r-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: RStudio images
-      run: make all IMAGE=data-science/rstudio TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  rstudio-images-gpu:
-    name: RStudio GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, base-r-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: RStudio images
-      run: make all IMAGE=data-science/rstudio TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
-
-  rstudio-tensorflow-images-cpu:
-    name: RStudio Tensorflow CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, rstudio-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: RStudio Tensorflow images
-      run: make all IMAGE=data-science/rstudio_tensorflow TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  rstudio-tensorflow-115-images-gpu:
-    name: RStudio Tensorflow 1.15 GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, rstudio-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: RStudio Tensorflow images
-      run: make all IMAGE=data-science/rstudio_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
-
-  rstudio-tensorflow-23-images-gpu:
-    name: RStudio Tensorflow 2.3 GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, rstudio-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: RStudio Tensorflow images
-      run: make all IMAGE=data-science/rstudio_tensorflow-2.3 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
-
-  rstudio-torch-images-cpu:
-    name: RStudio Torch CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, rstudio-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: RStudio Torch images
-      run: make all IMAGE=data-science/rstudio_torch TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  rstudio-torch-images-gpu:
-    name: RStudio Torch GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, rstudio-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: RStudio Torch images
-      run: make all IMAGE=data-science/rstudio_torch TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
-
   visualcode-images-cpu:
     name: Visual Code CPU
     runs-on: ubuntu-20.04
@@ -847,11 +721,6 @@ jobs:
             jupyterlab-r-torch-images-gpu,
             h2o-images-cpu,
             h2o-images-gpu,
-            rstudio-tensorflow-images-cpu,
-            rstudio-tensorflow-115-images-gpu,
-            rstudio-tensorflow-23-images-gpu,
-            rstudio-torch-images-cpu,
-            rstudio-torch-images-gpu,
             visualcode-tensorflow-115-images-cpu,
             visualcode-tensorflow-115-images-gpu,
             visualcode-tensorflow-23-images-gpu,
@@ -870,7 +739,7 @@ jobs:
       with:
         pattern: VERSION
         flags: g
-        string: 'rstudio-cpu:VERSION,rstudio-gpu:VERSION,jupyterlab_r-cpu:VERSION,jupyterlab_python-cpu:VERSION,jupyterlab_r-gpu:VERSION,jupyterlab_python-gpu:VERSION,ydata-cpu:VERSION,ydata-gpu:VERSION,h2oflow-cpu:VERSION,h2oflow-gpu:VERSION,tensorflow-1.15-cpu:VERSION,tensorflow-1.15-gpu:VERSION,tensorflow-2.3-cpu:VERSION,tensorflow-2.3-gpu:VERSION,torch-1.7-cpu:VERSION,torch-1.7-gpu:VERSION,visualcode-cpu:VERSION,visualcode-gpu:VERSION'
+        string: 'jupyterlab_r-cpu:VERSION,jupyterlab_python-cpu:VERSION,jupyterlab_r-gpu:VERSION,jupyterlab_python-gpu:VERSION,ydata-cpu:VERSION,ydata-gpu:VERSION,h2oflow-cpu:VERSION,h2oflow-gpu:VERSION,tensorflow-1.15-cpu:VERSION,tensorflow-1.15-gpu:VERSION,tensorflow-2.3-cpu:VERSION,tensorflow-2.3-gpu:VERSION,torch-1.7-cpu:VERSION,torch-1.7-gpu:VERSION,visualcode-cpu:VERSION,visualcode-gpu:VERSION'
         replace-with: ${{ env.VERSION }}
 
     - name: Checkout Manifests repo
