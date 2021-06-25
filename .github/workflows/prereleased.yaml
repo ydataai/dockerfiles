@@ -529,8 +529,8 @@ jobs:
     - name: RStudio images
       run: make all IMAGE=data-science/rstudio TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
-  rstudio-tensorflow-images-cpu:
-    name: RStudio Tensorflow CPU
+  rstudio-tensorflow-115-images-cpu:
+    name: RStudio Tensorflow 1.15 CPU
     runs-on: ubuntu-20.04
 
     needs: [prepare, rstudio-images-cpu]
@@ -545,7 +545,25 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: RStudio Tensorflow images
-      run: make all IMAGE=data-science/rstudio_tensorflow TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
+      run: make all IMAGE=data-science/rstudio_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
+
+  rstudio-tensorflow-23-images-cpu:
+    name: RStudio Tensorflow 2.3 CPU
+    runs-on: ubuntu-20.04
+
+    needs: [prepare, rstudio-images-cpu]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: RStudio Tensorflow images
+      run: make all IMAGE=data-science/rstudio_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   rstudio-tensorflow-115-images-gpu:
     name: RStudio Tensorflow 1.15 GPU

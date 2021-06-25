@@ -41,6 +41,3 @@ endif
 else
 	$(call DOCKER_PUSH,${IMAGE},${TYPE},${TAG})
 endif
-
-test:
-	echo $(firstword $(subst -, ,gpu-cuda10.0))
