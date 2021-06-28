@@ -1,4 +1,5 @@
-DOCKER_REGISTRY=docker.io
+DOCKER_REGISTRY=ghcr.io
+OWNER=ydataai
 
 .PHONY: build
 
@@ -14,13 +15,13 @@ define DOCKER_BUILD
 	@echo "\t\t$($@_BUILD_ARGS)"; echo ""; echo ""
 
 	@echo ""; echo "==> Commencing build"
-	@docker build --rm $($@_BUILD_ARGS) -t ydata/dask-gateway-worker:$1-$2 .
+	@docker build --rm $($@_BUILD_ARGS) -t ${DOCKER_REGISTRY}/${OWNER}/dask-gateway-worker:$1-$2 -f $1/Dockerfile $1
 endef
 
 define DOCKER_PUSH
 	$(eval IMAGE_NAME := ydata/dask-gateway-worker:$1-$2)
 	@echo ""; echo "==> Pushing ${IMAGE_NAME} to Docker image registry..."
-	@docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}
+	@docker push ${DOCKER_REGISTRY}/${OWNER}/${IMAGE_NAME}
 endef
 
 build:

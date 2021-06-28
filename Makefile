@@ -7,7 +7,7 @@ data-science/jupyterlab_python_tensorflow-1.15 data-science/jupyterlab_python_te
 data-science/jupyterlab_python_torch-1.7 data-science/h2oflow data-science/ydata \
 data-science/visualcode data-science/visualcode_tensorflow-1.15 data-science/visualcode_torch-1.7 \
 data-science/visualcode_tensorflow-2.3 data-science/visualcode_ydata
-DASK_IMAGES=dask/worker
+DASK_IMAGES=dask/worker dask/gateway
 
 IMAGES=$(CUDA_IMAGES) $(LABS_IMAGES) $(DASK_IMAGES)
 TAG=latest
@@ -49,6 +49,18 @@ ifeq ($(filter $(IMAGE),$(IMAGES)),)
 	$(error Invalid image selected. Call `make list-images` to check the images you can build)
 endif
 
+ifeq ($(IMAGE),$(filter $(IMAGE),$(DASK_IMAGES)))
+ifndef VERSION
+	$(error Missing VERSION variable. Usage: make build IMAGE= VERSION=)
+endif
+
+ifeq ($(filter $(VERSION),$(DASK_VERSIONS)),)
+	$(error Invalid VERSION selected. Only $(DASK_VERSIONS).12.0 is supported)
+endif
+
+	$(call DOCKER_BUILD,${IMAGE},${VERSION},${TAG})
+endif
+
 ifeq ($(IMAGE),nvidia-cuda)
 ifndef VERSION
 	$(error Missing VERSION variable. Usage: make build IMAGE= VERSION=)
@@ -59,17 +71,9 @@ ifeq ($(filter $(VERSION),$(CUDA_VERSIONS)),)
 endif
 
 	$(call DOCKER_BUILD,${IMAGE},${VERSION})
-else ifeq ($(IMAGE),dask/worker)
-ifndef VERSION
-	$(error Missing VERSION variable. Usage: make build IMAGE= VERSION=)
 endif
 
-ifeq ($(filter $(VERSION),$(DASK_VERSIONS)),)
-	$(error Invalid VERSION selected. Only 2020.12.0 is supported)
-endif
-
-	$(call DOCKER_BUILD,${IMAGE},${VERSION},${TAG})
-else
+ifeq ($(IMAGE), $(filter $(IMAGE),$(LABS_IMAGES)))
 ifndef TYPE
 	$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
 endif
@@ -100,7 +104,9 @@ ifeq ($(filter $(VERSION),$(CUDA_VERSIONS)),)
 endif
 
 	$(call DOCKER_PUSH,${IMAGE},${VERSION})
-else ifeq ($(IMAGE),dask/worker)
+endif
+
+ifeq ($(IMAGE),$(filter $(IMAGE), $(DASK_IMAGES)))
 ifndef VERSION
 	$(error Missing VERSION variable. Usage: make build IMAGE= VERSION=)
 endif
@@ -110,7 +116,8 @@ ifeq ($(filter $(VERSION),$(DASK_VERSIONS)),)
 endif
 
 	$(call DOCKER_PUSH,${IMAGE},${VERSION})
-else
+
+ifeq ($(IMAGE),$(filter $(IMAGE), $(LABS_IMAGES)))
 ifndef TYPE
 	$(error Missing TYPE variable. Usage: make build IMAGE= TYPE= TAG= (optional))
 endif
