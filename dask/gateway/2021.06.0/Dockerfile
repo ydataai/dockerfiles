@@ -1,7 +1,5 @@
 FROM debian:buster-slim as miniconda
 
-
-
 ARG CONDA_VERSION=py38_4.8.3
 ARG CONDA_SHA256=879457af6a0bf5b34b48c12de31d4df0ee2f06a8e68768e5758c3293b2daf688
 
@@ -64,6 +62,9 @@ FROM dependencies
 
 # Copy over the built dask-gateway
 COPY --from=pip /tmp/install-pip /opt/conda/
+
+RUN conda install -c conda-forge --freeze-installed dask-gateway \
+  && conda clean -af
 
 LABEL ai.ydata.dask.version=${DASK_VERSION}
 LABEL MAINTAINER="YData Developers"
