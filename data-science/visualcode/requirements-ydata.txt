@@ -6,9 +6,3 @@ ydata-utils==1.0.0rc4
 ydata-connectors==1.0.0rc4
 
 platform-python-models==0.2.0
-
-kubernetes==12.0.1
-kubernetes-asyncio==12.0.1
-
-blosc==1.9.2
-lz4==3.1.1
