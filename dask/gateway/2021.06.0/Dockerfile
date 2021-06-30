@@ -1,17 +1,16 @@
 FROM debian:buster-slim as miniconda
 
-ARG CONDA_VERSION=py38_4.8.3
-ARG CONDA_SHA256=879457af6a0bf5b34b48c12de31d4df0ee2f06a8e68768e5758c3293b2daf688
+ARG CONDA_VERSION=py38_4.9.2
+ARG CONDA_MD5=122c8c9beb51e124ab32a0fa6426c656
 
 RUN useradd -m -U -u 1000 dask \
     && apt-get update \
     && apt-get install -y tini wget bzip2 \
     && wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-$CONDA_VERSION-Linux-x86_64.sh \
-    && echo "${CONDA_SHA256}  Miniconda3-$CONDA_VERSION-Linux-x86_64.sh" > miniconda.checksum \
-    && if [ $(sha256sum -c miniconda.checksum | awk '{print $2}') != "OK" ] ; then exit 1; fi \
+    && echo "${CONDA_MD5}  Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - \
     && mv Miniconda3-$CONDA_VERSION-Linux-x86_64.sh miniconda.sh \
     && sh ./miniconda.sh -b -p /opt/conda \
-    && rm miniconda.sh miniconda.checksum \
+    && rm miniconda.sh \
     && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
     && echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/dask/.profile \
     && echo "conda activate base" >> /home/dask/.profile \
@@ -39,13 +38,14 @@ ARG DISTRIBUTED_VERSION=2021.06.0
 
 RUN /opt/conda/bin/conda install -c conda-forge --freeze-installed -y \
       aiohttp=3.6.2 \
-      blosc==1.9.2 \
+      dask-gateway==0.9.0 \
       lz4==3.1.1 \
       dask==$DASK_VERSION \
       distributed==$DISTRIBUTED_VERSION \
       msgpack-python==1.0.2 \
       numpy==1.19.2 \
       pandas==1.1.4 \
+      python-blosc==1.9.2 \
     && /opt/conda/bin/conda clean -afy \
     && find /opt/conda/ -follow -type f -name '*.a' -delete \
     && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
@@ -62,9 +62,6 @@ FROM dependencies
 
 # Copy over the built dask-gateway
 COPY --from=pip /tmp/install-pip /opt/conda/
-
-RUN conda install -c conda-forge --freeze-installed dask-gateway \
-  && conda clean -af
 
 LABEL ai.ydata.dask.version=${DASK_VERSION}
 LABEL MAINTAINER="YData Developers"
