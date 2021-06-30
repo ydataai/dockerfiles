@@ -116,6 +116,7 @@ ifeq ($(filter $(VERSION),$(DASK_VERSIONS)),)
 endif
 
 	$(call DOCKER_PUSH,${IMAGE},${VERSION})
+endif
 
 ifeq ($(IMAGE),$(filter $(IMAGE), $(LABS_IMAGES)))
 ifndef TYPE

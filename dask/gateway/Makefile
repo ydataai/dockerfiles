@@ -19,9 +19,9 @@ define DOCKER_BUILD
 endef
 
 define DOCKER_PUSH
-	$(eval IMAGE_NAME := ydata/dask-gateway-worker:$1-$2)
+	$(eval IMAGE_NAME := ${OWNER}/dask-gateway-worker:$1-$2)
 	@echo ""; echo "==> Pushing ${IMAGE_NAME} to Docker image registry..."
-	@docker push ${DOCKER_REGISTRY}/${OWNER}/${IMAGE_NAME}
+	@docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}
 endef
 
 build:

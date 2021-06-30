@@ -1,4 +1,4 @@
 --extra-index-url https://pypi.ydata.ai
 
-ydata-report==1.0.0rc3
-ydata-synthesizers==1.0.0rc3
+ydata-report==1.0.0rc4
+ydata-synthesizers==1.0.0rc4

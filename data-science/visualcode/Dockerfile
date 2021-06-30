@@ -4,6 +4,11 @@ FROM ydata/laboratories-base_python:${TAG}
 
 LABEL ai.ydata.laboratory.visualcode.version=3.9.1
 
+# Update and install conda packages
+COPY --chown=${USER}:users conda.txt /tmp/
+RUN conda install --quiet --yes --file /tmp/conda.txt && \
+    conda clean --all -f -y
+
 USER root
 
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=3.9.1
