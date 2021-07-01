@@ -1,7 +1,7 @@
 FROM debian:buster-slim as miniconda
 
-ARG CONDA_VERSION=py38_4.9.2
-ARG CONDA_MD5=122c8c9beb51e124ab32a0fa6426c656
+ARG CONDA_VERSION=py37_4.9.2
+ARG CONDA_MD5=3143b1116f2d466d9325c206b7de88f7
 
 RUN useradd -m -U -u 1000 dask \
     && apt-get update \
@@ -26,6 +26,7 @@ RUN useradd -m -U -u 1000 dask \
     && rm -rf /var/lib/apt/lists/*
 
 USER 1000:1000
+ENV UID 1000
 ENV PATH="/opt/conda/bin:$PATH"
 WORKDIR /home/dask/
 
@@ -37,31 +38,41 @@ ARG DASK_VERSION=2021.06.0
 ARG DISTRIBUTED_VERSION=2021.06.0
 
 RUN /opt/conda/bin/conda install -c conda-forge --freeze-installed -y \
+      python==3.7.10 \
       aiohttp=3.6.2 \
       dask-gateway==0.9.0 \
       lz4==3.1.1 \
       dask==$DASK_VERSION \
       distributed==$DISTRIBUTED_VERSION \
       msgpack-python==1.0.2 \
-      numpy==1.19.2 \
-      pandas==1.1.4 \
+      numpy==1.18.5 \
       python-blosc==1.9.2 \
     && /opt/conda/bin/conda clean -afy \
     && find /opt/conda/ -follow -type f -name '*.a' -delete \
     && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
     && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete
 
-FROM dependencies AS pip
-
-RUN mkdir -p /tmp/install-pip
-COPY requirements.txt /tmp/requirements.txt
-RUN /opt/conda/bin/pip install -r /tmp/requirements.txt --no-cache-dir --no-deps --prefix /tmp/install-pip
-
 # ** The final image **
 FROM dependencies
 
-# Copy over the built dask-gateway
-COPY --from=pip /tmp/install-pip /opt/conda/
+USER root
+
+RUN apt-get update && \
+    apt-get install --no-install-suggests --no-install-recommends --yes \
+      build-essential \
+      unixodbc-dev
+
+USER ${UID}
+
+COPY requirements.txt /tmp/requirements.txt
+RUN /opt/conda/bin/pip install -r /tmp/requirements.txt --no-cache-dir
+
+USER root
+
+RUN apt-get --purge autoremove --yes build-essential unixodbc-dev && \
+    rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt
+
+USER ${UID}
 
 LABEL ai.ydata.dask.version=${DASK_VERSION}
 LABEL MAINTAINER="YData Developers"
