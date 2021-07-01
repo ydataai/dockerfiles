@@ -51,17 +51,27 @@ RUN /opt/conda/bin/conda install -c conda-forge --freeze-installed -y \
     && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
     && find /opt/conda/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete
 
-FROM dependencies AS pip
-
-RUN mkdir -p /tmp/install-pip
-COPY requirements.txt /tmp/requirements.txt
-RUN /opt/conda/bin/pip install -r /tmp/requirements.txt --no-cache-dir --no-deps --prefix /tmp/install-pip
-
 # ** The final image **
 FROM dependencies
 
-# Copy over the built dask-gateway
-COPY --from=pip /tmp/install-pip /opt/conda/
+USER root
+
+RUN apt-get update && \
+    apt-get install --no-install-suggests --no-install-recommends --yes \
+      build-essential \
+      unixodbc-dev
+
+USER ${UID}
+
+COPY requirements.txt /tmp/requirements.txt
+RUN /opt/conda/bin/pip install -r /tmp/requirements.txt --no-cache-dir
+
+USER root
+
+RUN apt-get --purge autoremove --yes build-essential unixodbc-dev && \
+    rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt
+
+USER ${UID}
 
 LABEL ai.ydata.dask.version=${DASK_VERSION}
 LABEL MAINTAINER="YData Developers"
