@@ -1,7 +1,7 @@
 FROM debian:buster-slim as miniconda
 
-ARG CONDA_VERSION=py38_4.9.2
-ARG CONDA_MD5=122c8c9beb51e124ab32a0fa6426c656
+ARG CONDA_VERSION=py37_4.9.2
+ARG CONDA_MD5=3143b1116f2d466d9325c206b7de88f7
 
 RUN useradd -m -U -u 1000 dask \
     && apt-get update \
@@ -38,14 +38,14 @@ ARG DASK_VERSION=2021.06.0
 ARG DISTRIBUTED_VERSION=2021.06.0
 
 RUN /opt/conda/bin/conda install -c conda-forge --freeze-installed -y \
+      python==3.7.10 \
       aiohttp=3.6.2 \
       dask-gateway==0.9.0 \
       lz4==3.1.1 \
       dask==$DASK_VERSION \
       distributed==$DISTRIBUTED_VERSION \
       msgpack-python==1.0.2 \
-      numpy==1.19.2 \
-      pandas==1.1.4 \
+      numpy==1.18.5 \
       python-blosc==1.9.2 \
     && /opt/conda/bin/conda clean -afy \
     && find /opt/conda/ -follow -type f -name '*.a' -delete \
