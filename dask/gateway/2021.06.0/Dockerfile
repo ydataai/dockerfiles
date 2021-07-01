@@ -46,7 +46,7 @@ RUN /opt/conda/bin/conda install -c conda-forge --freeze-installed -y \
       numpy==1.19.2 \
       pandas==1.1.4 \
       python-blosc==1.9.2 \
-		  s3fs==0.4.2 \
+      s3fs==0.4.2 \
     && /opt/conda/bin/conda clean -afy \
     && find /opt/conda/ -follow -type f -name '*.a' -delete \
     && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
