@@ -1,0 +1,66 @@
+name: Prereleased Dask
+
+on:
+  release:
+    types: [ prereleased ]
+
+env:
+  DASK_VERSION: 2021.06.0
+
+jobs:
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-20.04
+
+    outputs:
+      version: ${{ steps.version.outputs.value }}
+
+    steps:
+    - name: Version
+      id: version
+      run: echo ::set-output name=value::`echo ${{ github.ref }} | sed -n -E 's/refs\/tags\/([0-9]+.[0-9]+.[0-9]+)/\1/p'`
+
+  dask-gateway:
+    name: Dask Gateway
+    runs-on: ubuntu-20.04
+
+    needs: prepare
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Lab Base Python images
+      run: make all IMAGE=dask/gateway VERSION=${DASK_VERSION} TAG=${{ needs.prepare.outputs.version }}
+
+  update-manifests:
+    name: Update Manifests
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, dask-gateway ]
+
+    steps:
+    - name: Checkout Manifests repo
+      uses: actions/checkout@v2
+      with:
+        repository: ydataai/manifests
+        token: ${{ secrets.ACCESS_TOKEN }}
+
+    - name: Update params.env with laboratories image tag
+      run: |
+        cd ydata/dask-gateway/base/
+        sed -i -r 's/\worker_tag=(.*)/worker_tag=${DASK_VERSION}-${{ needs.prepare.outputs.version }}/g' params.env
+
+    - name: Commit and push image update into manifests repo
+      env:
+        VERSION: ${DASK_VERSION}-${{ needs.prepare.outputs.version }}
+      run: |
+        git config user.email "azory@ydata.ai"
+        git config user.name "Azory YData Bot"
+        git commit -a -m "chore(bump): [CI] [DEV] bump dask-gateway image tag to $VERSION"
+        git push origin master

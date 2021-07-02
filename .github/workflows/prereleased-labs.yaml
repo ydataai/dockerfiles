@@ -1,4 +1,4 @@
-name: Prereleased
+name: Prereleased Labs
 
 on:
   release:
