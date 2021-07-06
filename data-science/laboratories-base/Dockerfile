@@ -69,5 +69,8 @@ LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
 # Make bash as the default shell
 ENV SHELL /bin/bash
 
+# Make home as the default work directory
+WORKDIR /home/${USER}
+
 # Setup entrypoint using tini
 ENTRYPOINT [ "tini", "-g", "--" ]
