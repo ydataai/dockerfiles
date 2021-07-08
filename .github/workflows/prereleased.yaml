@@ -53,14 +53,29 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
+  base-python-ydata-images-gpu:
+    name: Laboratories YData Base Python GPU
+    runs-on: ubuntu-20.04
+
+    needs: prepare
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
     - name: JupyterLab Python images CUDA 10.0
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
+      run: make all IMAGE=data-science/python_ydata_base LANGUAGE=python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
     - name: Lab Base Python images CUDA 10.1
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
+      run: make all IMAGE=data-science/python_ydata_base LANGUAGE=python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
     - name: Lab Base Python images CUDA 11
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
+      run: make all IMAGE=data-science/python_ydata_base LANGUAGE=python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
   base-r-images-cpu:
     name: Laboratories Base R CPU
