@@ -1,24 +1,24 @@
-name: Prereleased
+#name: Prereleased
 
-on:
-  release:
-    types: [ prereleased ]
+#on:
+#  release:
+#    types: [ prereleased ]
 
-env:
-  COMPONENT: laboratory-controller/base
+#env:
+#  COMPONENT: laboratory-controller/base
 
-jobs:
-  prepare:
-    name: Prepare
-    runs-on: ubuntu-20.04
+#jobs:
+#  prepare:
+#    name: Prepare
+#    runs-on: ubuntu-20.04
 
-    outputs:
-      version: ${{ steps.version.outputs.value }}
+#    outputs:
+#      version: ${{ steps.version.outputs.value }}
 
-    steps:
-    - name: Version
-      id: version
-      run: echo ::set-output name=value::`echo ${{ github.ref }} | sed -n -E 's/refs\/tags\/([0-9]+.[0-9]+.[0-9]+)/\1/p'`
+#    steps:
+#    - name: Version
+#      id: version
+#      run: echo ::set-output name=value::`echo ${{ github.ref }} | sed -n -E 's/refs\/tags\/([0-9]+.[0-9]+.[0-9]+)/\1/p'`
 
   base-python-images-cpu:
     name: Laboratories Base Python CPU
@@ -169,161 +169,161 @@ jobs:
     - name: JupyterLab Python images CUDA 11.0
       run: make all IMAGE=data-science/jupyterlab_python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
-  jupyterlab-python-tensorflow-115-images-cpu:
-    name: JupyterLab Python Tensorflow 1.15 CPU
-    runs-on: ubuntu-20.04
+  #jupyterlab-python-tensorflow-115-images-cpu:
+  #  name: JupyterLab Python Tensorflow 1.15 CPU
+  #  runs-on: ubuntu-20.04
 
-    needs: [prepare, jupyterlab-python-images-cpu]
+  #  needs: [prepare, jupyterlab-python-images-cpu]
 
-    steps:
-    - uses: actions/checkout@v2
+  #  steps:
+  #  - uses: actions/checkout@v2
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+  #  - name: Login to Docker Hub
+  #    uses: docker/login-action@v1
+  #    with:
+  #      username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #      password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab Python Tensorflow 1.15 Bundles images
-      run: make all IMAGE=data-science/jupyterlab_python_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
+  #  - name: JupyterLab Python Tensorflow 1.15 Bundles images
+  #    run: make all IMAGE=data-science/jupyterlab_python_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
-  jupyterlab-python-tensorflow-115-images-gpu:
-    name: JupyterLab Python Tensorflow 1.15 GPU
-    runs-on: ubuntu-20.04
+  #jupyterlab-python-tensorflow-115-images-gpu:
+  #  name: JupyterLab Python Tensorflow 1.15 GPU
+  #  runs-on: ubuntu-20.04
 
-    needs: [prepare, jupyterlab-python-images-gpu]
+  #  needs: [prepare, jupyterlab-python-images-gpu]
 
-    steps:
-    - uses: actions/checkout@v2
+  #  steps:
+  #  - uses: actions/checkout@v2
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+  #  - name: Login to Docker Hub
+  #    uses: docker/login-action@v1
+  #    with:
+  #      username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #      password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab Python Tensorflow 1.15 Bundles images
-      run: make all IMAGE=data-science/jupyterlab_python_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
+  #  - name: JupyterLab Python Tensorflow 1.15 Bundles images
+  #    run: make all IMAGE=data-science/jupyterlab_python_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
-  jupyterlab-python-tensorflow-23-images-cpu:
-    name: JupyterLab Python Tensorflow 2.3 CPU
-    runs-on: ubuntu-20.04
+  #jupyterlab-python-tensorflow-23-images-cpu:
+  #  name: JupyterLab Python Tensorflow 2.3 CPU
+  #  runs-on: ubuntu-20.04
 
-    needs: [prepare, jupyterlab-python-images-cpu]
+  #  needs: [prepare, jupyterlab-python-images-cpu]
 
-    steps:
-    - uses: actions/checkout@v2
+  #  steps:
+  #  - uses: actions/checkout@v2
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+  #  - name: Login to Docker Hub
+  #    uses: docker/login-action@v1
+  #    with:
+  #      username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #      password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab Python Tensorflow 2.3 Bundles images
-      run: make all IMAGE=data-science/jupyterlab_python_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
+  #  - name: JupyterLab Python Tensorflow 2.3 Bundles images
+  #    run: make all IMAGE=data-science/jupyterlab_python_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
-  jupyterlab-python-tensorflow-23-images-gpu:
-    name: JupyterLab Python Tensorflow 2.3 GPU
-    runs-on: ubuntu-20.04
+  #jupyterlab-python-tensorflow-23-images-gpu:
+  #  name: JupyterLab Python Tensorflow 2.3 GPU
+  #  runs-on: ubuntu-20.04
 
-    needs: [prepare, jupyterlab-python-images-gpu]
+  #  needs: [prepare, jupyterlab-python-images-gpu]
 
-    steps:
-    - uses: actions/checkout@v2
+  #  steps:
+  #  - uses: actions/checkout@v2
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+  #  - name: Login to Docker Hub
+  #    uses: docker/login-action@v1
+  #    with:
+  #      username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #      password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab Python Tensorflow 2.3 Bundles images
-      run: make all IMAGE=data-science/jupyterlab_python_tensorflow-2.3 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
+  #  - name: JupyterLab Python Tensorflow 2.3 Bundles images
+  #    run: make all IMAGE=data-science/jupyterlab_python_tensorflow-2.3 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
-  jupyterlab-python-torch-images-cpu:
-    name: JupyterLab Python Torch CPU
-    runs-on: ubuntu-20.04
+  #jupyterlab-python-torch-images-cpu:
+  #  name: JupyterLab Python Torch CPU
+  #  runs-on: ubuntu-20.04
 
-    needs: [prepare, jupyterlab-python-images-cpu]
+  #  needs: [prepare, jupyterlab-python-images-cpu]
 
-    steps:
-    - uses: actions/checkout@v2
+  #  steps:
+  #  - uses: actions/checkout@v2
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+  #  - name: Login to Docker Hub
+  #    uses: docker/login-action@v1
+  #    with:
+  #      username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #      password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab Python Torch images
-      run: make all IMAGE=data-science/jupyterlab_python_torch-1.7 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
+  #  - name: JupyterLab Python Torch images
+  #    run: make all IMAGE=data-science/jupyterlab_python_torch-1.7 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
-  jupyterlab-python-torch-images-gpu:
-    name: JupyterLab Python Torch GPU
-    runs-on: ubuntu-20.04
+  #jupyterlab-python-torch-images-gpu:
+  #  name: JupyterLab Python Torch GPU
+  #  runs-on: ubuntu-20.04
 
-    needs: [prepare, jupyterlab-python-images-gpu]
+  #  needs: [prepare, jupyterlab-python-images-gpu]
 
-    steps:
-    - uses: actions/checkout@v2
+  #  steps:
+  #  - uses: actions/checkout@v2
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+  #  - name: Login to Docker Hub
+  #    uses: docker/login-action@v1
+  #    with:
+  #      username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #      password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab Python Torch images
-      run: make all IMAGE=data-science/jupyterlab_python_torch-1.7 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
+  #  - name: JupyterLab Python Torch images
+  #    run: make all IMAGE=data-science/jupyterlab_python_torch-1.7 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
-  jupyterlab-python-ydata-image-cpu:
-    name: YData CPU
-    runs-on: ubuntu-20.04
+  #jupyterlab-python-ydata-image-cpu:
+  #  name: YData CPU
+  #  runs-on: ubuntu-20.04
 
-    needs: [prepare, jupyterlab-python-images-cpu]
+  #  needs: [prepare, jupyterlab-python-images-cpu]
 
-    steps:
-    - uses: actions/checkout@v2
+  #  steps:
+  #  - uses: actions/checkout@v2
 
-    - name: Add authentication to requirements file
-      run: |
-        sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements-ydata.txt
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/ydata/requirements-ydata.txt
+  #  - name: Add authentication to requirements file
+  #    run: |
+  #      sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements-ydata.txt
+  #      sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/ydata/requirements-ydata.txt
 
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GHCR_TOKEN }}
+  #  - name: Login to GitHub Container Registry
+  #    uses: docker/login-action@v1
+  #    with:
+  #      registry: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}
+  #      username: ${{ github.repository_owner }}
+  #      password: ${{ secrets.GHCR_TOKEN }}
 
-    - name: YData image
-      run: make all IMAGE=data-science/ydata TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
+  #  - name: YData image
+  #    run: make all IMAGE=data-science/ydata TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
-  jupyterlab-python-ydata-image-gpu:
-    name: YData GPU
-    runs-on: ubuntu-20.04
+  #jupyterlab-python-ydata-image-gpu:
+  #  name: YData GPU
+  #  runs-on: ubuntu-20.04
 
-    needs: [prepare, jupyterlab-python-images-gpu]
+  #  needs: [prepare, jupyterlab-python-images-gpu]
 
-    steps:
-    - uses: actions/checkout@v2
+  #  steps:
+  #  - uses: actions/checkout@v2
 
-    - name: Add authentication to requirements file
-      run: |
-        sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements-ydata.txt
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/ydata/requirements-ydata.txt
+  #  - name: Add authentication to requirements file
+  #    run: |
+  #      sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements-ydata.txt
+  #      sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/ydata/requirements-ydata.txt
 
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GHCR_TOKEN }}
+  #  - name: Login to GitHub Container Registry
+  #    uses: docker/login-action@v1
+  #    with:
+  #      registry: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}
+  #      username: ${{ github.repository_owner }}
+  #      password: ${{ secrets.GHCR_TOKEN }}
 
-    - name: YData image
-      run: make all IMAGE=data-science/ydata TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
+  #  - name: YData image
+  #    run: make all IMAGE=data-science/ydata TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
 
   jupyterlab-r-images-cpu:
     name: JupyterLab R CPU
@@ -364,59 +364,59 @@ jobs:
     - name: JupyterLab R images CUDA 10.1
       run: make all IMAGE=data-science/jupyterlab_r TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
-  jupyterlab-r-tensorflow-115-images-cpu:
-    name: JupyterLab R Tensorflow 1.15 CPU
-    runs-on: ubuntu-20.04
+  #jupyterlab-r-tensorflow-115-images-cpu:
+  #  name: JupyterLab R Tensorflow 1.15 CPU
+  #  runs-on: ubuntu-20.04
 
-    needs: [prepare, jupyterlab-r-images-cpu]
+  #  needs: [prepare, jupyterlab-r-images-cpu]
 
-    steps:
-    - uses: actions/checkout@v2
+  #  steps:
+  #  - uses: actions/checkout@v2
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+  #  - name: Login to Docker Hub
+  #    uses: docker/login-action@v1
+  #    with:
+  #      username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #      password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab R Tensorflow images
-      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
+  #  - name: JupyterLab R Tensorflow images
+  #    run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
-  jupyterlab-r-tensorflow-115-images-gpu:
-    name: JupyterLab R Tensorflow 1.15 GPU
-    runs-on: ubuntu-20.04
+  #jupyterlab-r-tensorflow-115-images-gpu:
+  #  name: JupyterLab R Tensorflow 1.15 GPU
+  #  runs-on: ubuntu-20.04
 
-    needs: [prepare, jupyterlab-r-images-gpu]
+  #  needs: [prepare, jupyterlab-r-images-gpu]
 
-    steps:
-    - uses: actions/checkout@v2
+  #  steps:
+  #  - uses: actions/checkout@v2
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+  #  - name: Login to Docker Hub
+  #    uses: docker/login-action@v1
+  #    with:
+  #      username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #      password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab R Tensorflow images
-      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
+  #  - name: JupyterLab R Tensorflow images
+  #    run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
 
-  jupyterlab-r-tensorflow-23-images-cpu:
-    name: JupyterLab R Tensorflow CPU
-    runs-on: ubuntu-20.04
+  #jupyterlab-r-tensorflow-23-images-cpu:
+  #  name: JupyterLab R Tensorflow CPU
+  #  runs-on: ubuntu-20.04
 
-    needs: [prepare, jupyterlab-r-images-cpu]
+  #  needs: [prepare, jupyterlab-r-images-cpu]
 
-    steps:
-    - uses: actions/checkout@v2
+  #  steps:
+  #  - uses: actions/checkout@v2
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+  #  - name: Login to Docker Hub
+  #    uses: docker/login-action@v1
+  #    with:
+  #      username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #      password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab R Tensorflow images
-      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
+  #  - name: JupyterLab R Tensorflow images
+  #    run: make all IMAGE=data-science/jupyterlab_r_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
   jupyterlab-r-tensorflow-23-images-gpu:
     name: JupyterLab R Tensorflow GPU
@@ -434,7 +434,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: JupyterLab R Tensorflow images
-      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
+      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-2.3 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
 
   jupyterlab-r-torch-images-cpu:
     name: JupyterLab R Torch CPU

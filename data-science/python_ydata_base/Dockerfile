@@ -2,8 +2,6 @@ ARG TAG
 
 FROM ydata/laboratories-base_python:${TAG}
 
-LABEL ai.ydata.laboratory.jupyterlab.version=3.0.14
-
 # Update and install conda packages
 COPY --chown=${USER}:users conda.txt /tmp/
 RUN conda install --quiet --yes --file /tmp/conda.txt && \
