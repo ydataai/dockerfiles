@@ -5,7 +5,8 @@ FROM ${FROM}:${TAG}
 
 LABEL ai.ydata.laboratory.visualcode.version=3.9.1
 
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=3.9.
+USER root
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=3.9.1
 
 USER ${UID}
 

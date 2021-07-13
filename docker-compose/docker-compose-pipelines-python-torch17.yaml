@@ -16,13 +16,13 @@ services:
 
   ### Pipelines YData Torch 1.7 CPU Python Image
   pipelines_ydata_torch17_cpu_python:
-    image: pipelines_ydata_torch17_cpu_python:${TAG}
+    image: pipelines_python_torch-1.7:${TAG}-cpu
     build:
       context: ../data-science/torch-1.7/
       args:
          FROM: base_ydata_cpu_python
          TAG: ${TAG}
-         TYPE: CPU
+         TYPE: cpu
 
 
   #### Pipelines YData Torch 1.7 GPU Python CUDA 10.1 Images
@@ -40,10 +40,10 @@ services:
 
   ### Pipelines YData Torch 1.7 GPU Python CUDA 10.1 Image
   pipelines_ydata_torch17_gpu_python_cuda101:
-    image: pipelines_ydata_torch17_gpu_python_cuda101:${TAG}
+    image: pipelines_python_torch-1.7:${TAG}-gpu
     build:
       context: ../data-science/torch-1.7/
       args:
          FROM: base_ydata_gpu_python_cuda101
          TAG: ${TAG}
-         TYPE: GPU
+         TYPE: gpu

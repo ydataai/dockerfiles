@@ -31,7 +31,7 @@ services:
 
   ### VisualCode YData CPU Python Image - NOPIP
   visualcode_ydata_cpu_python_nopip:
-    image: visualcode_ydata_cpu_python_nopip:${TAG}
+    image: visualcode_ydata:${TAG}-cpu
     build:
       context: ../data-science/ydata-nopip/
       args:
@@ -69,7 +69,7 @@ services:
 
   ### VisualCode YData GPU Python CUDA 11.0 Image - NOPIP
   visualcode_ydata_gpu_python_cuda110_nopip:
-    image: visualcode_ydata_gpu_python_cuda110_nopip:${TAG}
+    image: visualcode_ydata:${TAG}-gpu
     build:
       context: ../data-science/ydata-nopip/
       args:

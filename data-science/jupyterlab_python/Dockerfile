@@ -15,6 +15,11 @@ USER ${UID}
 COPY --chown=${USER}:users requirements.txt /tmp/
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
+# clean up /tmp
+USER root
+RUN rm -rf /tmp/*
+USER ${UID}
+
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --dev-build=False --minimize=False
 
 # Integrate NBDIME with git

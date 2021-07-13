@@ -10,7 +10,7 @@ services:
 
   ### H2OFlow CPU Python Image
   h2oflow_cpu_python:
-    image: h2oflow_cpu_python:${TAG}
+    image: h2oflow:${TAG}-cpu
     build:
       context: ../data-science/h2oflow/
       args:
@@ -29,7 +29,7 @@ services:
 
   ### H2OFlow GPU Python CUDA 10.0 Image
   h2oflow_gpu_python_cuda100:
-    image: h2oflow_gpu_python_cuda100:${TAG}
+    image: h2oflow:${TAG}-gpu
     build:
       context: ../data-science/h2oflow/
       args:

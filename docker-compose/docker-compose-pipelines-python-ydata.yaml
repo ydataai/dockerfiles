@@ -16,7 +16,7 @@ services:
 
   ### Pipelines YData CPU Python Image
   pipelines_ydata_cpu_python:
-    image: pipelines_ydata_cpu_python:${TAG}
+    image: pipelines_ydata:${TAG}-cpu
     build:
       context: ../data-science/ydata/
       args:
@@ -39,7 +39,7 @@ services:
 
   ### Pipelines YData GPU Python CUDA 11.0 Image
   pipelines_ydata_gpu_python_cuda110:
-    image: pipelines_ydata_gpu_python_cuda110:${TAG}
+    image: pipelines_ydata:${TAG}-gpu
     build:
       context: ../data-science/ydata/
       args:

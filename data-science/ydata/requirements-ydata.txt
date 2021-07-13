@@ -1,4 +1,4 @@
---extra-index-url https://azory:Ad.B5YL_rhavXH55Yvft@pypi.ydata.ai
+--extra-index-url https://pypi.ydata.ai
 
 ydata-report==1.0.0rc4
 ydata-synthesizers==1.0.0rc4

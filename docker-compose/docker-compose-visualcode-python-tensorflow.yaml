@@ -23,13 +23,13 @@ services:
 
   ### VisualCode YData Tensorflow 1.15 CPU Python Image
   visualcode_ydata_tensorflow115_cpu_python:
-    image: visualcode_ydata_tensorflow115_cpu_python:${TAG}
+    image: visualcode_tensorflow-1.15:${TAG}-cpu
     build:
       context: ../data-science/tensorflow/
       args:
          FROM: base_visualcode_ydata_cpu_python
          TAG: ${TAG}
-         TYPE: CPU
+         TYPE: cpu
          VERSION: 1.15
 
 
@@ -54,13 +54,13 @@ services:
 
   ### VisualCode YData Tensorflow 1.15 GPU Python CUDA 10.0 Image
   visualcode_ydata_tensorflow115_gpu_python_cuda100:
-    image: visualcode_ydata_tensorflow115_gpu_python_cuda100:${TAG}
+    image: visualcode_tensorflow-1.15:${TAG}-gpu
     build:
       context: ../data-science/tensorflow/
       args:
          FROM: base_visualcode_ydata_gpu_python_cuda100
          TAG: ${TAG}
-         TYPE: GPU
+         TYPE: gpu
          VERSION: 1.15
 
 
@@ -87,13 +87,13 @@ services:
 
   ### VisualCode YData Tensorflow 2.3 CPU Python Image
   visualcode_ydata_tensorflow23_cpu_python:
-    image: visualcode_ydata_tensorflow23_cpu_python:${TAG}
+    image: visualcode_tensorflow-2.3:${TAG}-cpu
     build:
       context: ../data-science/tensorflow/
       args:
          FROM: base_visualcode_ydata_cpu_python
          TAG: ${TAG}
-         TYPE: CPU
+         TYPE: cpu
          VERSION: 2.3
 
 
@@ -118,11 +118,11 @@ services:
 
   ### VisualCode YData Tensorflow 2.3 GPU Python CUDA 10.1 Image
   visualcode_ydata_tensorflow23_gpu_python_cuda101:
-    image: visualcode_ydata_tensorflow23_gpu_python_cuda101:${TAG}
+    image: visualcode_tensorflow-2.3:${TAG}-gpu
     build:
       context: ../data-science/tensorflow/
       args:
          FROM: base_visualcode_ydata_gpu_python_cuda101
          TAG: ${TAG}
-         TYPE: GPU
+         TYPE: gpu
          VERSION: 2.3

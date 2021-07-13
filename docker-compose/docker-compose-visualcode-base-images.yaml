@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  #### VisualCode Base CPU Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: docker-compose-ydata-base-images.yaml
+         service: base_ydata_cpu_python
+
+  ### Base VisualCode YData CPU Python Image
+  base_visualcode_ydata_cpu_python:
+    image: base_visualcode_ydata_cpu_python:${TAG}
+    build:
+      context: ../data-science/visualcode_python/
+      args:
+         FROM: base_ydata_cpu_python
+         TAG: ${TAG}
+
+
+
+  #### VisualCode GPU Python Images
+  ### CUDA 10.0
+  ## Base GPU Python CUDA 10.0 Image
+  base_gpu_python_cuda100:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_gpu_python_cuda100
+
+  ## Base YData GPU Python CUDA 10.0 Image
+  base_ydata_gpu_python_cuda100:
+    extends:
+      file: docker-compose-ydata-base-images.yaml
+      service: base_ydata_gpu_python_cuda100
+
+  ## VisualCode GPU Python CUDA 10.0 Image
+  base_visualcode_ydata_gpu_python_cuda100:
+    image: base_visualcode_ydata_gpu_python_cuda100:${TAG}
+    build:
+      context: ../data-science/visualcode_python/
+      args:
+         FROM: base_ydata_gpu_python_cuda100
+         TAG: ${TAG}
+
+
+  ### CUDA 10.1
+  ## Base GPU Python CUDA 10.1 Image
+  base_gpu_python_cuda101:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_gpu_python_cuda101
+
+  ## Base YData GPU Python CUDA 10.1 Image
+  base_ydata_gpu_python_cuda101:
+    extends:
+      file: docker-compose-ydata-base-images.yaml
+      service: base_ydata_gpu_python_cuda101
+
+  ## VisualCode GPU Python CUDA 10.1 Image
+  base_visualcode_ydata_gpu_python_cuda101:
+    image: base_visualcode_ydata_gpu_python_cuda101:${TAG}
+    build:
+      context: ../data-science/visualcode_python/
+      args:
+         FROM: base_ydata_gpu_python_cuda101
+         TAG: ${TAG}
+
+
+  ### CUDA 11.0
+  ## Base GPU Python CUDA 11.0 Image
+  base_gpu_python_cuda110:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_gpu_python_cuda110
+
+  ## Base YData GPU Python CUDA 11.0 Image
+  base_ydata_gpu_python_cuda110:
+    extends:
+      file: docker-compose-ydata-base-images.yaml
+      service: base_ydata_gpu_python_cuda110
+
+  ## VisualCode GPU Python CUDA 11.0 Image
+  base_visualcode_ydata_gpu_python_cuda110:
+    image: base_visualcode_ydata_gpu_python_cuda110:${TAG}
+    build:
+      context: ../data-science/visualcode_python/
+      args:
+         FROM: base_ydata_gpu_python_cuda110
+         TAG: ${TAG}

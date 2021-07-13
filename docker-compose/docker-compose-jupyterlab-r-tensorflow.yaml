@@ -23,18 +23,18 @@ services:
       args:
          FROM: base_jupyterlab_cpu_r
          TAG: ${TAG}
-         TYPE: CPU
+         TYPE: cpu
          VERSION: 1.15
 
   ### JupyterLab Tensorflow 1.15 CPU R Image
   jupyterlab_tensorflow115_cpu_r:
-    image: jupyterlab_tensorflow115_cpu_r:${TAG}
+    image: jupyterlab_r_tensorflow-1.15:${TAG}-cpu
     build:
       context: ../data-science/jupyterlab_r_tensorflow/
       args:
          FROM: base_jupyterlab_tensorflow115_cpu_r
          TAG: ${TAG}
-         TYPE: CPU
+         TYPE: cpu
          VERSION: 1.15
 
 
@@ -59,18 +59,18 @@ services:
       args:
          FROM: base_jupyterlab_gpu_r_cuda100
          TAG: ${TAG}
-         TYPE: GPU
+         TYPE: gpu
          VERSION: 1.15
 
   ### JupyterLab Tensorflow 1.15 GPU R CUDA 10.0 Image
   jupyterlab_tensorflow115_gpu_r:
-    image: jupyterlab_tensorflow115_gpu_r:${TAG}
+    image: jupyterlab_r_tensorflow-1.15:${TAG}-gpu
     build:
       context: ../data-science/jupyterlab_r_tensorflow/
       args:
          FROM: base_jupyterlab_tensorflow115_gpu_r_cuda100
          TAG: ${TAG}
-         TYPE: GPU
+         TYPE: gpu
          VERSION: 1.15
 
 
@@ -97,18 +97,18 @@ services:
       args:
          FROM: base_jupyterlab_cpu_r
          TAG: ${TAG}
-         TYPE: CPU
+         TYPE: cpu
          VERSION: 2.3
 
   ### JupyterLab Tensorflow 2.3 CPU R Image
   jupyterlab_tensorflow23_cpu_r:
-    image: jupyterlab_tensorflow23_cpu_r:${TAG}
+    image: jupyterlab_r_tensorflow-2.3:${TAG}-cpu
     build:
       context: ../data-science/jupyterlab_r_tensorflow/
       args:
          FROM: base_jupyterlab_tensorflow23_cpu_r
          TAG: ${TAG}
-         TYPE: CPU
+         TYPE: cpu
          VERSION: 2.3
 
 
@@ -133,16 +133,16 @@ services:
       args:
          FROM: base_jupyterlab_gpu_r_cuda101
          TAG: ${TAG}
-         TYPE: GPU
+         TYPE: gpu
          VERSION: 2.3
 
   ### JupyterLab Tensorflow 2.3 GPU R CUDA 10.1 Image
   jupyterlab_tensorflow23_gpu_r:
-    image: jupyterlab_tensorflow23_gpu_r:${TAG}
+    image: jupyterlab_r_tensorflow-2.3:${TAG}-gpu
     build:
       context: ../data-science/jupyterlab_r_tensorflow/
       args:
          FROM: base_jupyterlab_tensorflow23_gpu_r_cuda101
          TAG: ${TAG}
-         TYPE: GPU
+         TYPE: gpu
          VERSION: 2.3

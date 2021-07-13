@@ -31,4 +31,7 @@ USER root
 RUN apt-get --purge autoremove --yes build-essential unixodbc-dev && \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt
 
+# clean up /tmp
+RUN rm -rf /tmp/*
+
 USER ${UID}

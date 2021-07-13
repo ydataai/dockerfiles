@@ -1,4 +1,4 @@
---extra-index-url https://azory:Ad.B5YL_rhavXH55Yvft@pypi.ydata.ai
+--extra-index-url https://pypi.ydata.ai
 
 platform-python-sdk==0.2.3.dev60
 

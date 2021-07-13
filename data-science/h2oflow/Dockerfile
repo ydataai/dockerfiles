@@ -28,6 +28,9 @@ RUN curl -o /tmp/h2oflow.zip http://h2o-release.s3.amazonaws.com/h2o/$RELEASE_NA
     && rm -rf /tmp/h2oflow.zip \
     && chown -R ${UID}:users /opt/h2oflow
 
+# clean up /tmp
+RUN rm -rf /tmp/*
+
 USER ${UID}
 
 EXPOSE 8888

@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  #### Jupyerlab YData Torch 1.7 CPU Python Images
+  #### VisualCode YData Torch 1.7 CPU Python Images
   ### Base CPU Python Image
   base_cpu_python:
      extends:
@@ -14,24 +14,24 @@ services:
          file: docker-compose-ydata-base-images.yaml
          service: base_ydata_cpu_python
 
-  ### Base JupyterLab YData CPU Python Image
-  base_jupyterlab_ydata_cpu_python:
+  ### Base VisualCode YData CPU Python Image
+  base_visualcode_ydata_cpu_python:
      extends:
-         file: docker-compose-jupyerlab-base-images.yaml
-         service: base_jupyterlab_ydata_cpu_python
+         file: docker-compose-visualcode-base-images.yaml
+         service: base_visualcode_ydata_cpu_python
 
-  ### JupyterLab YData Torch 1.7 CPU Python Image
-  jupyterlab_ydata_torch17_cpu_python:
-    image: jupyterlab_python_torch-1.7:${TAG}-cpu
+  ### VisualCode YData Torch 1.7 CPU Python Image
+  visualcode_ydata_torch17_cpu_python:
+    image: visualcode_torch-1.7:${TAG}-cpu
     build:
       context: ../data-science/torch-1.7/
       args:
-         FROM: base_jupyterlab_ydata_cpu_python
+         FROM: base_visualcode_ydata_cpu_python
          TAG: ${TAG}
          TYPE: cpu
 
 
-  #### Jupyerlab YData Torch 1.7 GPU Python CUDA 10.1 Images
+  #### VisualCode YData Torch 1.7 GPU Python CUDA 10.1 Images
   ### Base GPU Python CUDA 10.1 Image
   base_gpu_python_cuda101:
      extends:
@@ -44,18 +44,18 @@ services:
          file: docker-compose-ydata-base-images.yaml
          service: base_ydata_gpu_python_cuda101
 
-  ### Base JupyterLab YData GPU Python CUDA 10.1 Image
-  base_jupyterlab_ydata_gpu_python_cuda101:
+  ### Base VisualCode YData GPU Python CUDA 10.1 Image
+  base_visualcode_ydata_gpu_python_cuda101:
      extends:
-         file: docker-compose-jupyerlab-base-images.yaml
-         service: base_jupyterlab_ydata_gpu_python_cuda101
+         file: docker-compose-visualcode-base-images.yaml
+         service: base_visualcode_ydata_gpu_python_cuda101
 
-  ### JupyterLab YData Torch 1.7 GPU Python CUDA 10.1 Image
-  jupyterlab_ydata_torch17_gpu_python_cuda101:
-    image: jupyterlab_python_torch-1.7:${TAG}-gpu
+  ### VisualCode YData Torch 1.7 GPU Python CUDA 10.1 Image
+  visualcode_ydata_torch17_gpu_python_cuda101:
+    image: visualcode_torch-1.7:${TAG}-gpu
     build:
       context: ../data-science/torch-1.7/
       args:
-         FROM: base_jupyterlab_ydata_gpu_python_cuda101
+         FROM: base_visualcode_ydata_gpu_python_cuda101
          TAG: ${TAG}
          TYPE: gpu

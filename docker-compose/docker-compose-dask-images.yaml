@@ -2,15 +2,6 @@ version: '3.8'
 
 services:
   ##### Dask Workers
-  #### Dask Worker 2020.12.0
-  dask_worker_2020120:
-    image: dask_worker_2020120:${TAG}
-    build:
-      context: ../dask/worker/
-      args:
-         FROM: daskdev/dask
-         TAG: 2020.12.0
-
   #### Dask Worker 2021.6.0
   dask_worker_202160:
     image: dask_worker_202160:${TAG}
@@ -24,7 +15,7 @@ services:
   ##### Dask Gateway
   #### Dask Gateway 2021.06.0
   dask_gateway_2021060:
-    image: dask_gateway_2021060:${TAG}
+    image: dask-gateway-worker:${TAG}
     build:
       context: ../dask/gateway/
       args:
@@ -33,4 +24,4 @@ services:
          DASK_VERSION: 2021.06.0
          DISTRIBUTED_VERSION: 2021.06.0
          CONDA_VERSION: py37_4.9.2
-         ARG CONDA_MD5: 3143b1116f2d466d9325c206b7de88f7
+         CONDA_MD5: 3143b1116f2d466d9325c206b7de88f7

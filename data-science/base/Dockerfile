@@ -1,14 +1,14 @@
 ARG FROM
 ARG TAG
 
-FROM $FROM:$TAG
+FROM ${FROM}:${TAG}
+
+# Support for string substituion
+SHELL ["/bin/bash", "-c"]
 
 ARG MINICONDA_IMAGE
 ARG MINICONDA_IMAGE_HASH
 ARG PACKAGES_FILE
-
-# Support for string substituion
-SHELL ["/bin/bash", "-c"]
 
 ENV DEBIAN_FRONTEND noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN true
@@ -62,6 +62,11 @@ COPY --chown=${USER}:users ./conda.txt /tmp/
 RUN conda update --all --quiet -y && \
     conda install --quiet -y --file /tmp/conda.txt && \
     conda clean --all -y
+
+# clean up /tmp
+USER root
+RUN rm -rf /tmp/*
+USER ${UID}
 
 LABEL org.opencontainers.image.source https://github.com/ydataai/dockerfiles
 

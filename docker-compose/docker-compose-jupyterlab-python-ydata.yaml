@@ -31,7 +31,7 @@ services:
 
   ### JupyterLab YData CPU Python Image - NOPIP
   jupyterlab_ydata_cpu_python_nopip:
-    image: jupyterlab_ydata_cpu_python_nopip:${TAG}
+    image: ydata:${TAG}-cpu
     build:
       context: ../data-science/ydata-nopip/
       args:
@@ -69,7 +69,7 @@ services:
 
   ### JupyterLab YData GPU Python CUDA 11.0 Image - NOPIP
   jupyterlab_ydata_gpu_python_cuda110_nopip:
-    image: jupyterlab_ydata_gpu_python_cuda110_nopip:${TAG}
+    image: ydata:${TAG}-gpu
     build:
       context: ../data-science/ydata-nopip/
       args:

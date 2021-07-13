@@ -72,6 +72,9 @@ RUN /opt/conda/bin/pip install -r /tmp/requirements.txt --no-cache-dir
 
 USER root
 
+# clean up /tmp
+RUN rm -rf /tmp/*
+
 RUN apt-get --purge autoremove --yes build-essential unixodbc-dev && \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log /var/cache/apt
 
