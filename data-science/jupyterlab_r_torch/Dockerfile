@@ -1,6 +1,7 @@
+ARG FROM
 ARG TAG
 
-FROM ydata/jupyterlab_r:${TAG}
+FROM ${FROM}:${TAG}
 
 ARG TYPE
 

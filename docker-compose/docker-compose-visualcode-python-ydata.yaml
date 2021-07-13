@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  #### VisualCode YData CPU Python Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: docker-compose-ydata-base-images.yaml
+         service: base_ydata_cpu_python
+
+  ### Base VisualCode YData CPU Python Image
+  base_visualcode_ydata_cpu_python:
+     extends:
+         file: docker-compose-visualcode-base-images.yaml
+         service: base_visualcode_ydata_cpu_python
+
+  ### VisualCode YData CPU Python Image
+  visualcode_ydata_cpu_python:
+    image: visualcode_ydata_cpu_python:${TAG}
+    build:
+      context: ../data-science/ydata/
+      args:
+         FROM: base_visualcode_ydata_cpu_python
+         TAG: ${TAG}
+
+  ### VisualCode YData CPU Python Image - NOPIP
+  visualcode_ydata_cpu_python_nopip:
+    image: visualcode_ydata_cpu_python_nopip:${TAG}
+    build:
+      context: ../data-science/ydata-nopip/
+      args:
+         FROM: visualcode_ydata_cpu_python
+         TAG: ${TAG}
+
+
+  #### VisualCode YData GPU Python Images
+  ### Base GPU Python CUDA 11.0 Image
+  base_gpu_python_cuda110:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_gpu_python_cuda110
+
+  ### Base YData GPU Python CUDA 11.0 Image
+  base_ydata_gpu_python_cuda110:
+     extends:
+         file: docker-compose-ydata-base-images.yaml
+         service: base_ydata_gpu_python_cuda110
+
+  ### Base VisualCode YData GPU Python CUDA 11.0 Image
+  base_visualcode_ydata_gpu_python_cuda110:
+     extends:
+         file: docker-compose-visualcode-base-images.yaml
+         service: base_visualcode_ydata_gpu_python_cuda110
+
+  ### VisualCode YData GPU Python CUDA 11.0 Image
+  visualcode_ydata_gpu_python_cuda110:
+    image: visualcode_ydata_gpu_python_cuda110:${TAG}
+    build:
+      context: ../data-science/ydata/
+      args:
+         FROM: base_visualcode_ydata_gpu_python_cuda110
+         TAG: ${TAG}
+
+  ### VisualCode YData GPU Python CUDA 11.0 Image - NOPIP
+  visualcode_ydata_gpu_python_cuda110_nopip:
+    image: visualcode_ydata_gpu_python_cuda110_nopip:${TAG}
+    build:
+      context: ../data-science/ydata-nopip/
+      args:
+         FROM: visualcode_ydata_gpu_python_cuda110
+         TAG: ${TAG}

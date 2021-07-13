@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  ##### Tensorflow 1.15
+  #### Pipelines YData Tensorflow 1.15 CPU Python Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: docker-compose-ydata-base-images.yaml
+         service: base_ydata_cpu_python
+
+  ### Pipelines YData Tensorflow 1.15 CPU Python Image
+  pipelines_ydata_tensorflow115_cpu_python:
+    image: pipelines_ydata_tensorflow115_cpu_python:${TAG}
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: base_ydata_cpu_python
+         TAG: ${TAG}
+         TYPE: CPU
+         VERSION: 1.15
+
+
+  #### Pipelines YData Tensorflow 1.15 GPU Python CUDA 10.0 Images
+  ### Base GPU Python CUDA 10.0 Image
+  base_gpu_python_cuda100:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_gpu_python_cuda100
+
+  ### Base YData GPU Python CUDA 10.0 Image
+  base_ydata_gpu_python_cuda100:
+     extends:
+         file: docker-compose-ydata-base-images.yaml
+         service: base_ydata_gpu_python_cuda100
+
+  ### Pipelines YData Tensorflow 1.15 GPU Python CUDA 10.0 Image
+  pipelines_ydata_tensorflow115_gpu_python_cuda100:
+    image: pipelines_ydata_tensorflow115_gpu_python_cuda100:${TAG}
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: base_ydata_gpu_python_cuda100
+         TAG: ${TAG}
+         TYPE: GPU
+         VERSION: 1.15
+
+
+
+  ##### Tensorflow 2.3
+  #### Pipelines YData Tensorflow 2.3 CPU Python Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: docker-compose-ydata-base-images.yaml
+         service: base_ydata_cpu_python
+
+  ### Pipelines YData Tensorflow 2.3 CPU Python Image
+  pipelines_ydata_tensorflow23_cpu_python:
+    image: pipelines_ydata_tensorflow23_cpu_python:${TAG}
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: base_ydata_cpu_python
+         TAG: ${TAG}
+         TYPE: CPU
+         VERSION: 2.3
+
+
+  #### Pipelines YData Tensorflow 2.3 GPU Python CUDA 10.1 Images
+  ### Base GPU Python CUDA 10.1 Image
+  base_gpu_python_cuda101:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_gpu_python_cuda101
+
+  ### Base YData GPU Python CUDA 10.1 Image
+  base_ydata_gpu_python_cuda101:
+     extends:
+         file: docker-compose-ydata-base-images.yaml
+         service: base_ydata_gpu_python_cuda101
+
+  ### Pipelines YData Tensorflow 2.3 GPU Python CUDA 10.1 Image
+  pipelines_ydata_tensorflow23_gpu_python_cuda101:
+    image: pipelines_ydata_tensorflow23_gpu_python_cuda101:${TAG}
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: base_ydata_gpu_python_cuda101
+         TAG: ${TAG}
+         TYPE: GPU
+         VERSION: 2.3

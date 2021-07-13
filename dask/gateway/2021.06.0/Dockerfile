@@ -1,7 +1,10 @@
-FROM debian:buster-slim as miniconda
+ARG FROM
+ARG TAG
 
-ARG CONDA_VERSION=py37_4.9.2
-ARG CONDA_MD5=3143b1116f2d466d9325c206b7de88f7
+FROM ${FROM}:${TAG} as miniconda
+
+ARG CONDA_VERSION
+ARG CONDA_MD5
 
 RUN useradd -m -U -u 1000 dask \
     && apt-get update \
@@ -34,8 +37,8 @@ ENTRYPOINT ["tini", "-g", "--"]
 
 FROM miniconda as dependencies
 
-ARG DASK_VERSION=2021.06.0
-ARG DISTRIBUTED_VERSION=2021.06.0
+ARG DASK_VERSION
+ARG DISTRIBUTED_VERSION
 
 RUN /opt/conda/bin/conda install -c conda-forge --freeze-installed -y \
       python==3.7.10 \

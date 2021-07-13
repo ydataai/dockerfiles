@@ -1,0 +1,151 @@
+version: '3.8'
+
+services:
+  ##### Base CPU Images
+  #### Base CPU Python Image
+  base_cpu_python:
+    image: base_cpu_python:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+        FROM: ubuntu
+        TAG: 20.04
+        PACKAGES_FILE: python_packages.txt
+        MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+        MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+  #### Base CPU R Image
+  base_cpu_r:
+    image: base_cpu_r:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: ubuntu
+         TAG: 20.04
+         PACKAGES_FILE: r_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+
+
+  ##### Base GPU Images
+  #### Base GPU Python Images
+  ### CUDA 10.0
+  ## Base GPU Nvidia CUDA 10.0 Image
+  base_gpu_nvidia_cuda_100:
+     extends:
+         file: docker-compose-nvidia-cuda-base-images.yaml
+         service: base_gpu_nvidia_cuda_100
+
+  ## Base GPU Python CUDA 10.0 Image
+  base_gpu_python_cuda100:
+    image: base_gpu_python_cuda100:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: base_gpu_nvidia_cuda_100
+         TAG: ${TAG}
+         PACKAGES_FILE: python_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+
+  ### CUDA 10.1
+  ## Base GPU Nvidia CUDA 10.1 Image
+  base_gpu_nvidia_cuda_101:
+     extends:
+         file: docker-compose-nvidia-cuda-base-images.yaml
+         service: base_gpu_nvidia_cuda_101
+
+  ## Base GPU Python CUDA 10.1 Image
+  base_gpu_python_cuda101:
+    image: base_gpu_python_cuda101:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: base_gpu_nvidia_cuda_101
+         TAG: ${TAG}
+         PACKAGES_FILE: python_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+
+  ### CUDA 11.0
+  ## Base GPU Nvidia CUDA 10.0 Image
+  base_gpu_nvidia_cuda_110:
+     extends:
+         file: docker-compose-nvidia-cuda-base-images.yaml
+         service: base_gpu_nvidia_cuda_110
+
+  ## Base GPU Python CUDA 11.0 Image
+  base_gpu_python_cuda110:
+    image: base_gpu_python_cuda110:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: base_gpu_nvidia_cuda_100
+         TAG: ${TAG}
+         PACKAGES_FILE: python_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+
+
+  #### Base GPU R Images
+  ### CUDA 10.0
+  ## Base GPU Nvidia CUDA 10.0 Image
+  base_gpu_nvidia_cuda_100:
+     extends:
+         file: docker-compose-nvidia-cuda-base-images.yaml
+         service: base_gpu_nvidia_cuda_100
+
+  base_gpu_r_cuda100:
+    image: base_gpu_r_cuda100:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: base_gpu_nvidia_cuda_100
+         TAG: ${TAG}
+         PACKAGES_FILE: r_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+
+  ### CUDA 10.1
+  ## Base GPU Nvidia CUDA 10.1 Image
+  base_gpu_nvidia_cuda_101:
+     extends:
+         file: docker-compose-nvidia-cuda-base-images.yaml
+         service: base_gpu_nvidia_cuda_101
+
+  ## Base GPU R CUDA 10.1 Image
+  base_gpu_r_cuda101:
+    image: base_gpu_r_cuda101:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: base_gpu_nvidia_cuda_101
+         TAG: ${TAG}
+         PACKAGES_FILE: r_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+
+  ### CUDA 11.0
+  ## Base GPU Nvidia CUDA 10.0 Image
+  base_gpu_nvidia_cuda_110:
+     extends:
+         file: docker-compose-nvidia-cuda-base-images.yaml
+         service: base_gpu_nvidia_cuda_110
+
+  ## Base GPU R CUDA 11.0 Image
+  base_gpu_r_cuda110:
+    image: base_gpu_r_cuda110:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: base_gpu_nvidia_cuda_110
+         TAG: ${TAG}
+         PACKAGES_FILE: r_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}

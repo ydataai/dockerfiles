@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  #### Jupyerlab YData CPU Python Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: docker-compose-ydata-base-images.yaml
+         service: base_ydata_cpu_python
+
+  ### Base JupyterLab YData CPU Python Image
+  base_jupyterlab_ydata_cpu_python:
+     extends:
+         file: docker-compose-jupyerlab-base-images.yaml
+         service: base_jupyterlab_ydata_cpu_python
+
+  ### JupyterLab YData CPU Python Image
+  jupyterlab_ydata_cpu_python:
+    image: jupyterlab_ydata_cpu_python:${TAG}
+    build:
+      context: ../data-science/ydata/
+      args:
+         FROM: base_jupyterlab_ydata_cpu_python
+         TAG: ${TAG}
+
+  ### JupyterLab YData CPU Python Image - NOPIP
+  jupyterlab_ydata_cpu_python_nopip:
+    image: jupyterlab_ydata_cpu_python_nopip:${TAG}
+    build:
+      context: ../data-science/ydata-nopip/
+      args:
+         FROM: jupyterlab_ydata_cpu_python
+         TAG: ${TAG}
+
+
+  #### Jupyerlab YData GPU Python Images
+  ### Base GPU Python CUDA 11.0 Image
+  base_gpu_python_cuda110:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_gpu_python_cuda110
+
+  ### Base YData GPU Python CUDA 11.0 Image
+  base_ydata_gpu_python_cuda110:
+     extends:
+         file: docker-compose-ydata-base-images.yaml
+         service: base_ydata_gpu_python_cuda110
+
+  ### Base JupyterLab YData GPU Python CUDA 11.0 Image
+  base_jupyterlab_ydata_gpu_python_cuda110:
+     extends:
+         file: docker-compose-jupyerlab-base-images.yaml
+         service: base_jupyterlab_ydata_gpu_python_cuda110
+
+  ### JupyterLab YData GPU Python CUDA 11.0 Image
+  jupyterlab_ydata_gpu_python_cuda110:
+    image: jupyterlab_ydata_gpu_python_cuda110:${TAG}
+    build:
+      context: ../data-science/ydata/
+      args:
+         FROM: base_jupyterlab_ydata_gpu_python_cuda110
+         TAG: ${TAG}
+
+  ### JupyterLab YData GPU Python CUDA 11.0 Image - NOPIP
+  jupyterlab_ydata_gpu_python_cuda110_nopip:
+    image: jupyterlab_ydata_gpu_python_cuda110_nopip:${TAG}
+    build:
+      context: ../data-science/ydata-nopip/
+      args:
+         FROM: jupyterlab_ydata_gpu_python_cuda110
+         TAG: ${TAG}

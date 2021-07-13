@@ -1,6 +1,7 @@
+ARG FROM
 ARG TAG
 
-FROM ydata/laboratories-base_python:${TAG}
+FROM ${FROM}:${TAG}
 
 # Update and install conda packages
 COPY --chown=${USER}:users conda.txt /tmp/
@@ -15,6 +16,9 @@ RUN apt-get update && \
       unixodbc-dev
 
 USER ${UID}
+
+# Dask config
+COPY --chown=ydata:users dask_config.yaml /etc/dask/distributed.yaml
 
 # Install pypi dependencies
 COPY --chown=${USER}:users requirements.txt requirements-ydata.txt /tmp/

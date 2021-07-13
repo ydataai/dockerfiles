@@ -1,6 +1,7 @@
-ARG DASK_VERSION
+ARG FROM
+ARG TAG
 
-FROM daskdev/dask:${DASK_VERSION}
+FROM ${FROM}:${TAG}
 
 RUN apt update -y && apt install build-essential unixodbc-dev -y
 

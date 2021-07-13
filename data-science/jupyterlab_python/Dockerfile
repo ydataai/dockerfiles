@@ -1,15 +1,19 @@
+ARG FROM
 ARG TAG
 
-FROM ydata/python_ydata_base:${TAG}
+FROM ${FROM}:${TAG}
 
 LABEL ai.ydata.laboratory.jupyterlab.version=3.0.14
+
+USER root
 
 COPY entrypoint.sh /etc/entrypoint.sh
 RUN chmod +x /etc/entrypoint.sh
 
-COPY --chown=ydata:users dask_config.yaml /etc/dask/distributed.yaml
-
 USER ${UID}
+
+COPY --chown=${USER}:users requirements.txt /tmp/
+RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --dev-build=False --minimize=False
 

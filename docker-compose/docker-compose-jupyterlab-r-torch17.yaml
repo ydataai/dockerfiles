@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  #### Jupyerlab Torch 1.7 CPU R Images
+  ### Base CPU R Image
+  base_cpu_r:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_cpu_r
+
+  ### Base JupyterLab CPU R Image
+  base_jupyterlab_cpu_r:
+     extends:
+         file: docker-compose-jupyerlab-base-images.yaml
+         service: base_jupyterlab_cpu_r
+
+  ### JupyterLab Torch 1.7 CPU R Image
+  jupyterlab_torch17_cpu_r:
+    image: jupyterlab_torch17_cpu_r:${TAG}
+    build:
+      context: ../data-science/jupyterlab_r_torch/
+      args:
+         FROM: base_jupyterlab_cpu_r
+         TAG: ${TAG}
+         TYPE: CPU
+
+
+  #### Jupyerlab Torch 1.7 GPU R CUDA 10.1 Images
+  ### Base GPU R CUDA 10.1 Image
+  base_gpu_r_cuda101:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_gpu_r_cuda101
+
+  ### Base JupyterLab GPU R CUDA 10.1 Image
+  base_jupyterlab_gpu_r_cuda101:
+     extends:
+         file: docker-compose-jupyerlab-base-images.yaml
+         service: base_jupyterlab_gpu_r_cuda101
+
+  ### JupyterLab Torch 1.7 GPU R CUDA 10.1 Image
+  jupyterlab_torch17_gpu_r_cuda101:
+    image: jupyterlab_torch17_gpu_r_cuda101:${TAG}
+    build:
+      context: ../data-science/jupyterlab_r_torch/
+      args:
+         FROM: base_jupyterlab_gpu_r_cuda101
+         TAG: ${TAG}
+         TYPE: GPU

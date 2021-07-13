@@ -1,0 +1,148 @@
+version: '3.8'
+
+services:
+  ##### Tensorflow 1.15
+  #### Jupyerlab Tensorflow 1.15 CPU R Images
+  ### Base CPU R Image
+  base_cpu_r:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_cpu_r
+
+  ### Base JupyterLab CPU R Image
+  base_jupyterlab_cpu_r:
+     extends:
+         file: docker-compose-jupyerlab-base-images.yaml
+         service: base_jupyterlab_cpu_r
+
+  ### Base JupyterLab Tensorflow 1.15 CPU R Image
+  base_jupyterlab_tensorflow115_cpu_r:
+    image: base_jupyterlab_tensorflow115_cpu_r:${TAG}
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: base_jupyterlab_cpu_r
+         TAG: ${TAG}
+         TYPE: CPU
+         VERSION: 1.15
+
+  ### JupyterLab Tensorflow 1.15 CPU R Image
+  jupyterlab_tensorflow115_cpu_r:
+    image: jupyterlab_tensorflow115_cpu_r:${TAG}
+    build:
+      context: ../data-science/jupyterlab_r_tensorflow/
+      args:
+         FROM: base_jupyterlab_tensorflow115_cpu_r
+         TAG: ${TAG}
+         TYPE: CPU
+         VERSION: 1.15
+
+
+  #### Jupyerlab Tensorflow 1.15 GPU R CUDA 10.0 Images
+  ### Base GPU R CUDA 10.0 Image
+  base_gpu_r_cuda100:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_gpu_r_cuda100
+
+  ### Base JupyterLab GPU R CUDA 10.0 Image
+  base_jupyterlab_gpu_r_cuda100:
+     extends:
+         file: docker-compose-jupyerlab-base-images.yaml
+         service: base_jupyterlab_gpu_r_cuda100
+
+  ### Base JupyterLab Tensorflow 1.15 GPU R CUDA 10.0 Image
+  base_jupyterlab_tensorflow115_gpu_r_cuda100:
+    image: base_jupyterlab_tensorflow115_gpu_r_cuda100:${TAG}
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: base_jupyterlab_gpu_r_cuda100
+         TAG: ${TAG}
+         TYPE: GPU
+         VERSION: 1.15
+
+  ### JupyterLab Tensorflow 1.15 GPU R CUDA 10.0 Image
+  jupyterlab_tensorflow115_gpu_r:
+    image: jupyterlab_tensorflow115_gpu_r:${TAG}
+    build:
+      context: ../data-science/jupyterlab_r_tensorflow/
+      args:
+         FROM: base_jupyterlab_tensorflow115_gpu_r_cuda100
+         TAG: ${TAG}
+         TYPE: GPU
+         VERSION: 1.15
+
+
+
+  ##### Tensorflow 2.3
+  #### Jupyerlab YData Tensorflow 2.3 CPU R Images
+  ### Base CPU R Image
+  base_cpu_r:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_cpu_r
+
+  ### Base JupyterLab CPU R Image
+  base_jupyterlab_cpu_r:
+     extends:
+         file: docker-compose-jupyerlab-base-images.yaml
+         service: base_jupyterlab_cpu_r
+
+  ### Base JupyterLab Tensorflow 2.3 CPU R Image
+  base_jupyterlab_tensorflow23_cpu_r:
+    image: base_jupyterlab_tensorflow23_cpu_r:${TAG}
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: base_jupyterlab_cpu_r
+         TAG: ${TAG}
+         TYPE: CPU
+         VERSION: 2.3
+
+  ### JupyterLab Tensorflow 2.3 CPU R Image
+  jupyterlab_tensorflow23_cpu_r:
+    image: jupyterlab_tensorflow23_cpu_r:${TAG}
+    build:
+      context: ../data-science/jupyterlab_r_tensorflow/
+      args:
+         FROM: base_jupyterlab_tensorflow23_cpu_r
+         TAG: ${TAG}
+         TYPE: CPU
+         VERSION: 2.3
+
+
+  #### Jupyerlab Tensorflow 2.3 GPU R CUDA 10.1 Images
+  ### Base GPU R CUDA 10.1 Image
+  base_gpu_r_cuda101:
+     extends:
+         file: docker-compose-base-images.yaml
+         service: base_gpu_r_cuda101
+
+  ### Base JupyterLab GPU R CUDA 10.1 Image
+  base_jupyterlab_gpu_r_cuda101:
+     extends:
+         file: docker-compose-jupyerlab-base-images.yaml
+         service: base_jupyterlab_gpu_r_cuda101
+
+  ### Base JupyterLab Tensorflow 2.3 GPU R CUDA 10.1 Image
+  base_jupyterlab_tensorflow23_gpu_r_cuda101:
+    image: base_jupyterlab_tensorflow23_gpu_r_cuda101:${TAG}
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: base_jupyterlab_gpu_r_cuda101
+         TAG: ${TAG}
+         TYPE: GPU
+         VERSION: 2.3
+
+  ### JupyterLab Tensorflow 2.3 GPU R CUDA 10.1 Image
+  jupyterlab_tensorflow23_gpu_r:
+    image: jupyterlab_tensorflow23_gpu_r:${TAG}
+    build:
+      context: ../data-science/jupyterlab_r_tensorflow/
+      args:
+         FROM: base_jupyterlab_tensorflow23_gpu_r_cuda101
+         TAG: ${TAG}
+         TYPE: GPU
+         VERSION: 2.3

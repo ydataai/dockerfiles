@@ -1,7 +1,7 @@
+ARG FROM
 ARG TAG
 
-FROM ydata/jupyterlab_python:${TAG}
-FROM ydata/python_ydata_base:${TAG}
+FROM ${FROM}:${TAG}
 
 COPY --chown=ydata:users requirements.txt requirements-ydata.txt /tmp/
 RUN python -m pip --no-cache-dir install -r /tmp/requirements.txt

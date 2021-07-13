@@ -1,15 +1,14 @@
 ARG FROM
+ARG TAG
 
-FROM $FROM
-
-# Support for string substituion
-SHELL ["/bin/bash", "-c"]
-
-ARG TYPE
+FROM $FROM:$TAG
 
 ARG MINICONDA_IMAGE
 ARG MINICONDA_IMAGE_HASH
 ARG PACKAGES_FILE
+
+# Support for string substituion
+SHELL ["/bin/bash", "-c"]
 
 ENV DEBIAN_FRONTEND noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN true
