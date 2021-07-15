@@ -613,7 +613,7 @@ jobs:
 
 
   cpu-pipelines-python-none-images:
-    name: CPU Pipelines Python None
+    name: CPU KFP Python None
     runs-on: ubuntu-20.04
 
     needs: [ prepare, cpu-ydata-python-base-images ]
@@ -655,7 +655,7 @@ jobs:
 
 
   cpu-pipelines-python-tensorflow-images:
-    name: CPU Pipelines Python TF
+    name: CPU KFP Python TF
     runs-on: ubuntu-20.04
 
     needs: [ prepare, cpu-ydata-python-base-images ]
@@ -694,7 +694,7 @@ jobs:
 
 
   cpu-pipelines-python-torch17-images:
-    name: CPU Pipelines Python TO
+    name: CPU KFP Python TO
     runs-on: ubuntu-20.04
 
     needs: [ prepare, cpu-ydata-python-base-images ]
@@ -731,7 +731,7 @@ jobs:
 
 
   cpu-pipelines-python-ydata-images:
-    name: CPU Pipelines Python YD
+    name: CPU KFP Python YD
     runs-on: ubuntu-20.04
 
     needs: [ prepare, cpu-ydata-python-base-images ]
@@ -1359,7 +1359,7 @@ jobs:
 
 
   gpu-pipelines-python-none-images:
-    name: GPU Pipelines Python None
+    name: GPU KFP Python None
     runs-on: ubuntu-20.04
 
     needs: [ prepare, gpu-ydata-python-base-images ]
@@ -1405,7 +1405,7 @@ jobs:
 
 
   gpu-pipelines-python-tensorflow-images:
-    name: GPU Pipelines Python TF
+    name: GPU KFP Python TF
     runs-on: ubuntu-20.04
 
     needs: [ prepare, gpu-ydata-python-base-images ]
@@ -1444,7 +1444,7 @@ jobs:
 
 
   gpu-pipelines-python-torch17-images:
-    name: GPU Pipelines Python TO
+    name: GPU KFP Python TO
     runs-on: ubuntu-20.04
 
     needs: [ prepare, gpu-ydata-python-base-images ]
@@ -1481,7 +1481,7 @@ jobs:
 
 
   gpu-pipelines-python-ydata-images:
-    name: GPU Pipelines Python YD
+    name: GPU KFP Python YD
     runs-on: ubuntu-20.04
 
     needs: [ prepare, gpu-ydata-python-base-images ]
