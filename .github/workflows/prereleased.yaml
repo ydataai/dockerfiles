@@ -1120,9 +1120,7 @@ jobs:
         cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
 
         docker-compose -f ${{ github.job }}.yaml push \
-          base_jupyterlab_tensorflow115_gpu_r_cuda100 \
           jupyterlab_tensorflow115_gpu_r \
-          base_jupyterlab_tensorflow23_gpu_r_cuda101 \
           jupyterlab_tensorflow23_gpu_r
 
 
@@ -1525,38 +1523,38 @@ jobs:
   ######    ENF OF GPU    ######
 
 
-  #update-manifests:
-  #  name: Update Manifests
-  #  runs-on: ubuntu-20.04
+  update-manifests:
+    name: Update Manifests
+    runs-on: ubuntu-20.04
 
-  #  needs: [ prepare ]
+    needs: [ prepare ]
 
-  #  steps:
-  #  - name: Mount laboratories images tag version
-  #    id: replace
-  #    uses: frabert/replace-string-action@v1.2
-  #    with:
-  #      pattern: VERSION
-  #      flags: g
-  #      string: 'jupyterlab_r-cpu:VERSION,jupyterlab_python-cpu:VERSION,jupyterlab_r-gpu:VERSION,jupyterlab_python-gpu:VERSION,ydata-cpu:VERSION,ydata-gpu:VERSION,h2oflow-cpu:VERSION,h2oflow-gpu:VERSION,tensorflow-1.15-cpu:VERSION,tensorflow-1.15-gpu:VERSION,tensorflow-2.3-cpu:VERSION,tensorflow-2.3-gpu:VERSION,torch-1.7-cpu:VERSION,torch-1.7-gpu:VERSION,visualcode-cpu:VERSION,visualcode-gpu:VERSION'
-  #      replace-with: ${{ needs.prepare.outputs.version }}
+    steps:
+    - name: Mount laboratories images tag version
+      id: replace
+      uses: frabert/replace-string-action@v1.2
+      with:
+        pattern: VERSION
+        flags: g
+        string: 'jupyterlab_r-cpu:VERSION,jupyterlab_python-cpu:VERSION,jupyterlab_r-gpu:VERSION,jupyterlab_python-gpu:VERSION,ydata-cpu:VERSION,ydata-gpu:VERSION,h2oflow-cpu:VERSION,h2oflow-gpu:VERSION,tensorflow-1.15-cpu:VERSION,tensorflow-1.15-gpu:VERSION,tensorflow-2.3-cpu:VERSION,tensorflow-2.3-gpu:VERSION,torch-1.7-cpu:VERSION,torch-1.7-gpu:VERSION,visualcode-cpu:VERSION,visualcode-gpu:VERSION'
+        replace-with: ${{ needs.prepare.outputs.version }}
 
-  #  - name: Checkout Manifests repo
-  #    uses: actions/checkout@v2
-  #    with:
-  #      repository: ydataai/manifests
-  #      token: ${{ secrets.ACCESS_TOKEN }}
+    - name: Checkout Manifests repo
+      uses: actions/checkout@v2
+      with:
+        repository: ydataai/manifests
+        token: ${{ secrets.ACCESS_TOKEN }}
 
-  #  - name: Update params.env with laboratories image tag
-  #    run: |
-  #      cd ydata/laboratory-controller/base
-  #      sed -i -r 's/\laboratoriesImageTag=(.*)/laboratoriesImageTag=${{steps.replace.outputs.replaced}}/g' params.env
+    - name: Update params.env with laboratories image tag
+      run: |
+        cd ydata/laboratory-controller/base
+        sed -i -r 's/\laboratoriesImageTag=(.*)/laboratoriesImageTag=${{steps.replace.outputs.replaced}}/g' params.env
 
-  #  - name: Commit and push image update into manifests repo
-  #    env:
-  #      VERSION: ${{ needs.prepare.outputs.version }}
-  #    run: |
-  #      git config user.email "azory@ydata.ai"
-  #      git config user.name "Azory YData Bot"
-  #      git commit -a -m "chore(bump): [CI] [DEV] bump laboratories image tag to $VERSION"
-  #      git push origin master
+    - name: Commit and push image update into manifests repo
+      env:
+        VERSION: ${{ needs.prepare.outputs.version }}
+      run: |
+        git config user.email "azory@ydata.ai"
+        git config user.name "Azory YData Bot"
+        git commit -a -m "chore(bump): [CI] [DEV] bump laboratories image tag to $VERSION"
+        git push origin master

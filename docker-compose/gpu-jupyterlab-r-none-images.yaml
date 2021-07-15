@@ -14,7 +14,7 @@ services:
     image: ${PUBLIC_REGISTRY}jupyterlab_r:${TAG}-gpu-cuda10.0
     build:
       context: ../data-science/jupyterlab_r/
-      dockerfile: Dockerfile.gpu
+      dockerfile: gpu.Dockerfile
       args:
          FROM: ${PUBLIC_REGISTRY}base_gpu_r_cuda100
          TAG: ${TAG}
@@ -32,7 +32,7 @@ services:
     image: ${PUBLIC_REGISTRY}jupyterlab_r:${TAG}-gpu-cuda10.1
     build:
       context: ../data-science/jupyterlab_r/
-      dockerfile: Dockerfile.gpu
+      dockerfile: gpu.Dockerfile
       args:
          FROM: ${PUBLIC_REGISTRY}base_gpu_r_cuda101
          TAG: ${TAG}

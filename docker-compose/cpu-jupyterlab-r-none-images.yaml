@@ -13,7 +13,7 @@ services:
     image: ${PUBLIC_REGISTRY}jupyterlab_r:${TAG}-cpu
     build:
       context: ../data-science/jupyterlab_r/
-      dockerfile: Dockerfile.cpu
+      dockerfile: cpu.Dockerfile
       args:
          FROM: ${PUBLIC_REGISTRY}base_cpu_r
          TAG: ${TAG}

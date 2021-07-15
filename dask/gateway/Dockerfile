@@ -65,12 +65,8 @@ RUN apt-get update && \
       build-essential \
       unixodbc-dev
 
-USER ${UID}
-
-COPY requirements.txt /tmp/requirements.txt
-RUN /opt/conda/bin/pip install -r /tmp/requirements.txt --no-cache-dir
-
-USER root
+COPY requirements-ydata.txt /tmp/
+RUN python -m pip install --no-cache-dir --ignore-installed PyYAML -r /tmp/requirements-ydata.txt
 
 # clean up /tmp
 RUN rm -rf /tmp/*

@@ -17,7 +17,7 @@ services:
   ## VisualCode YData GPU None Python CUDA 11.0 Image
   visualcode_ydata_none_gpu_python_cuda110:
      extends:
-         file: ${CPU_VISUALCODE_PYTHON_NONE_IMAGES}
+         file: ${GPU_VISUALCODE_PYTHON_NONE_IMAGES}
          service: visualcode_ydata_none_gpu_python_cuda110
 
   ### VisualCode YData GPU Python CUDA 11.0 Image
