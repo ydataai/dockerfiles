@@ -27,7 +27,7 @@ services:
          file: ${GPU_BASE_IMAGES}
          service: base_gpu_r_cuda101
 
-  ## [PUSH] JupyterLab GPU None R CUDA 10.1 Image
+  ## [PUSH] [LAB] JupyterLab GPU None R CUDA 10.1 Image
   jupyterlab_none_gpu_r_cuda101:
     image: ${PUBLIC_REGISTRY}jupyterlab_r:${TAG}-gpu-cuda10.1
     build:

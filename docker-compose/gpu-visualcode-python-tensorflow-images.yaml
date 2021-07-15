@@ -21,7 +21,7 @@ services:
          file: ${GPU_VISUALCODE_PYTHON_NONE_IMAGES}
          service: visualcode_ydata_none_gpu_python_cuda100
 
-  ### [PUSH] VisualCode YData Tensorflow 1.15 GPU Python CUDA 10.0 Image
+  ### [PUSH] [LAB] VisualCode YData Tensorflow 1.15 GPU Python CUDA 10.0 Image
   visualcode_ydata_tensorflow115_gpu_python_cuda100:
     image: ${PUBLIC_REGISTRY}visualcode_tensorflow-1.15:${TAG}-gpu
     build:
@@ -54,7 +54,7 @@ services:
          file: ${GPU_VISUALCODE_PYTHON_NONE_IMAGES}
          service: visualcode_ydata_none_gpu_python_cuda101
 
-  ### VisualCode YData Tensorflow 2.3 GPU Python CUDA 10.1 Image
+  ### [PUSH] [LAB] VisualCode YData Tensorflow 2.3 GPU Python CUDA 10.1 Image
   visualcode_ydata_tensorflow23_gpu_python_cuda101:
     image: visualcode_tensorflow-2.3:${TAG}-gpu
     build:

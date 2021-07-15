@@ -29,7 +29,7 @@ services:
          FROM: ${PUBLIC_REGISTRY}jupyterlab_python
          TAG: ${TAG}-gpu-cuda11.0
 
-  ### [PUSH] JupyterLab YData GPU Python CUDA 11.0 Image - NOPIP
+  ### [PUSH] [LAB] JupyterLab YData GPU Python CUDA 11.0 Image - NOPIP
   jupyterlab_ydata_gpu_python_cuda110_nopip:
     image: ${PRIVATE_REGISTRY}ydata:${TAG}-gpu
     build:

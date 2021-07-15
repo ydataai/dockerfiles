@@ -29,7 +29,7 @@ services:
          FROM: ${PUBLIC_REGISTRY}visualcode
          TAG: ${TAG}-gpu-cuda11.0
 
-  ### [PUSH] VisualCode YData GPU Python CUDA 11.0 Image - NOPIP
+  ### [PUSH] [LAB] VisualCode YData GPU Python CUDA 11.0 Image - NOPIP
   visualcode_ydata_gpu_python_cuda110_nopip:
     image: ${PRIVATE_REGISTRY}visualcode_ydata:${TAG}-gpu
     build:

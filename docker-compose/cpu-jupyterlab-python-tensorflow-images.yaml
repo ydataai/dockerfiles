@@ -21,7 +21,7 @@ services:
          file: ${CPU_JUPYTERLAB_PYTHON_NONE_IMAGES}
          service: jupyterlab_ydata_none_cpu_python
 
-  ### [PUSH] JupyterLab YData Tensorflow 1.15 CPU Python Image
+  ### [PUSH] [LAB] JupyterLab YData Tensorflow 1.15 CPU Python Image
   jupyterlab_ydata_tensorflow115_cpu_python:
     image: ${PUBLIC_REGISTRY}jupyterlab_python_tensorflow-1.15:${TAG}-cpu
     build:
@@ -54,7 +54,7 @@ services:
          file: ${CPU_JUPYTERLAB_PYTHON_NONE_IMAGES}
          service: jupyterlab_ydata_none_cpu_python
 
-  ### [PUSH] JupyterLab YData Tensorflow 2.3 CPU Python Image
+  ### [PUSH] [LAB] JupyterLab YData Tensorflow 2.3 CPU Python Image
   jupyterlab_ydata_tensorflow23_cpu_python:
     image: ${PUBLIC_REGISTRY}jupyterlab_python_tensorflow-2.3:${TAG}-cpu
     build:

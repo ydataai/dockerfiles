@@ -15,7 +15,7 @@ services:
          file: ${GPU_YDATA_PYTHON_BASE_IMAGES}
          service: base_ydata_gpu_python_cuda100
 
-  ### [PUSH] Pipelines YData Tensorflow 1.15 GPU Python CUDA 10.0 Image
+  ### [PUSH] [PIPELINE] Pipelines YData Tensorflow 1.15 GPU Python CUDA 10.0 Image
   pipelines_ydata_tensorflow115_gpu_python_cuda100:
     image: ${PUBLIC_REGISTRY}pipelines_python_tensorflow-1.15:${TAG}-gpu
     build:
@@ -42,7 +42,7 @@ services:
          file: ${GPU_YDATA_PYTHON_BASE_IMAGES}
          service: base_ydata_gpu_python_cuda101
 
-  ### [PUSH] Pipelines YData Tensorflow 2.3 GPU Python CUDA 10.1 Image
+  ### [PUSH] [PIPELINE] Pipelines YData Tensorflow 2.3 GPU Python CUDA 10.1 Image
   pipelines_ydata_tensorflow23_gpu_python_cuda101:
     image: ${PUBLIC_REGISTRY}pipelines_python_tensorflow-2.3:${TAG}-gpu
     build:

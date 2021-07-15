@@ -20,7 +20,7 @@ services:
          file: ${CPU_VISUALCODE_PYTHON_NONE_IMAGES}
          service: visualcode_ydata_none_cpu_python
 
-  ### VisualCode YData Torch 1.7 CPU Python Image
+  ### [PUSH] [LAB] VisualCode YData Torch 1.7 CPU Python Image
   visualcode_ydata_torch17_cpu_python:
     image: ${PUBLIC_REGISTRY}visualcode_torch-1.7:${TAG}-cpu
     build:

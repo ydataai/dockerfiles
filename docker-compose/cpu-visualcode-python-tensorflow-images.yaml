@@ -21,7 +21,7 @@ services:
          file: ${CPU_VISUALCODE_PYTHON_NONE_IMAGES}
          service: visualcode_ydata_none_cpu_python
 
-  ### [PUSH] VisualCode YData Tensorflow 1.15 CPU Python Image
+  ### [PUSH] [LAB] VisualCode YData Tensorflow 1.15 CPU Python Image
   visualcode_ydata_tensorflow115_cpu_python:
     image: ${PUBLIC_REGISTRY}visualcode_tensorflow-1.15:${TAG}-cpu
     build:
@@ -54,7 +54,7 @@ services:
          file: ${CPU_VISUALCODE_PYTHON_NONE_IMAGES}
          service: visualcode_ydata_none_cpu_python
 
-  ### [PUSH] VisualCode YData Tensorflow 2.3 CPU Python Image
+  ### [PUSH] [LAB] VisualCode YData Tensorflow 2.3 CPU Python Image
   visualcode_ydata_tensorflow23_cpu_python:
     image: ${PUBLIC_REGISTRY}visualcode_tensorflow-2.3:${TAG}-cpu
     build:

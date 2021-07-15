@@ -29,7 +29,7 @@ services:
         FROM: ${PUBLIC_REGISTRY}visualcode
         TAG: ${TAG}-cpu
 
-  ### [PUSH] VisualCode YData CPU Python Image - NOPIP
+  ### [PUSH] [LAB] VisualCode YData CPU Python Image - NOPIP
   visualcode_ydata_cpu_python_nopip:
     image: ${PRIVATE_REGISTRY}visualcode_ydata:${TAG}-cpu
     build:

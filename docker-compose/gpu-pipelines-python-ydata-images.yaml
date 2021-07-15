@@ -14,7 +14,7 @@ services:
          file: ${GPU_YDATA_PYTHON_BASE_IMAGES}
          service: base_ydata_gpu_python_cuda110
 
-  ### [PUSH] Pipelines YData GPU Python CUDA 11.0 Image
+  ### [PUSH] [PIPELINE] Pipelines YData GPU Python CUDA 11.0 Image
   pipelines_ydata_gpu_python_cuda110:
     image: ${PRIVATE_REGISTRY}pipelines_ydata:${TAG}-gpu
     build:

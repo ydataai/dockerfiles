@@ -26,7 +26,7 @@ services:
          TYPE: gpu
          VERSION: 1.15
 
-  ### [PUSH] JupyterLab Tensorflow 1.15 GPU R CUDA 10.0 Image
+  ### [PUSH] [LAB] JupyterLab Tensorflow 1.15 GPU R CUDA 10.0 Image
   jupyterlab_tensorflow115_gpu_r:
     image: ${PUBLIC_REGISTRY}jupyterlab_r_tensorflow-1.15:${TAG}-gpu
     build:
@@ -64,7 +64,7 @@ services:
          TYPE: gpu
          VERSION: 2.3
 
-  ### [PUSH] JupyterLab Tensorflow 2.3 GPU R CUDA 10.1 Image
+  ### [PUSH] [LAB] JupyterLab Tensorflow 2.3 GPU R CUDA 10.1 Image
   jupyterlab_tensorflow23_gpu_r:
     image: ${PUBLIC_REGISTRY}jupyterlab_r_tensorflow-2.3:${TAG}-gpu
     build:

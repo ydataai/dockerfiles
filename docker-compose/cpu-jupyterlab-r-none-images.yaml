@@ -8,7 +8,7 @@ services:
          file: ${CPU_BASE_IMAGES}
          service: base_cpu_r
 
-  ## [PUSH] JupyterLab YData CPU None R Image
+  ## [PUSH] [LAB] JupyterLab YData CPU None R Image
   jupyterlab_none_cpu_r:
     image: ${PUBLIC_REGISTRY}jupyterlab_r:${TAG}-cpu
     build:

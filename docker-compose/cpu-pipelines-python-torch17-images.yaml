@@ -14,7 +14,7 @@ services:
          file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
          service: base_ydata_cpu_python
 
-  ### [PUSH] Pipelines YData Torch 1.7 CPU Python Image
+  ### [PUSH] [PIPELINE] Pipelines YData Torch 1.7 CPU Python Image
   pipelines_ydata_torch17_cpu_python:
     image: ${PUBLIC_REGISTRY}pipelines_python_torch-1.7:${TAG}-cpu
     build:

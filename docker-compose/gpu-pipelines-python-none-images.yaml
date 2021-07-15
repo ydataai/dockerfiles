@@ -9,7 +9,7 @@ services:
          file: ${GPU_BASE_IMAGES}
          service: base_gpu_python_cuda100
 
-  ### [PUSH] Pipelines YData GPU None Python CUDA 10.0 Image
+  ### [PUSH] [PIPELINE] Pipelines YData GPU None Python CUDA 10.0 Image
   pipelines_ydata_none_gpu_python_cuda100:
     extends:
         file: ${GPU_YDATA_PYTHON_BASE_IMAGES}
@@ -24,7 +24,7 @@ services:
          file: ${GPU_BASE_IMAGES}
          service: base_gpu_python_cuda101
 
-  ### [PUSH] Pipelines YData GPU None Python CUDA 10.0 Image
+  ### [PUSH] [PIPELINE] Pipelines YData GPU None Python CUDA 10.0 Image
   pipelines_ydata_none_gpu_python_cuda101:
     extends:
         file: ${GPU_YDATA_PYTHON_BASE_IMAGES}
@@ -39,7 +39,7 @@ services:
          file: ${GPU_BASE_IMAGES}
          service: base_gpu_python_cuda110
 
-  ### [PUSH] Pipelines YData GPU None Python CUDA 11.0 Image
+  ### [PUSH] [PIPELINE] Pipelines YData GPU None Python CUDA 11.0 Image
   pipelines_ydata_none_gpu_python_cuda110:
     extends:
         file: ${GPU_YDATA_PYTHON_BASE_IMAGES}

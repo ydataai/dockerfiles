@@ -14,7 +14,7 @@ services:
          file: ${GPU_JUPYTERLAB_R_NONE_IMAGES}
          service: jupyterlab_none_gpu_r_cuda101
 
-  ### [PUSH] JupyterLab Torch 1.7 GPU R CUDA 10.1 Image
+  ### [PUSH] [LAB] JupyterLab Torch 1.7 GPU R CUDA 10.1 Image
   jupyterlab_torch17_gpu_r_cuda101:
     image: ${PUBLIC_REGISTRY}jupyterlab_r_torch-1.7:${TAG}-gpu
     build:

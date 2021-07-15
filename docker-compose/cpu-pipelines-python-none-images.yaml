@@ -8,7 +8,7 @@ services:
          file: ${CPU_BASE_IMAGES}
          service: base_cpu_python
 
-  ### [PUSH] Pipelines YData CPU None Python Image
+  ### [PUSH] [PIPELINE] Pipelines YData CPU None Python Image
   pipelines_ydata_none_cpu_python:
     extends:
         file: ${CPU_YDATA_PYTHON_BASE_IMAGES}

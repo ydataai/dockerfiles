@@ -14,7 +14,7 @@ services:
          file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
          service: base_ydata_cpu_python
 
-  ### [PUSH] JupyterLab YData CPU None Python Image
+  ### [PUSH] [LAB] JupyterLab YData CPU None Python Image
   jupyterlab_ydata_none_cpu_python:
     image: ${PUBLIC_REGISTRY}jupyterlab_python:${TAG}-cpu
     build:

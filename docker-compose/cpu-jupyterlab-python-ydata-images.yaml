@@ -29,7 +29,7 @@ services:
          FROM: ${PUBLIC_REGISTRY}jupyterlab_python
          TAG: ${TAG}-cpu
 
-  ### [PUSH] JupyterLab YData CPU Python Image - NOPIP
+  ### [PUSH] [LAB] JupyterLab YData CPU Python Image - NOPIP
   jupyterlab_ydata_cpu_python_nopip:
     image: ${PRIVATE_REGISTRY}ydata:${TAG}-cpu
     build:

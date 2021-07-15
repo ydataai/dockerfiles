@@ -14,7 +14,7 @@ services:
          file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
          service: base_ydata_cpu_python
 
-  ### [PUSH] Pipelines YData CPU Python Image
+  ### [PUSH] [PIPELINE] Pipelines YData CPU Python Image
   pipelines_ydata_cpu_python:
     image: ${PRIVATE_REGISTRY}pipelines_ydata:${TAG}-cpu
     build:

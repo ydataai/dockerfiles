@@ -15,7 +15,7 @@ services:
          file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
          service: base_ydata_cpu_python
 
-  ### [PUSH] Pipelines YData Tensorflow 1.15 CPU Python Image
+  ### [PUSH] [PIPELINE] Pipelines YData Tensorflow 1.15 CPU Python Image
   pipelines_ydata_tensorflow115_cpu_python:
     image: ${PUBLIC_REGISTRY}pipelines_python_tensorflow-1.15:${TAG}-cpu
     build:
@@ -42,7 +42,7 @@ services:
          file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
          service: base_ydata_cpu_python
 
-  ### [PUSH] Pipelines YData Tensorflow 2.3 CPU Python Image
+  ### [PUSH] [PIPELINE] Pipelines YData Tensorflow 2.3 CPU Python Image
   pipelines_ydata_tensorflow23_cpu_python:
     image: ${PUBLIC_REGISTRY}pipelines_python_tensorflow-2.3:${TAG}-cpu
     build:

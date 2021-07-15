@@ -26,7 +26,7 @@ services:
          TYPE: cpu
          VERSION: 1.15
 
-  ### [PUSH] JupyterLab Tensorflow 1.15 CPU R Image
+  ### [PUSH] [LAB] JupyterLab Tensorflow 1.15 CPU R Image
   jupyterlab_tensorflow115_cpu_r:
     image: ${PUBLIC_REGISTRY}jupyterlab_r_tensorflow-1.15:${TAG}-cpu
     build:
@@ -64,7 +64,7 @@ services:
          TYPE: cpu
          VERSION: 2.3
 
-  ### [PUSH] JupyterLab Tensorflow 2.3 CPU R Image
+  ### [PUSH] [LAB] JupyterLab Tensorflow 2.3 CPU R Image
   jupyterlab_tensorflow23_cpu_r:
     image: ${PUBLIC_REGISTRY}jupyterlab_r_tensorflow-2.3:${TAG}-cpu
     build:
