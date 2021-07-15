@@ -7,6 +7,10 @@ Find the public images on [DockerHub](https://hub.docker.com/u/ydata)
 # Build locally
 
 ```
+NOTE: Due do the privacy of the python YData packages, and since most of the images are based in the image with this packages, some of the builds will fail. 
+```
+
+```
 cd docker-compose/
 ```
 
