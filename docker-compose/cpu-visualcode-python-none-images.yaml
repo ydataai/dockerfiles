@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  #### VisualCode None CPU Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_cpu_python
+
+  ## [PUSH] [LAB] VisualCode YData CPU None Python Image
+  visualcode_ydata_none_cpu_python:
+    image: ${PUBLIC_REGISTRY}visualcode:${TAG}-cpu
+    build:
+      context: ../data-science/visualcode_python/
+      args:
+         FROM: ${PUBLIC_REGISTRY}base_ydata_cpu_python
+         TAG: ${TAG}

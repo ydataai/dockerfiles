@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  #### [PUSH] Node Image
+  node_image:
+    image: ${PUBLIC_REGISTRY}node_image:${TAG}
+    build:
+      context: ../node/
+      dockerfile: node10-alpine-glibc.Dockerfile
+      args:
+        FROM: node
+        TAG: 10-alpine

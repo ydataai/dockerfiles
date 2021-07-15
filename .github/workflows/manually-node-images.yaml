@@ -1,0 +1,84 @@
+name: Manually [node]
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      TAG:
+        description: Base TAG
+        required: true
+
+
+env:
+  PUBLIC_REGISTRY: docker.io/ydata/
+  DOCKER_COMPOSE_FOLDER: docker-compose
+
+
+jobs:
+  cancel_previous:
+    name: 'Cancel Previous Runs'
+    runs-on: ubuntu-20.04
+    timeout-minutes: 3
+    steps:
+      - uses: ydataai/cancel-workflow-action@0.7.0-fix
+        with:
+          ignore_sha: true
+          access_token: ${{ secrets.ACCESS_TOKEN }}
+
+
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Replace docker-compose .env variables
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        sed -i -r 's|\TAG=(.*)|TAG=${{ github.event.inputs.TAG }}|g'                     .env
+        sed -i -r 's|\PUBLIC_REGISTRY=(.*)|PUBLIC_REGISTRY=${{ env.PUBLIC_REGISTRY }}|g'     .env
+
+    - name: Upload docker-compose .env file
+      uses: actions/upload-artifact@v2.2.4
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/.env
+
+
+  cpu-node-images:
+    name: Node
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          node_image
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          node_image

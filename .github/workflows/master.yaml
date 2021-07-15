@@ -1,8 +1,10 @@
-name: master
+name: Merge master
+
 
 on:
   push:
     branches: [ master ]
+
 
 jobs:
   release:

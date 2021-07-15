@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  #### Base GPU Nvidia CUDA Images
+  ### [PUSH] Base GPU Nvidia CUDA 10.0 Image
+  base_gpu_nvidia_cuda_100:
+    image: ${PUBLIC_REGISTRY}nvidia-cuda:10.0-ubuntu18.04
+    build:
+      context: ../nvidia-cuda/
+      dockerfile: Dockerfile.100
+      args:
+        FROM: nvidia/cuda
+        TAG: 10.0-base-ubuntu18.04
+        CUDA: 10.0
+        CUDNN: 7=7.6.5.32-1+cuda10.0
+        LIBNVINFER: 6=6.0.1-1+cuda10.0
+
+  ### [PUSH] Base GPU Nvidia CUDA 10.1 Image
+  base_gpu_nvidia_cuda_101:
+    image: ${PUBLIC_REGISTRY}nvidia-cuda:10.1-ubuntu18.04
+    build:
+      context: ../nvidia-cuda/
+      dockerfile: Dockerfile.101
+      args:
+        FROM: nvidia/cuda
+        TAG: 10.1-base-ubuntu18.04
+        CUDA: 10.1
+        CUDNN: 7=7.6.4.38-1+cuda10.1
+        LIBNVINFER: 6=6.0.1-1+cuda10.1
+
+  ### [PUSH] Base GPU Nvidia CUDA 11.0 Image
+  base_gpu_nvidia_cuda_110:
+    image: ${PUBLIC_REGISTRY}nvidia-cuda:11.0-ubuntu18.04
+    build:
+      context: ../nvidia-cuda/
+      dockerfile: Dockerfile.110
+      args:
+        FROM: nvidia/cuda
+        TAG: 11.0-cudnn8-devel-ubuntu18.04
+        LIBNVINFER: 7_7.2.3-1+cuda11.0_amd64

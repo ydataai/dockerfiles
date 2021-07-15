@@ -4,7 +4,3 @@ jupyterlab-git==0.30.*
 jupyterlab_widgets==1.0.0
 
 elyra==2.3.0rc1
-
-jedi==0.17.2
-scikit-learn==0.23.2
-seaborn==0.10.*

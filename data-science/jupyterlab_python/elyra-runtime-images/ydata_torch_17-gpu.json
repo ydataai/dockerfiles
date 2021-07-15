@@ -1,7 +1,7 @@
 {
   "display_name": "YData Torch 1.7 GPU",
   "metadata": {
-    "image_name": "docker.io/ydata/jupyterlab_python_torch-1.7:0.23.1-gpu"
+    "image_name": ""
   },
   "schema_name": "runtime-image"
 }

@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  #### VisualCode YData CPU Python Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_cpu_python
+
+  ## VisualCode YData CPU None Python Image
+  visualcode_ydata_none_cpu_python:
+     extends:
+         file: ${CPU_VISUALCODE_PYTHON_NONE_IMAGES}
+         service: visualcode_ydata_none_cpu_python
+
+  ### VisualCode YData CPU Python Image
+  visualcode_ydata_cpu_python:
+    image: visualcode_ydata_cpu_python:${TAG}
+    build:
+      context: ../data-science/ydata/
+      args:
+        FROM: ${PUBLIC_REGISTRY}visualcode
+        TAG: ${TAG}-cpu
+
+  ### [PUSH] [LAB] VisualCode YData CPU Python Image - NOPIP
+  visualcode_ydata_cpu_python_nopip:
+    image: ${PRIVATE_REGISTRY}visualcode_ydata:${TAG}-cpu
+    build:
+      context: ../data-science/ydata-nopip/
+      args:
+         FROM: visualcode_ydata_cpu_python
+         TAG: ${TAG}

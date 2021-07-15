@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  #### JupyterLab Base CPU Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_python
+
+  ### [PUSH] Base YData CPU Python Image
+  base_ydata_cpu_python:
+    image: ${PUBLIC_REGISTRY}base_ydata_cpu_python:${TAG}
+    build:
+      context: ../data-science/python_ydata_base/
+      args:
+         FROM: ${PUBLIC_REGISTRY}base_cpu_python
+         TAG: ${TAG}

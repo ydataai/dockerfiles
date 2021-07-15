@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  ##### Tensorflow 1.15
+  #### Jupyerlab Tensorflow 1.15 CPU R Images
+  ### Base CPU R Image
+  base_cpu_r:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_r
+
+  ## JupyterLab CPU None R Image
+  jupyterlab_none_cpu_r:
+     extends:
+         file: ${CPU_JUPYTERLAB_R_NONE_IMAGES}
+         service: jupyterlab_none_cpu_r
+
+  ### Base JupyterLab Tensorflow 1.15 CPU R Image
+  base_jupyterlab_tensorflow115_cpu_r:
+    image: base_jupyterlab_tensorflow115_cpu_r:${TAG}
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: ${PUBLIC_REGISTRY}jupyterlab_r
+         TAG: ${TAG}-cpu
+         TYPE: cpu
+         VERSION: 1.15
+
+  ### [PUSH] [LAB] JupyterLab Tensorflow 1.15 CPU R Image
+  jupyterlab_tensorflow115_cpu_r:
+    image: ${PUBLIC_REGISTRY}jupyterlab_r_tensorflow-1.15:${TAG}-cpu
+    build:
+      context: ../data-science/jupyterlab_r_tensorflow/
+      args:
+         FROM: base_jupyterlab_tensorflow115_cpu_r
+         TAG: ${TAG}
+         TYPE: cpu
+         VERSION: 1.15
+
+
+
+  ##### Tensorflow 2.3
+  #### Jupyerlab YData Tensorflow 2.3 CPU R Images
+  ### Base CPU R Image
+  base_cpu_r:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_r
+
+  ## JupyterLab CPU None R Image
+  jupyterlab_none_cpu_r:
+     extends:
+         file: ${CPU_JUPYTERLAB_R_NONE_IMAGES}
+         service: jupyterlab_none_cpu_r
+
+  ### Base JupyterLab Tensorflow 2.3 CPU R Image
+  base_jupyterlab_tensorflow23_cpu_r:
+    image: base_jupyterlab_tensorflow23_cpu_r:${TAG}
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: ${PUBLIC_REGISTRY}jupyterlab_r
+         TAG: ${TAG}-cpu
+         TYPE: cpu
+         VERSION: 2.3
+
+  ### [PUSH] [LAB] JupyterLab Tensorflow 2.3 CPU R Image
+  jupyterlab_tensorflow23_cpu_r:
+    image: ${PUBLIC_REGISTRY}jupyterlab_r_tensorflow-2.3:${TAG}-cpu
+    build:
+      context: ../data-science/jupyterlab_r_tensorflow/
+      args:
+         FROM: base_jupyterlab_tensorflow23_cpu_r
+         TAG: ${TAG}
+         TYPE: cpu
+         VERSION: 2.3

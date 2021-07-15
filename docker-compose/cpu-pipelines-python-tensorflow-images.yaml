@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  ##### Tensorflow 1.15
+  #### Pipelines YData Tensorflow 1.15 CPU Python Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_cpu_python
+
+  ### [PUSH] [PIPELINE] Pipelines YData Tensorflow 1.15 CPU Python Image
+  pipelines_ydata_tensorflow115_cpu_python:
+    image: ${PUBLIC_REGISTRY}pipelines_python_tensorflow-1.15:${TAG}-cpu
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: ${PUBLIC_REGISTRY}base_ydata_cpu_python
+         TAG: ${TAG}
+         TYPE: cpu
+         VERSION: 1.15
+
+
+
+  ##### Tensorflow 2.3
+  #### Pipelines YData Tensorflow 2.3 CPU Python Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_cpu_python
+
+  ### [PUSH] [PIPELINE] Pipelines YData Tensorflow 2.3 CPU Python Image
+  pipelines_ydata_tensorflow23_cpu_python:
+    image: ${PUBLIC_REGISTRY}pipelines_python_tensorflow-2.3:${TAG}-cpu
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: ${PUBLIC_REGISTRY}base_ydata_cpu_python
+         TAG: ${TAG}
+         TYPE: cpu
+         VERSION: 2.3

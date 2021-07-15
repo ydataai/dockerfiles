@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  #### Pipelines YData Torch 1.7 CPU Python Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_cpu_python
+
+  ### [PUSH] [PIPELINE] Pipelines YData Torch 1.7 CPU Python Image
+  pipelines_ydata_torch17_cpu_python:
+    image: ${PUBLIC_REGISTRY}pipelines_python_torch-1.7:${TAG}-cpu
+    build:
+      context: ../data-science/torch-1.7/
+      args:
+         FROM: ${PUBLIC_REGISTRY}base_ydata_cpu_python
+         TAG: ${TAG}
+         TYPE: cpu

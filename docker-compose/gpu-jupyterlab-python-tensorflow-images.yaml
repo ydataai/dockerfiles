@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  ##### Tensorflow 1.15
+  #### Jupyerlab YData Tensorflow 1.15 GPU Python CUDA 10.0 Images
+  ### Base GPU Python CUDA 10.0 Image
+  base_gpu_python_cuda100:
+     extends:
+         file: ${GPU_BASE_IMAGES}
+         service: base_gpu_python_cuda100
+
+  ### Base YData GPU Python CUDA 10.0 Image
+  base_ydata_gpu_python_cuda100:
+     extends:
+         file: ${GPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_gpu_python_cuda100
+
+  ### JupyterLab YData GPU None Python CUDA 10.0 Image
+  jupyterlab_ydata_none_gpu_python_cuda100:
+     extends:
+         file: ${GPU_JUPYTERLAB_PYTHON_NONE_IMAGES}
+         service: jupyterlab_ydata_none_gpu_python_cuda100
+
+  ### [PUSH] [LAB] JupyterLab YData Tensorflow 1.15 GPU Python CUDA 10.0 Image
+  jupyterlab_ydata_tensorflow115_gpu_python_cuda100:
+    image: ${PUBLIC_REGISTRY}jupyterlab_python_tensorflow-1.15:${TAG}-gpu
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: ${PUBLIC_REGISTRY}jupyterlab_python
+         TAG: ${TAG}-gpu-cuda10.0
+         TYPE: gpu
+         VERSION: 1.15
+
+
+
+  ##### Tensorflow 2.3
+  #### Jupyerlab YData Tensorflow 2.3 GPU Python CUDA 10.1 Images
+  ### Base GPU Python CUDA 10.1 Image
+  base_gpu_python_cuda101:
+     extends:
+         file: ${GPU_BASE_IMAGES}
+         service: base_gpu_python_cuda101
+
+  ### Base YData GPU Python CUDA 10.1 Image
+  base_ydata_gpu_python_cuda101:
+     extends:
+         file: ${GPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_gpu_python_cuda101
+
+  ### JupyterLab YData GPU None Python CUDA 10.1 Image
+  jupyterlab_ydata_none_gpu_python_cuda101:
+     extends:
+         file: ${GPU_JUPYTERLAB_PYTHON_NONE_IMAGES}
+         service: jupyterlab_ydata_none_gpu_python_cuda101
+
+  ### [PUSH] [LAB] JupyterLab YData Tensorflow 2.3 GPU Python CUDA 10.1 Image
+  jupyterlab_ydata_tensorflow23_gpu_python_cuda101:
+    image: ${PUBLIC_REGISTRY}jupyterlab_python_tensorflow-2.3:${TAG}-gpu
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: ${PUBLIC_REGISTRY}jupyterlab_python
+         TAG: ${TAG}-gpu-cuda10.1
+         TYPE: gpu
+         VERSION: 2.3

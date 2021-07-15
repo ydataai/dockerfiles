@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  ##### Base CPU Images
+  #### [PUSH] Base CPU Python Image
+  base_cpu_python:
+    image: ${PUBLIC_REGISTRY}base_cpu_python:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+        FROM: ubuntu
+        TAG: 20.04
+        PACKAGES_FILE: python_packages.txt
+        MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+        MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+  #### [PUSH] Base CPU R Image
+  base_cpu_r:
+    image: ${PUBLIC_REGISTRY}base_cpu_r:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: ubuntu
+         TAG: 20.04
+         PACKAGES_FILE: r_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}

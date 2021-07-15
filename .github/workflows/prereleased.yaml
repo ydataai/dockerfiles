@@ -1,13 +1,29 @@
 name: Prereleased
 
+
 on:
   release:
     types: [ prereleased ]
 
+
 env:
-  COMPONENT: laboratory-controller/base
+  PUBLIC_REGISTRY: docker.io/ydata/
+  PRIVATE_REGISTRY: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}/${{ github.repository_owner }}/
+  DOCKER_COMPOSE_FOLDER: docker-compose
+
 
 jobs:
+  cancel_previous:
+    name: 'Cancel Previous Runs'
+    runs-on: ubuntu-20.04
+    timeout-minutes: 3
+    steps:
+      - uses: ydataai/cancel-workflow-action@0.7.0-fix
+        with:
+          ignore_sha: true
+          access_token: ${{ secrets.ACCESS_TOKEN }}
+
+
   prepare:
     name: Prepare
     runs-on: ubuntu-20.04
@@ -20,727 +36,1549 @@ jobs:
       id: version
       run: echo ::set-output name=value::`echo ${{ github.ref }} | sed -n -E 's/refs\/tags\/([0-9]+.[0-9]+.[0-9]+)/\1/p'`
 
-  base-python-images-cpu:
-    name: Laboratories Base Python CPU
-    runs-on: ubuntu-20.04
-
-    needs: prepare
-
-    steps:
     - uses: actions/checkout@v2
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Lab Base Python images
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  base-python-images-gpu:
-    name: Laboratories Base Python GPU
-    runs-on: ubuntu-20.04
-
-    needs: prepare
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab Python images CUDA 10.0
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
-
-    - name: Lab Base Python images CUDA 10.1
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
-
-    - name: Lab Base Python images CUDA 11
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
-
-  base-r-images-cpu:
-    name: Laboratories Base R CPU
-    runs-on: ubuntu-20.04
-
-    needs: prepare
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Lab Base R images
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  base-r-images-gpu:
-    name: Laboratories Base R GPU
-    runs-on: ubuntu-20.04
-
-    needs: prepare
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Lab Base R images CUDA 10.0
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
-
-    - name: Lab Base R images CUDA 10.1
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
-
-    - name: Lab Base R images CUDA 11.0
-      run: make all IMAGE=data-science/laboratories-base LANGUAGE=r TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
-
-  jupyterlab-python-images-cpu:
-    name: JupyterLab Python CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, base-python-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Add authentication to requirements file
+    - name: Replace docker-compose .env variables
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/jupyterlab_python/requirements-ydata.txt
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
+        sed -i -r 's|\TAG=(.*)|TAG=${{ steps.version.outputs.value }}|g'                     .env
+        sed -i -r 's|\PUBLIC_REGISTRY=(.*)|PUBLIC_REGISTRY=${{ env.PUBLIC_REGISTRY }}|g'     .env
+        sed -i -r 's|\PRIVATE_REGISTRY=(.*)|PRIVATE_REGISTRY=${{ env.PRIVATE_REGISTRY }}|g'  .env
+
+    - name: Upload docker-compose .env file
+      uses: actions/upload-artifact@v2.2.4
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/.env
 
-    - name: JupyterLab Python images
-      run: make all IMAGE=data-science/jupyterlab_python TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
-  jupyterlab-python-images-gpu:
-    name: JupyterLab Python GPU
+  ######        CPU       ######
+  cpu-base-images:
+    name: CPU Base
     runs-on: ubuntu-20.04
 
-    needs: [prepare, base-python-images-gpu]
+    needs: [ prepare ]
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Add authentication to requirements file
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/jupyterlab_python/requirements-ydata.txt
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
 
-    - name: Login to Docker Hub
+        docker-compose -f ${{ github.job }}.yaml build \
+          base_cpu_python \
+          base_cpu_r
+
+    - name: Login to Docker Registry
       uses: docker/login-action@v1
       with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: JupyterLab Python images CUDA 10.0
-      run: make all IMAGE=data-science/jupyterlab_python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
-
-    - name: JupyterLab Python images CUDA 10.1
-      run: make all IMAGE=data-science/jupyterlab_python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
-
-    - name: JupyterLab Python images CUDA 11.0
-      run: make all IMAGE=data-science/jupyterlab_python TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
-
-  jupyterlab-python-tensorflow-115-images-cpu:
-    name: JupyterLab Python Tensorflow 1.15 CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-python-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab Python Tensorflow 1.15 Bundles images
-      run: make all IMAGE=data-science/jupyterlab_python_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  jupyterlab-python-tensorflow-115-images-gpu:
-    name: JupyterLab Python Tensorflow 1.15 GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-python-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab Python Tensorflow 1.15 Bundles images
-      run: make all IMAGE=data-science/jupyterlab_python_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
-
-  jupyterlab-python-tensorflow-23-images-cpu:
-    name: JupyterLab Python Tensorflow 2.3 CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-python-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab Python Tensorflow 2.3 Bundles images
-      run: make all IMAGE=data-science/jupyterlab_python_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  jupyterlab-python-tensorflow-23-images-gpu:
-    name: JupyterLab Python Tensorflow 2.3 GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-python-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab Python Tensorflow 2.3 Bundles images
-      run: make all IMAGE=data-science/jupyterlab_python_tensorflow-2.3 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
-
-  jupyterlab-python-torch-images-cpu:
-    name: JupyterLab Python Torch CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-python-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab Python Torch images
-      run: make all IMAGE=data-science/jupyterlab_python_torch-1.7 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  jupyterlab-python-torch-images-gpu:
-    name: JupyterLab Python Torch GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-python-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab Python Torch images
-      run: make all IMAGE=data-science/jupyterlab_python_torch-1.7 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
-
-  jupyterlab-python-ydata-image-cpu:
-    name: YData CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-python-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Add authentication to requirements file
+    - name: Push images
       run: |
-        sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements-ydata.txt
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/ydata/requirements-ydata.txt
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
 
-    - name: Login to GitHub Container Registry
+        docker-compose -f ${{ github.job }}.yaml push \
+          base_cpu_python \
+          base_cpu_r
+
+
+  cpu-ydata-python-base-images:
+    name: CPU YD Python Base
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes pypi requirements credentials
+      run: |
+        cd data-science/python_ydata_base/
+        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' requirements-ydata.txt
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          base_ydata_cpu_python
+
+    - name: Login to Docker Registry
       uses: docker/login-action@v1
       with:
-        registry: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          base_ydata_cpu_python
+
+
+  cpu-jupyterlab-python-none-images:
+    name: CPU JL Python None
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-ydata-python-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes elyra runtime images
+      run: |
+        cd data-science/jupyterlab_python/elyra-runtime-images/
+
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_tensorflow-1.15:${{ needs.prepare.outputs.version }}-cpu"' ydata_tensorflow_115-cpu.json`" > ydata_tensorflow_115-cpu.json
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_tensorflow-1.15:${{ needs.prepare.outputs.version }}-gpu"' ydata_tensorflow_115-gpu.json`" > ydata_tensorflow_115-gpu.json
+
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_tensorflow-2.3:${{ needs.prepare.outputs.version }}-cpu"'  ydata_tensorflow_23-cpu.json`"  > ydata_tensorflow_23-cpu.json
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_tensorflow-2.3:${{ needs.prepare.outputs.version }}-gpu"'  ydata_tensorflow_23-gpu.json`"  > ydata_tensorflow_23-gpu.json
+
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_torch-1.7:${{ needs.prepare.outputs.version }}-cpu"'       ydata_torch_17-cpu.json`"       > ydata_torch_17-cpu.json
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_torch-1.7:${{ needs.prepare.outputs.version }}-gpu"'       ydata_torch_17-gpu.json`"       > ydata_torch_17-gpu.json
+
+        echo "`jq '.metadata.image_name = "${{ env.PRIVATE_REGISTRY }}pipelines_ydata:${{ needs.prepare.outputs.version }}-cpu"'                 ydata-cpu.json`"                > ydata-cpu.json
+        echo "`jq '.metadata.image_name = "${{ env.PRIVATE_REGISTRY }}pipelines_ydata:${{ needs.prepare.outputs.version }}-gpu"'                 ydata-gpu.json`"                > ydata-gpu.json
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          jupyterlab_ydata_none_cpu_python
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          jupyterlab_ydata_none_cpu_python
+
+
+  cpu-jupyterlab-python-tensorflow-images:
+    name: CPU JL Python TF
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-jupyterlab-python-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          jupyterlab_ydata_tensorflow115_cpu_python \
+          jupyterlab_ydata_tensorflow23_cpu_python
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          jupyterlab_ydata_tensorflow115_cpu_python \
+          jupyterlab_ydata_tensorflow23_cpu_python
+
+
+  cpu-jupyterlab-python-torch17-images:
+    name: CPU JL Python TO
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-jupyterlab-python-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          jupyterlab_ydata_torch17_cpu_python
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          jupyterlab_ydata_torch17_cpu_python
+
+
+  cpu-jupyterlab-python-ydata-images:
+    name: CPU JL Python YD
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-jupyterlab-python-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes pypi requirements credentials
+      run: |
+        cd data-science/ydata/
+        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' requirements-ydata.txt
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          jupyterlab_ydata_cpu_python \
+          jupyterlab_ydata_cpu_python_nopip
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PRIVATE_REGISTRY }}
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GHCR_TOKEN }}
 
-    - name: YData image
-      run: make all IMAGE=data-science/ydata TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
 
-  jupyterlab-python-ydata-image-gpu:
-    name: YData GPU
+        docker-compose -f ${{ github.job }}.yaml push \
+          jupyterlab_ydata_cpu_python_nopip
+
+
+  cpu-jupyterlab-r-none-images:
+    name: CPU JL R None
     runs-on: ubuntu-20.04
 
-    needs: [prepare, jupyterlab-python-images-gpu]
+    needs: [ prepare, cpu-base-images ]
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Add authentication to requirements file
-      run: |
-        sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/ydata/requirements-ydata.txt
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/ydata/requirements-ydata.txt
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
 
-    - name: Login to GitHub Container Registry
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          jupyterlab_none_cpu_r
+
+    - name: Login to Docker Registry
       uses: docker/login-action@v1
       with:
-        registry: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          jupyterlab_none_cpu_r
+
+
+  cpu-jupyterlab-r-tensorflow-images:
+    name: CPU JL R TF
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-jupyterlab-r-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          base_jupyterlab_tensorflow115_cpu_r \
+          jupyterlab_tensorflow115_cpu_r \
+          base_jupyterlab_tensorflow23_cpu_r \
+          jupyterlab_tensorflow23_cpu_r
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+           jupyterlab_tensorflow115_cpu_r \
+           jupyterlab_tensorflow23_cpu_r
+
+
+  cpu-jupyterlab-r-torch17-images:
+    name: CPU JL R TO
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-jupyterlab-r-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          jupyterlab_torch17_cpu_r
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+           jupyterlab_torch17_cpu_r
+
+
+  cpu-visualcode-python-none-images:
+    name: CPU VC Python None
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-ydata-python-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          visualcode_ydata_none_cpu_python
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+           visualcode_ydata_none_cpu_python
+
+
+  cpu-visualcode-python-tensorflow-images:
+    name: CPU VC Python TF
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-visualcode-python-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          visualcode_ydata_tensorflow115_cpu_python \
+          visualcode_ydata_tensorflow23_cpu_python
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+           visualcode_ydata_tensorflow115_cpu_python \
+           visualcode_ydata_tensorflow23_cpu_python
+
+
+  cpu-visualcode-python-torch17-images:
+    name: CPU VC Python TO
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-visualcode-python-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          visualcode_ydata_torch17_cpu_python
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+           visualcode_ydata_torch17_cpu_python
+
+
+  cpu-visualcode-python-ydata-images:
+    name: CPU VC Python YD
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-visualcode-python-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes pypi requirements credentials
+      run: |
+        cd data-science/ydata/
+        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' requirements-ydata.txt
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          visualcode_ydata_cpu_python \
+          visualcode_ydata_cpu_python_nopip
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PRIVATE_REGISTRY }}
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GHCR_TOKEN }}
 
-    - name: YData image
-      run: make all IMAGE=data-science/ydata TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
-
-  jupyterlab-r-images-cpu:
-    name: JupyterLab R CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, base-r-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab R images
-      run: make all IMAGE=data-science/jupyterlab_r TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  jupyterlab-r-images-gpu:
-    name: JupyterLab R GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, base-r-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab R images CUDA 10.0
-      run: make all IMAGE=data-science/jupyterlab_r TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
-
-    - name: JupyterLab R images CUDA 10.1
-      run: make all IMAGE=data-science/jupyterlab_r TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
-
-  jupyterlab-r-tensorflow-115-images-cpu:
-    name: JupyterLab R Tensorflow 1.15 CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-r-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab R Tensorflow images
-      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  jupyterlab-r-tensorflow-115-images-gpu:
-    name: JupyterLab R Tensorflow 1.15 GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-r-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab R Tensorflow images
-      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
-
-  jupyterlab-r-tensorflow-23-images-cpu:
-    name: JupyterLab R Tensorflow CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-r-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab R Tensorflow images
-      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  jupyterlab-r-tensorflow-23-images-gpu:
-    name: JupyterLab R Tensorflow GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-r-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab R Tensorflow images
-      run: make all IMAGE=data-science/jupyterlab_r_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
-
-  jupyterlab-r-torch-images-cpu:
-    name: JupyterLab R Torch CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-r-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab R Torch images
-      run: make all IMAGE=data-science/jupyterlab_r_torch TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  jupyterlab-r-torch-images-gpu:
-    name: JupyterLab R Torch GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, jupyterlab-r-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: JupyterLab R Torch images
-      run: make all IMAGE=data-science/jupyterlab_r_torch TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
-
-  h2o-images-cpu:
-    name: H2O CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, base-python-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: H2O images
-      run: make all IMAGE=data-science/h2oflow TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  h2o-images-gpu:
-    name: H2O GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, base-python-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: H2O images
-      run: make all IMAGE=data-science/h2oflow TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
-
-  visualcode-images-cpu:
-    name: Visual Code CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, base-python-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Add authentication to requirements file
+    - name: Push images
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode/requirements-ydata.txt
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        docker-compose -f ${{ github.job }}.yaml push \
+          visualcode_ydata_cpu_python_nopip
 
-    - name: Visual Code images
-      run: make all IMAGE=data-science/visualcode TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
 
-  visualcode-images-gpu:
-    name: Visual Code GPU
+  cpu-h2oflow-images:
+    name: CPU H2O
     runs-on: ubuntu-20.04
 
-    needs: [prepare, base-python-images-gpu]
+    needs: [ prepare, cpu-base-images ]
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Add authentication to requirements file
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
       run: |
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode/requirements-ydata.txt
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
 
-    - name: Login to Docker Hub
-      uses:  docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        docker-compose -f ${{ github.job }}.yaml build \
+          h2oflow_cpu_python
 
-    - name: Visual Code images CUDA 10.0
-      run: make all IMAGE=data-science/visualcode TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
-
-    - name: Visual Code images CUDA 10.1
-      run: make all IMAGE=data-science/visualcode TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
-
-    - name: Visual Code images CUDA 11.0
-      run: make all IMAGE=data-science/visualcode TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
-
-  visualcode-tensorflow-115-images-cpu:
-    name: Visual Code Tensorflow 1.15 CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, visualcode-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
+    - name: Login to Docker Registry
       uses: docker/login-action@v1
       with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Visual Code Tensorflow 1.15 Bundles images
-      run: make all IMAGE=data-science/visualcode_tensorflow-1.15 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  visualcode-tensorflow-115-images-gpu:
-    name: Visual Code Tensorflow 1.15 GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, visualcode-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Visual Code Tensorflow 1.15 Bundles images
-      run: make all IMAGE=data-science/visualcode_tensorflow-1.15 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.0
-
-  visualcode-tensorflow-23-images-cpu:
-    name: Visual Code Tensorflow 2.3 CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, visualcode-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Visual Code Tensorflow 2.3 Bundles images
-      run: make all IMAGE=data-science/visualcode_tensorflow-2.3 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  visualcode-tensorflow-23-images-gpu:
-    name: Visual Code Tensorflow 2.3 GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, visualcode-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Visual Code Tensorflow 2.3 Bundles images
-      run: make all IMAGE=data-science/visualcode_tensorflow-2.3 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
-
-  visualcode-torch-images-cpu:
-    name: Visual Code Torch CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, visualcode-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Visual Code Torch Bundles images
-      run: make all IMAGE=data-science/visualcode_torch-1.7 TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
-
-  visualcode-torch-images-gpu:
-    name: Visual Code Torch GPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, visualcode-images-gpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Visual Code Torch Bundles images
-      run: make all IMAGE=data-science/visualcode_torch-1.7 TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=10.1
-
-  visualcode-ydata-image-cpu:
-    name: VisualCode YData CPU
-    runs-on: ubuntu-20.04
-
-    needs: [prepare, visualcode-images-cpu]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Add authentication to requirements file
+    - name: Push images
       run: |
-        sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/visualcode_ydata/requirements.txt
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
 
-    - name: Login to GitHub Container Registry
+        docker-compose -f ${{ github.job }}.yaml push \
+           h2oflow_cpu_python
+
+
+  cpu-pipelines-python-none-images:
+    name: CPU KFP Python None
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-ydata-python-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes pypi requirements credentials
+      run: |
+        cd data-science/python_ydata_base/
+        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' requirements-ydata.txt
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          pipelines_ydata_none_cpu_python
+
+    - name: Login to Docker Registry
       uses: docker/login-action@v1
       with:
-        registry: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+           pipelines_ydata_none_cpu_python
+
+
+  cpu-pipelines-python-tensorflow-images:
+    name: CPU KFP Python TF
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-ydata-python-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          pipelines_ydata_tensorflow115_cpu_python \
+          pipelines_ydata_tensorflow23_cpu_python
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          pipelines_ydata_tensorflow115_cpu_python \
+          pipelines_ydata_tensorflow23_cpu_python
+
+
+  cpu-pipelines-python-torch17-images:
+    name: CPU KFP Python TO
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-ydata-python-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          pipelines_ydata_torch17_cpu_python
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+           pipelines_ydata_torch17_cpu_python
+
+
+  cpu-pipelines-python-ydata-images:
+    name: CPU KFP Python YD
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-ydata-python-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes pypi requirements credentials
+      run: |
+        cd data-science/ydata/
+        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' requirements-ydata.txt
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          pipelines_ydata_cpu_python
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PRIVATE_REGISTRY }}
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GHCR_TOKEN }}
 
-    - name: VisualCode YData image
-      run: make all IMAGE=data-science/visualcode_ydata TYPE=cpu TAG=${{ needs.prepare.outputs.version }}
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
 
-  visualcode-ydata-image-gpu:
-    name: VisualCode YData GPU
+        docker-compose -f ${{ github.job }}.yaml push \
+          pipelines_ydata_cpu_python
+  ######    ENF OF CPU    ######
+
+
+
+  ######        GPU       ######
+  gpu-base-images:
+    name: GPU Base
     runs-on: ubuntu-20.04
 
-    needs: [prepare, visualcode-images-gpu]
+    needs: [ prepare ]
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Add authentication to requirements file
-      run: |
-        sed -i 's/https:\/\/github.com/https:\/\/${{ secrets.ACCESS_TOKEN }}:x-oauth-basic@github.com/g' data-science/visualcode_ydata/requirements.txt
-        sed -i 's/https:\/\/pypi.ydata.ai/https:\/\/${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai/g' data-science/visualcode_ydata/requirements.txt
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
 
-    - name: Login to GitHub Container Registry
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          base_gpu_python_cuda100 \
+          base_gpu_python_cuda101 \
+          base_gpu_python_cuda110 \
+          base_gpu_r_cuda100 \
+          base_gpu_r_cuda101 \
+          base_gpu_r_cuda110
+
+    - name: Login to Docker Registry
       uses: docker/login-action@v1
       with:
-        registry: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          base_gpu_python_cuda100 \
+          base_gpu_python_cuda101 \
+          base_gpu_python_cuda110 \
+          base_gpu_r_cuda100 \
+          base_gpu_r_cuda101 \
+          base_gpu_r_cuda110
+
+
+  gpu-ydata-python-base-images:
+    name: GPU YD Python Base
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes pypi requirements credentials
+      run: |
+        cd data-science/python_ydata_base/
+        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' requirements-ydata.txt
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          base_ydata_gpu_python_cuda100 \
+          base_ydata_gpu_python_cuda101 \
+          base_ydata_gpu_python_cuda110
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          base_ydata_gpu_python_cuda100 \
+          base_ydata_gpu_python_cuda101 \
+          base_ydata_gpu_python_cuda110
+
+
+  gpu-jupyterlab-python-none-images:
+    name: GPU JL Python None
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-ydata-python-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes elyra runtime images
+      run: |
+        cd data-science/jupyterlab_python/elyra-runtime-images/
+
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_tensorflow-1.15:${{ needs.prepare.outputs.version }}-cpu"' ydata_tensorflow_115-cpu.json`" > ydata_tensorflow_115-cpu.json
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_tensorflow-1.15:${{ needs.prepare.outputs.version }}-gpu"' ydata_tensorflow_115-gpu.json`" > ydata_tensorflow_115-gpu.json
+
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_tensorflow-2.3:${{ needs.prepare.outputs.version }}-cpu"'  ydata_tensorflow_23-cpu.json`"  > ydata_tensorflow_23-cpu.json
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_tensorflow-2.3:${{ needs.prepare.outputs.version }}-gpu"'  ydata_tensorflow_23-gpu.json`"  > ydata_tensorflow_23-gpu.json
+
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_torch-1.7:${{ needs.prepare.outputs.version }}-cpu"'       ydata_torch_17-cpu.json`"       > ydata_torch_17-cpu.json
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_torch-1.7:${{ needs.prepare.outputs.version }}-gpu"'       ydata_torch_17-gpu.json`"       > ydata_torch_17-gpu.json
+
+        echo "`jq '.metadata.image_name = "${{ env.PRIVATE_REGISTRY }}pipelines_ydata:${{ needs.prepare.outputs.version }}-cpu"'                 ydata-cpu.json`"                > ydata-cpu.json
+        echo "`jq '.metadata.image_name = "${{ env.PRIVATE_REGISTRY }}pipelines_ydata:${{ needs.prepare.outputs.version }}-gpu"'                 ydata-gpu.json`"                > ydata-gpu.json
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          jupyterlab_ydata_none_gpu_python_cuda100 \
+          jupyterlab_ydata_none_gpu_python_cuda101 \
+          jupyterlab_ydata_none_gpu_python_cuda110
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          jupyterlab_ydata_none_gpu_python_cuda100 \
+          jupyterlab_ydata_none_gpu_python_cuda101 \
+          jupyterlab_ydata_none_gpu_python_cuda110
+
+
+  gpu-jupyterlab-python-tensorflow-images:
+    name: GPU JL Python TF
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-jupyterlab-python-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          jupyterlab_ydata_tensorflow115_gpu_python_cuda100 \
+          jupyterlab_ydata_tensorflow23_gpu_python_cuda101
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          jupyterlab_ydata_tensorflow115_gpu_python_cuda100 \
+          jupyterlab_ydata_tensorflow23_gpu_python_cuda101
+
+
+  gpu-jupyterlab-python-torch17-images:
+    name: GPU JL Python TO
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-jupyterlab-python-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          jupyterlab_ydata_torch17_gpu_python_cuda101
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          jupyterlab_ydata_torch17_gpu_python_cuda101
+
+
+  gpu-jupyterlab-python-ydata-images:
+    name: GPU JL Python YD
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-jupyterlab-python-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes pypi requirements credentials
+      run: |
+        cd data-science/ydata/
+        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' requirements-ydata.txt
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          jupyterlab_ydata_gpu_python_cuda110 \
+          jupyterlab_ydata_gpu_python_cuda110_nopip
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PRIVATE_REGISTRY }}
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GHCR_TOKEN }}
 
-    - name: VisualCode YData image
-      run: make all IMAGE=data-science/visualcode_ydata TYPE=gpu TAG=${{ needs.prepare.outputs.version }} CUDA=11.0
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          jupyterlab_ydata_gpu_python_cuda110_nopip
+
+
+  gpu-jupyterlab-r-none-images:
+    name: GPU JL R None
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          jupyterlab_none_gpu_r_cuda100 \
+          jupyterlab_none_gpu_r_cuda101
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          jupyterlab_none_gpu_r_cuda100 \
+          jupyterlab_none_gpu_r_cuda101
+
+
+  gpu-jupyterlab-r-tensorflow-images:
+    name: GPU JL R TF
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-jupyterlab-r-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          base_jupyterlab_tensorflow115_gpu_r_cuda100 \
+          jupyterlab_tensorflow115_gpu_r \
+          base_jupyterlab_tensorflow23_gpu_r_cuda101 \
+          jupyterlab_tensorflow23_gpu_r
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          jupyterlab_tensorflow115_gpu_r \
+          jupyterlab_tensorflow23_gpu_r
+
+
+  gpu-jupyterlab-r-torch17-images:
+    name: GPU JL R TO
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-jupyterlab-r-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          jupyterlab_torch17_gpu_r_cuda101
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+           jupyterlab_torch17_gpu_r_cuda101
+
+
+  gpu-visualcode-python-none-images:
+    name: GPU VC Python None
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-ydata-python-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          visualcode_ydata_none_gpu_python_cuda100 \
+          visualcode_ydata_none_gpu_python_cuda101 \
+          visualcode_ydata_none_gpu_python_cuda110
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          visualcode_ydata_none_gpu_python_cuda100 \
+          visualcode_ydata_none_gpu_python_cuda101 \
+          visualcode_ydata_none_gpu_python_cuda110
+
+
+  gpu-visualcode-python-tensorflow-images:
+    name: GPU VC Python TF
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-visualcode-python-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          visualcode_ydata_tensorflow115_gpu_python_cuda100 \
+          visualcode_ydata_tensorflow23_gpu_python_cuda101
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          visualcode_ydata_tensorflow115_gpu_python_cuda100 \
+          visualcode_ydata_tensorflow23_gpu_python_cuda101
+
+
+  gpu-visualcode-python-torch17-images:
+    name: GPU VC Python TO
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-visualcode-python-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          visualcode_ydata_torch17_gpu_python_cuda101
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+           visualcode_ydata_torch17_gpu_python_cuda101
+
+
+  gpu-visualcode-python-ydata-images:
+    name: GPU VC Python YD
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-visualcode-python-none-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes pypi requirements credentials
+      run: |
+        cd data-science/ydata/
+        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' requirements-ydata.txt
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          visualcode_ydata_gpu_python_cuda110 \
+          visualcode_ydata_gpu_python_cuda110_nopip
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PRIVATE_REGISTRY }}
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GHCR_TOKEN }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          visualcode_ydata_gpu_python_cuda110_nopip
+
+
+  gpu-h2oflow-images:
+    name: GPU H2O
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          h2oflow_gpu_python_cuda100
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+           h2oflow_gpu_python_cuda100
+
+
+  gpu-pipelines-python-none-images:
+    name: GPU KFP Python None
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-ydata-python-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes pypi requirements credentials
+      run: |
+        cd data-science/python_ydata_base/
+        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' requirements-ydata.txt
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          pipelines_ydata_none_gpu_python_cuda100 \
+          pipelines_ydata_none_gpu_python_cuda101 \
+          pipelines_ydata_none_gpu_python_cuda110
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          pipelines_ydata_none_gpu_python_cuda100 \
+          pipelines_ydata_none_gpu_python_cuda101 \
+          pipelines_ydata_none_gpu_python_cuda110
+
+
+  gpu-pipelines-python-tensorflow-images:
+    name: GPU KFP Python TF
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-ydata-python-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          pipelines_ydata_tensorflow115_gpu_python_cuda100 \
+          pipelines_ydata_tensorflow23_gpu_python_cuda101
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          pipelines_ydata_tensorflow115_gpu_python_cuda100 \
+          pipelines_ydata_tensorflow23_gpu_python_cuda101
+
+
+  gpu-pipelines-python-torch17-images:
+    name: GPU KFP Python TO
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-ydata-python-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          pipelines_ydata_torch17_gpu_python_cuda101
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+           pipelines_ydata_torch17_gpu_python_cuda101
+
+
+  gpu-pipelines-python-ydata-images:
+    name: GPU KFP Python YD
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, gpu-ydata-python-base-images ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes pypi requirements credentials
+      run: |
+        cd data-science/ydata/
+        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' requirements-ydata.txt
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          pipelines_ydata_gpu_python_cuda110
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PRIVATE_REGISTRY }}
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GHCR_TOKEN }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          pipelines_ydata_gpu_python_cuda110
+  ######    ENF OF GPU    ######
 
 
   update-manifests:
     name: Update Manifests
     runs-on: ubuntu-20.04
 
-    needs: [prepare,
-            jupyterlab-python-tensorflow-115-images-cpu,
-            jupyterlab-python-tensorflow-115-images-gpu,
-            jupyterlab-python-tensorflow-23-images-cpu,
-            jupyterlab-python-tensorflow-23-images-gpu,
-            jupyterlab-python-torch-images-cpu,
-            jupyterlab-python-torch-images-gpu,
-            jupyterlab-python-ydata-image-cpu,
-            jupyterlab-python-ydata-image-gpu,
-            jupyterlab-r-tensorflow-115-images-cpu,
-            jupyterlab-r-tensorflow-115-images-gpu,
-            jupyterlab-r-tensorflow-23-images-cpu,
-            jupyterlab-r-tensorflow-23-images-gpu,
-            jupyterlab-r-torch-images-cpu,
-            jupyterlab-r-torch-images-gpu,
-            h2o-images-cpu,
-            h2o-images-gpu,
-            visualcode-tensorflow-115-images-cpu,
-            visualcode-tensorflow-115-images-gpu,
-            visualcode-tensorflow-23-images-gpu,
-            visualcode-tensorflow-23-images-cpu,
-            visualcode-torch-images-cpu,
-            visualcode-torch-images-gpu,
-            visualcode-ydata-image-cpu,
-            visualcode-ydata-image-gpu]
+    needs: [ prepare,
+             ## CPU
+             cpu-base-images,
+             cpu-ydata-python-base-images,
+             cpu-jupyterlab-python-none-images,
+             cpu-jupyterlab-python-tensorflow-images,
+             cpu-jupyterlab-python-torch17-images,
+             cpu-jupyterlab-python-ydata-images,
+             cpu-jupyterlab-r-none-images,
+             cpu-jupyterlab-r-tensorflow-images,
+             cpu-jupyterlab-r-torch17-images,
+             cpu-visualcode-python-none-images,
+             cpu-visualcode-python-tensorflow-images,
+             cpu-visualcode-python-torch17-images,
+             cpu-visualcode-python-ydata-images,
+             cpu-h2oflow-images,
+             cpu-pipelines-python-none-images,
+             cpu-pipelines-python-tensorflow-images,
+             cpu-pipelines-python-torch17-images,
+             cpu-pipelines-python-ydata-images,
+             ## GPU
+             gpu-base-images,
+             gpu-ydata-python-base-images,
+             gpu-jupyterlab-python-none-images,
+             gpu-jupyterlab-python-tensorflow-images,
+             gpu-jupyterlab-python-torch17-images,
+             gpu-jupyterlab-python-ydata-images,
+             gpu-jupyterlab-r-none-images,
+             gpu-jupyterlab-r-tensorflow-images,
+             gpu-jupyterlab-r-torch17-images,
+             gpu-visualcode-python-none-images,
+             gpu-visualcode-python-tensorflow-images,
+             gpu-visualcode-python-torch17-images,
+             gpu-visualcode-python-ydata-images,
+             gpu-h2oflow-images,
+             gpu-pipelines-python-none-images,
+             gpu-pipelines-python-tensorflow-images,
+             gpu-pipelines-python-torch17-images,
+             gpu-pipelines-python-ydata-images]
 
     steps:
     - name: Mount laboratories images tag version
-      env:
-        VERSION: ${{ needs.prepare.outputs.version }}
       id: replace
       uses: frabert/replace-string-action@v1.2
       with:
         pattern: VERSION
         flags: g
         string: 'jupyterlab_r-cpu:VERSION,jupyterlab_python-cpu:VERSION,jupyterlab_r-gpu:VERSION,jupyterlab_python-gpu:VERSION,ydata-cpu:VERSION,ydata-gpu:VERSION,h2oflow-cpu:VERSION,h2oflow-gpu:VERSION,tensorflow-1.15-cpu:VERSION,tensorflow-1.15-gpu:VERSION,tensorflow-2.3-cpu:VERSION,tensorflow-2.3-gpu:VERSION,torch-1.7-cpu:VERSION,torch-1.7-gpu:VERSION,visualcode-cpu:VERSION,visualcode-gpu:VERSION'
-        replace-with: ${{ env.VERSION }}
+        replace-with: ${{ needs.prepare.outputs.version }}
 
     - name: Checkout Manifests repo
       uses: actions/checkout@v2
@@ -750,7 +1588,7 @@ jobs:
 
     - name: Update params.env with laboratories image tag
       run: |
-        cd ydata/${COMPONENT}
+        cd ydata/laboratory-controller/base
         sed -i -r 's/\laboratoriesImageTag=(.*)/laboratoriesImageTag=${{steps.replace.outputs.replaced}}/g' params.env
 
     - name: Commit and push image update into manifests repo

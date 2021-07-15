@@ -1,2 +1,0 @@
-conda-forge::python-blosc==1.9.2
-conda-forge::lz4==3.1.1

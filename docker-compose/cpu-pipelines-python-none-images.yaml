@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  #### Pipelines YData CPU None Python Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_python
+
+  ### [PUSH] [PIPELINE] Pipelines YData CPU None Python Image
+  pipelines_ydata_none_cpu_python:
+    extends:
+        file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
+        service: base_ydata_cpu_python
+    image: ${PUBLIC_REGISTRY}pipelines_python_ydata:${TAG}-cpu

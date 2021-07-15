@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  #### Jupyerlab YData CPU Python Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_cpu_python
+
+  ### JupyterLab YData CPU None Python Image
+  jupyterlab_ydata_none_cpu_python:
+     extends:
+         file: ${CPU_JUPYTERLAB_PYTHON_NONE_IMAGES}
+         service: jupyterlab_ydata_none_cpu_python
+
+  ### JupyterLab YData CPU Python Image
+  jupyterlab_ydata_cpu_python:
+    image: jupyterlab_ydata_cpu_python:${TAG}
+    build:
+      context: ../data-science/ydata/
+      args:
+         FROM: ${PUBLIC_REGISTRY}jupyterlab_python
+         TAG: ${TAG}-cpu
+
+  ### [PUSH] [LAB] JupyterLab YData CPU Python Image - NOPIP
+  jupyterlab_ydata_cpu_python_nopip:
+    image: ${PRIVATE_REGISTRY}ydata:${TAG}-cpu
+    build:
+      context: ../data-science/ydata-nopip/
+      args:
+         FROM: jupyterlab_ydata_cpu_python
+         TAG: ${TAG}
