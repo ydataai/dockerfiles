@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  #### JupyterLab GPU R Images
+  ### CUDA 10.0
+  ## Base GPU R CUDA 10.0 Image
+  base_gpu_r_cuda100:
+     extends:
+         file: ${GPU_BASE_IMAGES}
+         service: base_gpu_r_cuda100
+
+  ## [PUSH] JupyterLab GPU None R CUDA 10.0 Image
+  jupyterlab_none_gpu_r_cuda100:
+    image: ${PUBLIC_REGISTRY}jupyterlab_r:${TAG}-gpu-cuda10.0
+    build:
+      context: ../data-science/jupyterlab_r/
+      dockerfile: Dockerfile.gpu
+      args:
+         FROM: ${PUBLIC_REGISTRY}base_gpu_r_cuda100
+         TAG: ${TAG}
+
+
+  ### CUDA 10.1
+  ## Base GPU R CUDA 10.1 Image
+  base_gpu_r_cuda101:
+     extends:
+         file: ${GPU_BASE_IMAGES}
+         service: base_gpu_r_cuda101
+
+  ## [PUSH] JupyterLab GPU None R CUDA 10.1 Image
+  jupyterlab_none_gpu_r_cuda101:
+    image: ${PUBLIC_REGISTRY}jupyterlab_r:${TAG}-gpu-cuda10.1
+    build:
+      context: ../data-science/jupyterlab_r/
+      dockerfile: Dockerfile.gpu
+      args:
+         FROM: ${PUBLIC_REGISTRY}base_gpu_r_cuda101
+         TAG: ${TAG}

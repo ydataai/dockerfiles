@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  #### Jupyerlab Torch 1.7 GPU R CUDA 10.1 Images
+  ### Base GPU R CUDA 10.1 Image
+  base_gpu_r_cuda101:
+     extends:
+         file: ${GPU_BASE_IMAGES}
+         service: base_gpu_r_cuda101
+
+  ## JupyterLab GPU None R CUDA 10.1 Image
+  jupyterlab_none_gpu_r_cuda101:
+     extends:
+         file: ${GPU_JUPYTERLAB_R_NONE_IMAGES}
+         service: jupyterlab_none_gpu_r_cuda101
+
+  ### [PUSH] JupyterLab Torch 1.7 GPU R CUDA 10.1 Image
+  jupyterlab_torch17_gpu_r_cuda101:
+    image: ${PUBLIC_REGISTRY}jupyterlab_r_torch-1.7:${TAG}-gpu
+    build:
+      context: ../data-science/jupyterlab_r_torch/
+      args:
+         FROM: ${PUBLIC_REGISTRY}jupyterlab_r
+         TAG: ${TAG}-gpu-cuda10.1
+         # (valid values are 'cpu' or the 'CUDA' version)
+         TYPE: 10.1

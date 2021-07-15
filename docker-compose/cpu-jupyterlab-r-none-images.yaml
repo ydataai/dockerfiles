@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  #### JupyterLab None R CPU Images
+  ### Base CPU R Image
+  base_cpu_r:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_r
+
+  ## [PUSH] JupyterLab YData CPU None R Image
+  jupyterlab_none_cpu_r:
+    image: ${PUBLIC_REGISTRY}jupyterlab_r:${TAG}-cpu
+    build:
+      context: ../data-science/jupyterlab_r/
+      dockerfile: Dockerfile.cpu
+      args:
+         FROM: ${PUBLIC_REGISTRY}base_cpu_r
+         TAG: ${TAG}

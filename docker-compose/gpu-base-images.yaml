@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  ##### Base GPU Images
+  #### Base GPU Python Images
+  ### CUDA 10.0
+  ## [PUSH] Base GPU Python CUDA 10.0 Image
+  base_gpu_python_cuda100:
+    image: ${PUBLIC_REGISTRY}base_gpu_python_cuda100:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: ${PUBLIC_REGISTRY}nvidia-cuda
+         TAG: 10.0-ubuntu18.04
+         PACKAGES_FILE: python_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+
+  ### CUDA 10.1
+  ## [PUSH] Base GPU Python CUDA 10.1 Image
+  base_gpu_python_cuda101:
+    image: ${PUBLIC_REGISTRY}base_gpu_python_cuda101:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: ${PUBLIC_REGISTRY}nvidia-cuda
+         TAG: 10.1-ubuntu18.04
+         PACKAGES_FILE: python_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+
+  ### CUDA 11.0
+  ## [PUSH] Base GPU Python CUDA 11.0 Image
+  base_gpu_python_cuda110:
+    image: ${PUBLIC_REGISTRY}base_gpu_python_cuda110:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: ${PUBLIC_REGISTRY}nvidia-cuda
+         TAG: 11.0-ubuntu18.04
+         PACKAGES_FILE: python_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+
+
+  #### Base GPU R Images
+  ### CUDA 10.0
+  ## [PUSH] Base GPU R CUDA 10.0 Image
+  base_gpu_r_cuda100:
+    image: ${PUBLIC_REGISTRY}base_gpu_r_cuda100:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: ${PUBLIC_REGISTRY}nvidia-cuda
+         TAG: 10.0-ubuntu18.04
+         PACKAGES_FILE: r_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+
+  ### CUDA 10.1
+  ## [PUSH] Base GPU R CUDA 10.1 Image
+  base_gpu_r_cuda101:
+    image: ${PUBLIC_REGISTRY}base_gpu_r_cuda101:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: ${PUBLIC_REGISTRY}nvidia-cuda
+         TAG: 10.1-ubuntu18.04
+         PACKAGES_FILE: r_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}
+
+
+  ### CUDA 11.0
+  ## [PUSH] Base GPU R CUDA 11.0 Image
+  base_gpu_r_cuda110:
+    image: ${PUBLIC_REGISTRY}base_gpu_r_cuda110:${TAG}
+    build:
+      context: ../data-science/base/
+      args:
+         FROM: ${PUBLIC_REGISTRY}nvidia-cuda
+         TAG: 11.0-ubuntu18.04
+         PACKAGES_FILE: r_packages.txt
+         MINICONDA_IMAGE: ${MINICONDA_IMAGE}
+         MINICONDA_IMAGE_HASH: ${MINICONDA_IMAGE_HASH}

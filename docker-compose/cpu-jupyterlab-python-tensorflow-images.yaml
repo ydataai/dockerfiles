@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  ##### Tensorflow 1.15
+  #### Jupyerlab YData Tensorflow 1.15 CPU Python Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_cpu_python
+
+  ### JupyterLab YData CPU None Python Image
+  jupyterlab_ydata_none_cpu_python:
+     extends:
+         file: ${CPU_JUPYTERLAB_PYTHON_NONE_IMAGES}
+         service: jupyterlab_ydata_none_cpu_python
+
+  ### [PUSH] JupyterLab YData Tensorflow 1.15 CPU Python Image
+  jupyterlab_ydata_tensorflow115_cpu_python:
+    image: ${PUBLIC_REGISTRY}jupyterlab_python_tensorflow-1.15:${TAG}-cpu
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: ${PUBLIC_REGISTRY}jupyterlab_python
+         TAG: ${TAG}-cpu
+         TYPE: cpu
+         VERSION: 1.15
+
+
+
+  ##### Tensorflow 2.3
+  #### Jupyerlab YData Tensorflow 2.3 CPU Python Images
+  ### Base CPU Python Image
+  base_cpu_python:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_python
+
+  ### Base YData CPU Python Image
+  base_ydata_cpu_python:
+     extends:
+         file: ${CPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_cpu_python
+
+  ### JupyterLab YData CPU None Python Image
+  jupyterlab_ydata_none_cpu_python:
+     extends:
+         file: ${CPU_JUPYTERLAB_PYTHON_NONE_IMAGES}
+         service: jupyterlab_ydata_none_cpu_python
+
+  ### [PUSH] JupyterLab YData Tensorflow 2.3 CPU Python Image
+  jupyterlab_ydata_tensorflow23_cpu_python:
+    image: ${PUBLIC_REGISTRY}jupyterlab_python_tensorflow-2.3:${TAG}-cpu
+    build:
+      context: ../data-science/tensorflow/
+      args:
+         FROM: ${PUBLIC_REGISTRY}jupyterlab_python
+         TAG: ${TAG}-cpu
+         TYPE: cpu
+         VERSION: 2.3

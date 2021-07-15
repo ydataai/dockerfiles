@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  #### Pipelines YData GPU Python Images
+  ### Base GPU Python CUDA 11.0 Image
+  base_gpu_python_cuda110:
+     extends:
+         file: ${GPU_BASE_IMAGES}
+         service: base_gpu_python_cuda110
+
+  ### Base YData GPU Python CUDA 11.0 Image
+  base_ydata_gpu_python_cuda110:
+     extends:
+         file: ${GPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_gpu_python_cuda110
+
+  ### [PUSH] Pipelines YData GPU Python CUDA 11.0 Image
+  pipelines_ydata_gpu_python_cuda110:
+    image: ${PRIVATE_REGISTRY}pipelines_ydata:${TAG}-gpu
+    build:
+      context: ../data-science/ydata/
+      args:
+         FROM: ${PUBLIC_REGISTRY}base_ydata_gpu_python_cuda110
+         TAG: ${TAG}

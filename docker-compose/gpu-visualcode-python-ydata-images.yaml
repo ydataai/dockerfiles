@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  #### VisualCode YData GPU Python Images
+  ### Base GPU Python CUDA 11.0 Image
+  base_gpu_python_cuda110:
+     extends:
+         file: ${GPU_BASE_IMAGES}
+         service: base_gpu_python_cuda110
+
+  ### Base YData GPU Python CUDA 11.0 Image
+  base_ydata_gpu_python_cuda110:
+     extends:
+         file: ${GPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_gpu_python_cuda110
+
+  ## VisualCode YData GPU None Python CUDA 11.0 Image
+  visualcode_ydata_none_gpu_python_cuda110:
+     extends:
+         file: ${CPU_VISUALCODE_PYTHON_NONE_IMAGES}
+         service: visualcode_ydata_none_gpu_python_cuda110
+
+  ### VisualCode YData GPU Python CUDA 11.0 Image
+  visualcode_ydata_gpu_python_cuda110:
+    image: visualcode_ydata_gpu_python_cuda110:${TAG}
+    build:
+      context: ../data-science/ydata/
+      args:
+         FROM: ${PUBLIC_REGISTRY}visualcode
+         TAG: ${TAG}-gpu-cuda11.0
+
+  ### [PUSH] VisualCode YData GPU Python CUDA 11.0 Image - NOPIP
+  visualcode_ydata_gpu_python_cuda110_nopip:
+    image: ${PRIVATE_REGISTRY}visualcode_ydata:${TAG}-gpu
+    build:
+      context: ../data-science/ydata-nopip/
+      args:
+         FROM: visualcode_ydata_gpu_python_cuda110
+         TAG: ${TAG}

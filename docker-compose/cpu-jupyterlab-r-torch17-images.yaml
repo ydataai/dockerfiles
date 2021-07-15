@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  #### Jupyerlab Torch 1.7 CPU R Images
+  ### Base CPU R Image
+  base_cpu_r:
+     extends:
+         file: ${CPU_BASE_IMAGES}
+         service: base_cpu_r
+
+  ## JupyterLab CPU None R Image
+  jupyterlab_none_cpu_r:
+     extends:
+         file: ${CPU_JUPYTERLAB_R_NONE_IMAGES}
+         service: jupyterlab_none_cpu_r
+
+  ### JupyterLab Torch 1.7 CPU R Image
+  jupyterlab_torch17_cpu_r:
+    image: ${PUBLIC_REGISTRY}jupyterlab_r_torch-1.7:${TAG}-cpu
+    build:
+      context: ../data-science/jupyterlab_r_torch/
+      args:
+         FROM: ${PUBLIC_REGISTRY}jupyterlab_r
+         TAG: ${TAG}-cpu
+         TYPE: cpu

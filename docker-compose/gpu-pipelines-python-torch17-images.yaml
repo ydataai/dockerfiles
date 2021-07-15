@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  #### Pipelines YData Torch 1.7 GPU Python CUDA 10.1 Images
+  ### Base GPU Python CUDA 10.1 Image
+  base_gpu_python_cuda101:
+     extends:
+         file: ${GPU_BASE_IMAGES}
+         service: base_gpu_python_cuda101
+
+  ### Base YData GPU Python CUDA 10.1 Image
+  base_ydata_gpu_python_cuda101:
+     extends:
+         file: ${GPU_YDATA_PYTHON_BASE_IMAGES}
+         service: base_ydata_gpu_python_cuda101
+
+  ### [PUSH] Pipelines YData Torch 1.7 GPU Python CUDA 10.1 Image
+  pipelines_ydata_torch17_gpu_python_cuda101:
+    image: ${PUBLIC_REGISTRY}pipelines_python_torch-1.7:${TAG}-gpu
+    build:
+      context: ../data-science/torch-1.7/
+      args:
+         FROM: ${PUBLIC_REGISTRY}base_ydata_gpu_python_cuda101
+         TAG: ${TAG}
+         TYPE: gpu
