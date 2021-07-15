@@ -10,7 +10,7 @@ services:
     build:
       context: ../data-science/base/
       args:
-         FROM: ${PUBLIC_REGISTRY}nvidia-cuda
+         FROM: docker.io/ydata/nvidia-cuda
          TAG: 10.0-ubuntu18.04
          PACKAGES_FILE: python_packages.txt
          MINICONDA_IMAGE: ${MINICONDA_IMAGE}
@@ -24,7 +24,7 @@ services:
     build:
       context: ../data-science/base/
       args:
-         FROM: ${PUBLIC_REGISTRY}nvidia-cuda
+         FROM: docker.io/ydata/nvidia-cuda
          TAG: 10.1-ubuntu18.04
          PACKAGES_FILE: python_packages.txt
          MINICONDA_IMAGE: ${MINICONDA_IMAGE}
@@ -38,7 +38,7 @@ services:
     build:
       context: ../data-science/base/
       args:
-         FROM: ${PUBLIC_REGISTRY}nvidia-cuda
+         FROM: docker.io/ydata/nvidia-cuda
          TAG: 11.0-ubuntu18.04
          PACKAGES_FILE: python_packages.txt
          MINICONDA_IMAGE: ${MINICONDA_IMAGE}
