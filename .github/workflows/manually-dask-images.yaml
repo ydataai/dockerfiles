@@ -1,0 +1,140 @@
+name: Manually [dask]
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      DASK_VERSION:
+        required: true
+        description: DASK_VERSION - check available version on /dask folder
+      IMAGE_TAG:
+        description: IMAGE_TAG
+        required: true
+
+
+env:
+  PUBLIC_REGISTRY: docker.io/ydata/
+  PRIVATE_REGISTRY: ${{ secrets.PRIVATE_CONTAINER_REGISTRY }}/${{ github.repository_owner }}/
+  DOCKER_COMPOSE_FOLDER: docker-compose
+
+
+jobs:
+  cancel_previous:
+    name: 'Cancel Previous Runs'
+    runs-on: ubuntu-20.04
+    timeout-minutes: 3
+    steps:
+      - uses: ydataai/cancel-workflow-action@0.7.0-fix
+        with:
+          ignore_sha: true
+          access_token: ${{ secrets.ACCESS_TOKEN }}
+
+
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Replace docker-compose .env variables
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        sed -i -r 's|\TAG=(.*)|TAG=${{ github.event.inputs.DASK_VERSION }}-${{ github.event.inputs.IMAGE_TAG }}|g'                     .env
+        sed -i -r 's|\PUBLIC_REGISTRY=(.*)|PUBLIC_REGISTRY=${{ env.PUBLIC_REGISTRY }}|g'     .env
+        sed -i -r 's|\PRIVATE_REGISTRY=(.*)|PRIVATE_REGISTRY=${{ env.PRIVATE_REGISTRY }}|g'  .env
+
+    - name: Upload docker-compose .env file
+      uses: actions/upload-artifact@v2.2.4
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/.env
+
+
+  cpu-dask-images:
+    name: Dask
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and replace .env file
+      uses: actions/download-artifact@v2.0.10
+      with:
+        name: env-file
+        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+    - name: Changes pypi requirements credentials
+      run: |
+        cd dask/${{ github.event.inputs.DASK_VERSION }}
+        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' gateway/requirements-ydata.txt
+        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' worker/requirements-ydata.txt
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          dask_worker_${{ github.event.inputs.DASK_VERSION }} \
+          dask_gateway_ydata_${{ github.event.inputs.DASK_VERSION }}
+
+    # Push dask gateway to private registry
+    - name: Login to Private Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PRIVATE_REGISTRY }}
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GHCR_TOKEN }}
+
+    - name: Push dask gateway to Private Docker Registry
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          dask_gateway_ydata_${{ github.event.inputs.DASK_VERSION }}
+
+    # Push dask worker to public registry
+    - name: Login to Public Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push dask worker to Public Docker Registry
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          dask_worker_${{ github.event.inputs.DASK_VERSION }}
+
+
+  update-manifests:
+    name: Update Manifests
+    runs-on: ubuntu-20.04
+
+    needs: [ prepare, cpu-dask-images ]
+
+    steps:
+    - name: Checkout Manifests repo
+      uses: actions/checkout@v2
+      with:
+        repository: ydataai/manifests
+        token: ${{ secrets.ACCESS_TOKEN }}
+
+    - name: Update params.env with dask-gateway-worker tag
+      run: |
+        cd ydata/dask-gateway/base
+        sed -i -r 's/\worker_tag=(.*)/worker_tag=${{ github.event.inputs.DASK_VERSION }}-${{ github.event.inputs.IMAGE_TAG }}/g' params.env
+
+    - name: Commit and push image update into manifests repo
+      env:
+        VERSION: ${{ github.event.inputs.DASK_VERSION }}-${{ github.event.inputs.IMAGE_TAG }}
+      run: |
+        git config user.email "azory@ydata.ai"
+        git config user.name "Azory YData Bot"
+        git commit -a -m "chore(bump): [CI] [DEV] bump dask-gateway-worker image tag to $VERSION"
+        git push origin master

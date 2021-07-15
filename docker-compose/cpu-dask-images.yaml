@@ -3,21 +3,21 @@ version: '3.8'
 services:
   ##### Dask Workers
   #### Dask Worker 2021.6.0
-  dask_worker_202160:
-    image: ${PUBLIC_REGISTRY}dask_worker_202160:${TAG}
+  dask_worker_2021.06.0:
+    image: ${PUBLIC_REGISTRY}dask-worker:${TAG}
     build:
-      context: ../dask/worker/
+      context: ../dask/2021.06.0/worker/
       args:
          FROM: daskdev/dask
          TAG: 2021.6.0
 
 
   ##### Dask Gateway
-  #### Dask Gateway 2021.06.0
-  dask_gateway_2021060:
-    image: ${PUBLIC_REGISTRY}dask-gateway-worker:${TAG}
+  #### Dask Gateway Ydata 2021.06.0
+  dask_gateway_ydata_2021.06.0:
+    image: ${PRIVATE_REGISTRY}dask-gateway-worker:${TAG}
     build:
-      context: ../dask/gateway/
+      context: ../dask/2021.06.0/gateway/
       args:
          FROM: debian
          TAG: buster-slim

@@ -33,8 +33,8 @@ docker.io/ydata/pipelines_python_tensorflow-2.3:${TAG}-cpu
 docker.io/ydata/pipelines_python_torch-1.7:${TAG}-cpu
 
 ## OTHERS
-docker.io/ydata/dask-worker:2021.06.0-1.0.0
-docker.io/ydata/node:10-alpine-glibc
+docker.io/ydata/dask-worker:2021.06.0-1.1.1
+docker.io/ydata/node_image:1.0.0
 
 ## BASE (base for above images)
 docker.io/ydata/base_cpu_python:${TAG}

@@ -1,0 +1,57 @@
+name: Manually [nvidia-cuda]
+
+
+on:
+  workflow_dispatch
+
+
+env:
+  PUBLIC_REGISTRY: docker.io/ydata/
+  DOCKER_COMPOSE_FOLDER: docker-compose
+
+
+jobs:
+  cancel_previous:
+    name: 'Cancel Previous Runs'
+    runs-on: ubuntu-20.04
+    timeout-minutes: 3
+    steps:
+      - uses: ydataai/cancel-workflow-action@0.7.0-fix
+        with:
+          ignore_sha: true
+          access_token: ${{ secrets.ACCESS_TOKEN }}
+
+
+  gpu-nvidia-cuda-base-images:
+    name: Nvidia CUDA
+    runs-on: ubuntu-20.04
+
+    needs: [ cancel_previous ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml build \
+          base_gpu_nvidia_cuda_100 \
+          base_gpu_nvidia_cuda_101 \
+          base_gpu_nvidia_cuda_110
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.PUBLIC_REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push images
+      run: |
+        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
+
+        docker-compose -f ${{ github.job }}.yaml push \
+          base_gpu_nvidia_cuda_100 \
+          base_gpu_nvidia_cuda_101 \
+          base_gpu_nvidia_cuda_110
