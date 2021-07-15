@@ -27,5 +27,5 @@ services:
       context: ../data-science/torch-1.7/
       args:
          FROM: ${PUBLIC_REGISTRY}visualcode
-         TAG: ${TAG}
-         TYPE: ${TAG}-gpu-cuda10.1
+         TAG: ${TAG}-gpu-cuda10.1
+         TYPE: gpu

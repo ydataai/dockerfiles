@@ -365,7 +365,7 @@ jobs:
 
         docker-compose -f ${{ github.job }}.yaml build \
           base_jupyterlab_tensorflow115_cpu_r \
-          jupyterlab_tensorflow115_cpu_r
+          jupyterlab_tensorflow115_cpu_r \
           base_jupyterlab_tensorflow23_cpu_r \
           jupyterlab_tensorflow23_cpu_r
 

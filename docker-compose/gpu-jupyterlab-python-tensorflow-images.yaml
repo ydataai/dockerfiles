@@ -56,7 +56,7 @@ services:
 
   ### [PUSH] [LAB] JupyterLab YData Tensorflow 2.3 GPU Python CUDA 10.1 Image
   jupyterlab_ydata_tensorflow23_gpu_python_cuda101:
-    image: jupyterlab_python_tensorflow-2.3:${TAG}-gpu
+    image: ${PUBLIC_REGISTRY}jupyterlab_python_tensorflow-2.3:${TAG}-gpu
     build:
       context: ../data-science/tensorflow/
       args:

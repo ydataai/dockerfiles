@@ -56,11 +56,11 @@ services:
 
   ### [PUSH] [LAB] VisualCode YData Tensorflow 2.3 GPU Python CUDA 10.1 Image
   visualcode_ydata_tensorflow23_gpu_python_cuda101:
-    image: visualcode_tensorflow-2.3:${TAG}-gpu
+    image: ${PUBLIC_REGISTRY}visualcode_tensorflow-2.3:${TAG}-gpu
     build:
       context: ../data-science/tensorflow/
       args:
-         FROM: visualcode
+         FROM: ${PUBLIC_REGISTRY}visualcode
          TAG: ${TAG}-gpu-cuda10.1
          TYPE: gpu
          VERSION: 2.3
