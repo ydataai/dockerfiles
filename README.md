@@ -141,5 +141,3 @@ With ❤️ &nbsp;from [YData](https://ydata.ai)
 [Development team](mailto://developers@ydata.ai)
 
 Find our available positions at: [YData | AngelList Talent](https://angel.co/company/ydata)
-
-
