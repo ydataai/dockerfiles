@@ -366,6 +366,8 @@ jobs:
         docker-compose -f ${{ github.job }}.yaml build \
           base_jupyterlab_tensorflow115_cpu_r \
           jupyterlab_tensorflow115_cpu_r
+          base_jupyterlab_tensorflow23_cpu_r \
+          jupyterlab_tensorflow23_cpu_r
 
     - name: Login to Docker Registry
       uses: docker/login-action@v1
@@ -379,7 +381,8 @@ jobs:
         cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
 
         docker-compose -f ${{ github.job }}.yaml push \
-           jupyterlab_tensorflow115_cpu_r
+           jupyterlab_tensorflow115_cpu_r \
+           jupyterlab_tensorflow23_cpu_r
 
 
   cpu-jupyterlab-r-torch17-images:
