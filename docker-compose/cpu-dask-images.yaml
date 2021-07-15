@@ -4,7 +4,7 @@ services:
   ##### Dask Workers
   #### Dask Worker 2021.6.0
   dask_worker_202160:
-    image: dask_worker_202160:${TAG}
+    image: ${PUBLIC_REGISTRY}dask_worker_202160:${TAG}
     build:
       context: ../dask/worker/
       args:
@@ -15,7 +15,7 @@ services:
   ##### Dask Gateway
   #### Dask Gateway 2021.06.0
   dask_gateway_2021060:
-    image: dask-gateway-worker:${TAG}
+    image: ${PUBLIC_REGISTRY}dask-gateway-worker:${TAG}
     build:
       context: ../dask/gateway/
       args:
