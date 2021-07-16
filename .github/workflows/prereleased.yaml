@@ -163,6 +163,8 @@ jobs:
         echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_torch-1.7:${{ needs.prepare.outputs.version }}-cpu"'       ydata_torch_17-cpu.json`"       > ydata_torch_17-cpu.json
         echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_torch-1.7:${{ needs.prepare.outputs.version }}-gpu"'       ydata_torch_17-gpu.json`"       > ydata_torch_17-gpu.json
 
+        echo "`jq '.metadata.image_name = "${{ env.PUBLIC_REGISTRY }}pipelines_python_ydata:${{ needs.prepare.outputs.version }}-cpu"'           ydata_none-cpu.json`"           > ydata_none-cpu.json
+
         echo "`jq '.metadata.image_name = "${{ env.PRIVATE_REGISTRY }}pipelines_ydata:${{ needs.prepare.outputs.version }}-cpu"'                 ydata-cpu.json`"                > ydata-cpu.json
         echo "`jq '.metadata.image_name = "${{ env.PRIVATE_REGISTRY }}pipelines_ydata:${{ needs.prepare.outputs.version }}-gpu"'                 ydata-gpu.json`"                > ydata-gpu.json
 
@@ -1361,52 +1363,6 @@ jobs:
            h2oflow_gpu_python_cuda100
 
 
-  gpu-pipelines-python-none-images:
-    name: GPU KFP Python None
-    runs-on: ubuntu-20.04
-
-    needs: [ prepare, gpu-ydata-python-base-images ]
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Download and replace .env file
-      uses: actions/download-artifact@v2.0.10
-      with:
-        name: env-file
-        path: ${{ env.DOCKER_COMPOSE_FOLDER }}/
-
-    - name: Changes pypi requirements credentials
-      run: |
-        cd data-science/python_ydata_base/
-        sed -i -r 's|\https://pypi.ydata.ai|https://${{ secrets.PRIVATE_PYPI_USERNAME }}:${{ secrets.PRIVATE_PYPI_PASSWORD }}@pypi.ydata.ai|g' requirements-ydata.txt
-
-    - name: Build images
-      run: |
-        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
-
-        docker-compose -f ${{ github.job }}.yaml build \
-          pipelines_ydata_none_gpu_python_cuda100 \
-          pipelines_ydata_none_gpu_python_cuda101 \
-          pipelines_ydata_none_gpu_python_cuda110
-
-    - name: Login to Docker Registry
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.PUBLIC_REGISTRY }}
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Push images
-      run: |
-        cd ${{ env.DOCKER_COMPOSE_FOLDER }}/
-
-        docker-compose -f ${{ github.job }}.yaml push \
-          pipelines_ydata_none_gpu_python_cuda100 \
-          pipelines_ydata_none_gpu_python_cuda101 \
-          pipelines_ydata_none_gpu_python_cuda110
-
-
   gpu-pipelines-python-tensorflow-images:
     name: GPU KFP Python TF
     runs-on: ubuntu-20.04
@@ -1565,7 +1521,6 @@ jobs:
              gpu-visualcode-python-torch17-images,
              gpu-visualcode-python-ydata-images,
              gpu-h2oflow-images,
-             gpu-pipelines-python-none-images,
              gpu-pipelines-python-tensorflow-images,
              gpu-pipelines-python-torch17-images,
              gpu-pipelines-python-ydata-images]
