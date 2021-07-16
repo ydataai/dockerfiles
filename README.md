@@ -27,7 +27,7 @@ docker.io/ydata/visualcode_tensorflow-2.3:${TAG}-cpu
 docker.io/ydata/visualcode_torch-1.7:${TAG}-cpu
 
 ## PIPELINES
-docker.io/ydata/pipelines_python_ydata:${TAG}-cpu
+docker.io/ydata/pipelines_python_ydata:${TAG}-cpu [SIMPLE | NONE]
 docker.io/ydata/pipelines_python_tensorflow-1.15:${TAG}-cpu
 docker.io/ydata/pipelines_python_tensorflow-2.3:${TAG}-cpu
 docker.io/ydata/pipelines_python_torch-1.7:${TAG}-cpu
@@ -83,9 +83,6 @@ docker.io/ydata/base_gpu_python_cuda110:${TAG}
 docker.io/ydata/base_ydata_gpu_python_cuda100:${TAG}
 docker.io/ydata/base_ydata_gpu_python_cuda101:${TAG}
 docker.io/ydata/base_ydata_gpu_python_cuda110:${TAG}
-docker.io/ydata/pipelines_python_ydata:${TAG}-gpu-cuda10.0
-docker.io/ydata/pipelines_python_ydata:${TAG}-gpu-cuda10.1
-docker.io/ydata/pipelines_python_ydata:${TAG}-gpu-cuda11.0
 ###### END OF GPU ######
 ```
 
