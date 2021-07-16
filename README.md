@@ -9,6 +9,8 @@ Find all the public images on [DockerHub](https://hub.docker.com/u/ydata)
 <details>
 <summary>List of all the public images</summary>
 
+Replace `${TAG}` with any of the [released](https://github.com/ydataai/dockerfiles/releases) versions number.
+
 ```
 ###### CPU ######
 ## LABS
