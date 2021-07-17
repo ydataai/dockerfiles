@@ -38,7 +38,7 @@ docker.io/ydata/pipelines_python_torch-1.7:${TAG}-cpu
 docker.io/ydata/dask-worker:2021.06.0-1.1.1
 docker.io/ydata/node_image:1.0.0
 
-## BASE (base for above images)
+## BASE (for above images)
 docker.io/ydata/base_cpu_python:${TAG}
 docker.io/ydata/base_cpu_r:${TAG}
 docker.io/ydata/base_ydata_cpu_python${TAG}
@@ -70,7 +70,7 @@ docker.io/ydata/nvidia-cuda:10.0-ubuntu18.04
 docker.io/ydata/nvidia-cuda:10.1-ubuntu18.04
 docker.io/ydata/nvidia-cuda:11.0-ubuntu18.04
 
-## BASE (base for above images)
+## BASE (for above images)
 docker.io/ydata/base_gpu_r_cuda100:${TAG}
 docker.io/ydata/base_gpu_r_cuda101:${TAG}
 docker.io/ydata/base_gpu_r_cuda110:${TAG}
