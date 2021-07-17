@@ -15,15 +15,15 @@ Replace `${TAG}` with any of the [released](https://github.com/ydataai/dockerfil
 ###### CPU ######
 ## LABS
 docker.io/ydata/h2oflow:${TAG}-cpu
-docker.io/ydata/jupyterlab_python:${TAG}-cpu
+docker.io/ydata/jupyterlab_python:${TAG}-cpu [NONE]
 docker.io/ydata/jupyterlab_python_tensorflow-1.15:${TAG}-cpu
 docker.io/ydata/jupyterlab_python_tensorflow-2.3:${TAG}-cpu
 docker.io/ydata/jupyterlab_python_torch-1.7:${TAG}-cpu
-docker.io/ydata/jupyterlab_r:${TAG}-cpu
+docker.io/ydata/jupyterlab_r:${TAG}-cpu [NONE]
 docker.io/ydata/jupyterlab_r_tensorflow-1.15:${TAG}-cpu
 docker.io/ydata/jupyterlab_r_tensorflow-2.3:${TAG}-cpu
 docker.io/ydata/jupyterlab_r_torch-1.7:${TAG}-cpu
-docker.io/ydata/visualcode:${TAG}-cpu
+docker.io/ydata/visualcode:${TAG}-cpu [NONE]
 docker.io/ydata/visualcode_tensorflow-1.15:${TAG}-cpu
 docker.io/ydata/visualcode_tensorflow-2.3:${TAG}-cpu
 docker.io/ydata/visualcode_torch-1.7:${TAG}-cpu
@@ -38,7 +38,7 @@ docker.io/ydata/pipelines_python_torch-1.7:${TAG}-cpu
 docker.io/ydata/dask-worker:2021.06.0-1.1.1
 docker.io/ydata/node_image:1.0.0
 
-## BASE (base for above images)
+## BASE (for above images)
 docker.io/ydata/base_cpu_python:${TAG}
 docker.io/ydata/base_cpu_r:${TAG}
 docker.io/ydata/base_ydata_cpu_python${TAG}
@@ -47,20 +47,15 @@ docker.io/ydata/base_ydata_cpu_python${TAG}
 ######     GPU    ######
 ## LABS
 docker.io/ydata/h2oflow:${TAG}-gpu
-docker.io/ydata/jupyterlab_python:${TAG}-gpu-cuda10.0
-docker.io/ydata/jupyterlab_python:${TAG}-gpu-cuda10.1
-docker.io/ydata/jupyterlab_python:${TAG}-gpu-cuda11.0
+docker.io/ydata/jupyterlab_python:${TAG}-gpu-cuda10.1 [NONE]
 docker.io/ydata/jupyterlab_python_tensorflow-1.15:${TAG}-gpu
 docker.io/ydata/jupyterlab_python_tensorflow-2.3:${TAG}-gpu
 docker.io/ydata/jupyterlab_python_torch-1.7:${TAG}-gpu
-docker.io/ydata/jupyterlab_r:${TAG}-gpu-cuda10.0
-docker.io/ydata/jupyterlab_r:${TAG}-gpu-cuda10.1
+docker.io/ydata/jupyterlab_r:${TAG}-gpu-cuda10.1 [NONE]
 docker.io/ydata/jupyterlab_r_tensorflow-1.15:${TAG}-gpu
 docker.io/ydata/jupyterlab_r_tensorflow-2.3:${TAG}-gpu
 docker.io/ydata/jupyterlab_r_torch-1.7:${TAG}-gpu
-docker.io/ydata/visualcode:${TAG}-gpu-cuda10.0
-docker.io/ydata/visualcode:${TAG}-gpu-cuda10.1
-docker.io/ydata/visualcode:${TAG}-gpu-cuda11.0
+docker.io/ydata/visualcode:${TAG}-gpu-cuda10.1 [NONE]
 docker.io/ydata/visualcode_tensorflow-1.15:${TAG}-gpu
 docker.io/ydata/visualcode_tensorflow-2.3:${TAG}-gpu
 docker.io/ydata/visualcode_torch-1.7:${TAG}-gpu
@@ -75,7 +70,7 @@ docker.io/ydata/nvidia-cuda:10.0-ubuntu18.04
 docker.io/ydata/nvidia-cuda:10.1-ubuntu18.04
 docker.io/ydata/nvidia-cuda:11.0-ubuntu18.04
 
-## BASE (base for above images)
+## BASE (for above images)
 docker.io/ydata/base_gpu_r_cuda100:${TAG}
 docker.io/ydata/base_gpu_r_cuda101:${TAG}
 docker.io/ydata/base_gpu_r_cuda110:${TAG}
@@ -85,6 +80,11 @@ docker.io/ydata/base_gpu_python_cuda110:${TAG}
 docker.io/ydata/base_ydata_gpu_python_cuda100:${TAG}
 docker.io/ydata/base_ydata_gpu_python_cuda101:${TAG}
 docker.io/ydata/base_ydata_gpu_python_cuda110:${TAG}
+docker.io/ydata/jupyterlab_python:${TAG}-gpu-cuda10.0
+docker.io/ydata/jupyterlab_python:${TAG}-gpu-cuda11.0
+docker.io/ydata/jupyterlab_r:${TAG}-gpu-cuda10.0
+docker.io/ydata/visualcode:${TAG}-gpu-cuda10.0
+docker.io/ydata/visualcode:${TAG}-gpu-cuda11.0
 ###### END OF GPU ######
 ```
 
